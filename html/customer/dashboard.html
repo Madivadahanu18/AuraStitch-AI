@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Feed & Discover - AuraStitch AI</title>
+  
+  <link rel="stylesheet" href="../assets/css/variables.css">
+  <link rel="stylesheet" href="../assets/css/theme.css">
+  <link rel="stylesheet" href="../assets/css/animations.css">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  
+  <style>
+    /* Stories list circular bubbles layout */
+    .stories-row {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      padding: 10px 0;
+      margin-bottom: 30px;
+    }
+    
+    .story-bubble {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      min-width: 76px;
+    }
+    
+    .story-avatar-border {
+      width: 66px;
+      height: 66px;
+      border-radius: 50%;
+      padding: 3px;
+      background: linear-gradient(45deg, var(--accent-gold), var(--accent-copper), var(--accent-teal));
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .story-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--bg-secondary);
+    }
+    
+    .category-tabs {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      margin-bottom: 30px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .category-tab-btn {
+      padding: 8px 18px;
+      border-radius: var(--border-radius-sm);
+      border: 1px solid var(--border-color);
+      font-size: 14px;
+      font-weight: 500;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      background-color: var(--bg-secondary);
+    }
+    
+    .category-tab-btn.active, .category-tab-btn:hover {
+      border-color: var(--accent-gold);
+      background-color: var(--bg-tertiary);
+      color: var(--accent-gold-dark);
+    }
+    
+    /* Pinterest style card feed layout */
+    .discover-masonry-feed {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-gap: 24px;
+    }
+    
+    .discover-pin-card {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    }
+    
+    .discover-pin-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .pin-img-wrapper {
+      position: relative;
+      cursor: pointer;
+    }
+    
+    .pin-img {
+      width: 100%;
+      object-fit: cover;
+      max-height: 380px;
+    }
+    
+    .pin-overlay-actions {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      opacity: 0;
+      transition: opacity var(--transition-fast);
+    }
+    
+    .pin-img-wrapper:hover .pin-overlay-actions {
+      opacity: 1;
+    }
+    
+    .pin-action-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background-color: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .pin-content-box {
+      padding: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- App Header components -->
+  <app-navbar></app-navbar>
+
+  <div class="app-layout">
+    <app-sidebar class="app-sidebar"></app-sidebar>
+    
+    <main class="app-main">
+      
+      <!-- Stories circular list -->
+      <div class="stories-row">
+        <div class="story-bubble">
+          <div class="story-avatar-border">
+            <img class="story-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80">
+          </div>
+          <span style="font-size:12px;">My Story</span>
+        </div>
+        
+        <div class="story-bubble">
+          <div class="story-avatar-border">
+            <img class="story-img" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80">
+          </div>
+          <span style="font-size:12px;">Priya S.</span>
+        </div>
+        
+        <div class="story-bubble">
+          <div class="story-avatar-border">
+            <img class="story-img" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80">
+          </div>
+          <span style="font-size:12px;">Kiran Loom</span>
+        </div>
+      </div>
+      
+      <!-- Horizontal Category Tabs for Theme Shifts -->
+      <div class="category-tabs">
+        <button class="category-tab-btn active" data-category="light">Minimalist Modern</button>
+        <button class="category-tab-btn" data-category="traditional">Traditional Clay</button>
+        <button class="category-tab-btn" data-category="retro">Retro Vintage</button>
+        <button class="category-tab-btn" data-category="royal">Royal Wedding</button>
+        <button class="category-tab-btn" data-category="handloom">Artisan Handloom</button>
+        <button class="category-tab-btn" data-category="festival">Festive Saffron</button>
+      </div>
+      
+      <!-- Pinterest masonry discover feed -->
+      <div class="discover-masonry-feed">
+        
+        <!-- Post Pin card -->
+        <div class="discover-pin-card fade-in">
+          <div class="pin-img-wrapper">
+            <img class="pin-img" src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=350&q=80">
+            <div class="pin-overlay-actions">
+              <button class="pin-action-icon" title="Save Design">♥</button>
+              <button class="pin-action-icon" title="Share Design">↗</button>
+            </div>
+          </div>
+          <div class="pin-content-box">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+              <span class="badge badge-gold">Weaver</span>
+              <span style="font-size:13px; font-weight:600;">Kiran Loom</span>
+            </div>
+            <h4 style="font-size:15px; margin-bottom:6px; font-weight:700;">Handwoven Ikkat Dress Fabric</h4>
+            <p style="font-size:12px; color:var(--text-secondary); margin-bottom:12px;">Pure double-ikat silk fabric from Pochampally weavers, perfect for customized kurtis.</p>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-weight:700; color:var(--accent-gold-dark);">₹1,200/meter</span>
+              <a href="./design-lab.html" class="btn-primary" style="padding:6px 12px; font-size:12px; border-radius:var(--border-radius-sm);">Try Preset</a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="discover-pin-card fade-in">
+          <div class="pin-img-wrapper">
+            <img class="pin-img" src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=350&q=80">
+            <div class="pin-overlay-actions">
+              <button class="pin-action-icon" title="Save Design">♥</button>
+              <button class="pin-action-icon" title="Share Design">↗</button>
+            </div>
+          </div>
+          <div class="pin-content-box">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+              <span class="badge badge-verified">Tailor</span>
+              <span style="font-size:13px; font-weight:600;">Priya Sharma</span>
+            </div>
+            <h4 style="font-size:15px; margin-bottom:6px; font-weight:700;">Embroidered Zardozi Blouse</h4>
+            <p style="font-size:12px; color:var(--text-secondary); margin-bottom:12px;">Stitched royal silk saree blouse featuring intricate zari and maggam heavy bead detailing.</p>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-weight:700; color:var(--accent-gold-dark);">₹3,500 Stitching</span>
+              <button class="btn-primary" style="padding:6px 12px; font-size:12px; border-radius:var(--border-radius-sm);" onclick="triggerOrderTimeline()">Book Tailor</button>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </main>
+  </div>
+
+  <app-bottom-nav></app-bottom-nav>
+
+  <!-- Interactive overlays -->
+  <app-chat-system></app-chat-system>
+  <app-call-overlay></app-call-overlay>
+  
+  <!-- Float trigger buttons for quick messages -->
+  <div class="chat-widget-container">
+    <button class="chat-trigger-btn" onclick="window.dispatchEvent(new CustomEvent('togglechat'))">💬</button>
+  </div>
+
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/common.js"></script>
+  <script src="../components/navbar.js"></script>
+  <script src="../components/sidebar.js"></script>
+  <script src="../components/bottom-nav.js"></script>
+  <script src="../components/chat-system.js"></script>
+  <script src="../components/call-overlay.js"></script>
+  
+  <script>
+    // Handle tab clicking theme modifications
+    document.querySelectorAll('.category-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.category-tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        const theme = btn.getAttribute('data-category');
+        window.AuraTheme.setTheme(theme);
+        window.AuraToasts.show(`Dynamic styling updated to: ${theme.toUpperCase()}`, "info");
+      });
+    });
+
+    const triggerOrderTimeline = () => {
+      window.AuraModals.showConfirm({
+        title: "Confirm Booking",
+        text: "Would you like to book Priya Sharma for custom stitching this blouse design? Standard measurements profile will be shared.",
+        onConfirm: () => {
+          window.AuraToasts.show("Order placed successfully! Tracking timeline generated.", "success");
+        }
+      });
+    };
+  </script>
+</body>
+</html>

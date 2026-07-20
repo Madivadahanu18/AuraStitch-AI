@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Fashion Hub - AuraStitch AI</title>
+  
+  <link rel="stylesheet" href="../assets/css/variables.css">
+  <link rel="stylesheet" href="../assets/css/theme.css">
+  <link rel="stylesheet" href="../assets/css/animations.css">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  
+  <style>
+    /* Glowing visual accents */
+    .ai-glow-card {
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 8px 32px rgba(229, 193, 128, 0.1);
+      border-radius: var(--border-radius-md);
+      padding: 24px;
+      transition: transform var(--transition-fast), border-color var(--transition-fast);
+    }
+    
+    .ai-glow-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 20px rgba(var(--accent-gold-rgb), 0.2);
+    }
+    
+    .ai-tools-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+    
+    .recommendations-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <app-navbar></app-navbar>
+
+  <div class="app-layout">
+    <app-sidebar class="app-sidebar"></app-sidebar>
+    
+    <main class="app-main">
+      
+      <!-- Top glowing welcome banner -->
+      <div style="margin-bottom:40px;">
+        <h1 style="font-family:var(--font-heading); font-size:36px; margin-bottom:6px; color:var(--text-primary);">
+          AI Fashion Recommendations Hub
+        </h1>
+        <p style="color:var(--text-secondary); font-size:15px;">Discover personalized design suggestions and color swatches matching your profile preferences.</p>
+      </div>
+      
+      <!-- Quick AI Tools Selector Grid -->
+      <h3 style="font-family:var(--font-heading); font-size:22px; margin-bottom:20px; border-left:4px solid var(--accent-gold); padding-left:12px;">Quick Intelligent Tools</h3>
+      <div class="ai-tools-grid">
+        
+        <div class="ai-glow-card fade-in">
+          <div style="font-size:32px; margin-bottom:12px;">🎨</div>
+          <h4 style="font-size:16px; font-weight:600; margin-bottom:8px;">AI Dress Designer</h4>
+          <p style="font-size:12px; color:var(--text-secondary); margin-bottom:16px;">Map sleeve cuts, neck shapes and fabrics overlay on custom mannequin builder.</p>
+          <a href="../customer/design-lab.html" class="btn-primary" style="padding:6px 12px; font-size:12px; border-radius:var(--border-radius-sm);">Launch Studio</a>
+        </div>
+        
+        <div class="ai-glow-card fade-in">
+          <div style="font-size:32px; margin-bottom:12px;">👗</div>
+          <h4 style="font-size:16px; font-weight:600; margin-bottom:8px;">Virtual Try-On</h4>
+          <p style="font-size:12px; color:var(--text-secondary); margin-bottom:16px;">Upload a portrait photo to visualize custom dresses mapping and textures.</p>
+          <button class="btn-primary" style="padding:6px 12px; font-size:12px; border-radius:var(--border-radius-sm);" onclick="openTryOnDemo()">Launch Try-On</button>
+        </div>
+        
+        <div class="ai-glow-card fade-in">
+          <div style="font-size:32px; margin-bottom:12px;">💡</div>
+          <h4 style="font-size:16px; font-weight:600; margin-bottom:8px;">Occasion Stylist</h4>
+          <p style="font-size:12px; color:var(--text-secondary); margin-bottom:16px;">Find matching jewelry, footwear and custom blouses for weddings or festivals.</p>
+          <button class="btn-primary" style="padding:6px 12px; font-size:12px; border-radius:var(--border-radius-sm);" onclick="openStylistAlert()">Explore Styling</button>
+        </div>
+        
+      </div>
+      
+      <!-- AI Feed recommendations -->
+      <div class="recommendations-row">
+        <!-- Daily recommendations cards list -->
+        <div class="glass-panel" style="padding:30px;">
+          <h3 style="font-size: 20px; margin-bottom: 20px; font-family: var(--font-heading); border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">Daily Design Matches</h3>
+          
+          <div style="display:flex; flex-direction:column; gap:16px;">
+            <div style="display:flex; gap:16px; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:12px;">
+              <img style="width:60px; height:60px; border-radius:var(--border-radius-sm); object-fit:cover;" src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=100&q=80">
+              <div>
+                <h4 style="font-size:15px; font-weight:600; margin-bottom:4px;">Banarasi Gold Brocade Blouse</h4>
+                <p style="font-size:12px; color:var(--text-secondary);">98% Match based on your color & fabric interests</p>
+              </div>
+            </div>
+            
+            <div style="display:flex; gap:16px; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:12px;">
+              <img style="width:60px; height:60px; border-radius:var(--border-radius-sm); object-fit:cover;" src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=100&q=80">
+              <div>
+                <h4 style="font-size:15px; font-weight:600; margin-bottom:4px;">Sage Green Handloom Saree Wrap</h4>
+                <p style="font-size:12px; color:var(--text-secondary);">94% Match based on Pochampally weaving styles</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Fashion trend insights panel -->
+        <div class="glass-panel" style="padding:30px;">
+          <h3 style="font-size: 20px; margin-bottom: 20px; font-family: var(--font-heading); border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">Fashion AI Insights</h3>
+          
+          <p style="font-size:14px; line-height:1.6; color:var(--text-secondary); margin-bottom:20px;">
+            Gold embroidery stitching and temple borders are currently trending up by 34% among wedding dress buyers this season. We recommend pairing your raw silk sarees with boat neck designs.
+          </p>
+          <button class="btn-secondary" style="width:100%;" onclick="copyHexColorCodes()">Generate Matching Color Swatch</button>
+        </div>
+      </div>
+      
+    </main>
+  </div>
+
+  <app-bottom-nav></app-bottom-nav>
+  
+  <app-chat-system></app-chat-system>
+  <app-call-overlay></app-call-overlay>
+
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/common.js"></script>
+  <script src="../components/navbar.js"></script>
+  <script src="../components/sidebar.js"></script>
+  <script src="../components/bottom-nav.js"></script>
+  <script src="../components/chat-system.js"></script>
+  <script src="../components/call-overlay.js"></script>
+  
+  <script>
+    const openTryOnDemo = () => {
+      window.AuraToasts.show("Launching Virtual Try-On photo picker...", "info");
+    };
+    
+    const openStylistAlert = () => {
+      window.AuraToasts.show("Stylist guides and coordinates compiled!", "success");
+    };
+    
+    const copyHexColorCodes = () => {
+      window.AuraToasts.show("Warm wedding color palette generated! HEX codes copied to clipboard.", "success");
+    };
+  </script>
+</body>
+</html>

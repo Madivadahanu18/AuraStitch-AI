@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="handloom">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Artisan AI Handloom Studio - AuraStitch AI</title>
+  
+  <link rel="stylesheet" href="../assets/css/variables.css">
+  <link rel="stylesheet" href="../assets/css/theme.css">
+  <link rel="stylesheet" href="../assets/css/animations.css">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  
+  <style>
+    .studio-wizard-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      height: calc(100vh - var(--navbar-height) - 60px);
+      gap: 24px;
+    }
+    
+    .selection-panel {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      padding: 30px;
+      overflow-y: auto;
+    }
+    
+    .preview-panel {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .wizard-step {
+      display: none;
+    }
+    
+    .wizard-step.active {
+      display: block;
+    }
+    
+    .selector-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 20px;
+    }
+    
+    .selector-card {
+      padding: 20px;
+      border-radius: var(--border-radius-md);
+      border: 1px solid var(--border-color);
+      text-align: center;
+      cursor: pointer;
+      background-color: var(--bg-primary);
+      transition: all var(--transition-fast);
+    }
+    
+    .selector-card:hover, .selector-card.active {
+      border-color: var(--accent-gold);
+      background-color: var(--bg-tertiary);
+    }
+    
+    /* Interactive fabric preview canvas */
+    .fabric-preview-block {
+      width: 100%;
+      height: 380px;
+      border-radius: var(--border-radius-md);
+      border: 2px solid var(--accent-gold);
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .fabric-base-texture {
+      width: 100%;
+      height: 100%;
+      background-color: #FAF9F6;
+      transition: background-color var(--transition-normal);
+    }
+    
+    .fabric-border-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      background-color: #B85A38;
+      border-top: 4px solid var(--accent-gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      font-size: 24px;
+      letter-spacing: 4px;
+      font-weight: 700;
+    }
+    
+    .fabric-motif-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 80px;
+    }
+    
+    .color-swatch-picker {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+    
+    .color-swatch {
+      height: 50px;
+      border-radius: var(--border-radius-sm);
+      cursor: pointer;
+      border: 1px solid var(--border-color);
+      transition: transform var(--transition-fast);
+    }
+    
+    .color-swatch:hover, .color-swatch.active {
+      transform: scale(1.1);
+      border-color: var(--accent-gold);
+    }
+  </style>
+</head>
+<body>
+
+  <app-navbar></app-navbar>
+
+  <div class="app-layout">
+    <app-sidebar class="app-sidebar"></app-sidebar>
+    
+    <main class="app-main">
+      
+      <div class="studio-wizard-layout">
+        
+        <!-- Left Selection wizard stages -->
+        <div class="selection-panel">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid var(--border-color); padding-bottom:10px;">
+            <h3 style="font-family:var(--font-heading); font-size:22px;">Weaving Concept Wizard</h3>
+            <span style="font-size:14px; font-weight:600; color:var(--accent-gold-dark);" id="wizard-step-label">Step 1 of 5</span>
+          </div>
+          
+          <form id="handloom-wizard-form" style="height:calc(100% - 100px); display:flex; flex-direction:column; justify-content:space-between;">
+            <div id="steps-container">
+              <!-- Step 1: Select Product -->
+              <div class="wizard-step active" id="step-product">
+                <h4 style="font-size:16px; font-weight:600; color:var(--text-secondary);">Select weaving product outline</h4>
+                <div class="selector-grid">
+                  <div class="selector-card active" data-product="saree">Saree</div>
+                  <div class="selector-card" data-product="material">Dress Material</div>
+                  <div class="selector-card" data-product="scarf">Dupatta / Scarf</div>
+                  <div class="selector-card" data-product="roll">Fabric Roll</div>
+                </div>
+              </div>
+              
+              <!-- Step 2: Select Fabric material -->
+              <div class="wizard-step" id="step-fabric">
+                <h4 style="font-size:16px; font-weight:600; color:var(--text-secondary);">Choose thread composition</h4>
+                <div class="selector-grid">
+                  <div class="selector-card active" data-fabric="silk">Traditional Silk</div>
+                  <div class="selector-card" data-fabric="cotton">Organic Cotton</div>
+                  <div class="selector-card" data-fabric="khadi">Khadi Loom</div>
+                  <div class="selector-card" data-fabric="linen">Linen Weave</div>
+                </div>
+              </div>
+              
+              <!-- Step 3: Choose Border style -->
+              <div class="wizard-step" id="step-border">
+                <h4 style="font-size:16px; font-weight:600; color:var(--text-secondary);">Choose loom border details</h4>
+                <div class="selector-grid">
+                  <div class="selector-card active" data-border="temple">Temple Art Border</div>
+                  <div class="selector-card" data-border="traditional">Traditional Pochampally</div>
+                  <div class="selector-card" data-border="geometric">Geometric Chevron</div>
+                  <div class="selector-card" data-border="minimal">Minimal Line Border</div>
+                </div>
+              </div>
+              
+              <!-- Step 4: Choose Motifs patterns -->
+              <div class="wizard-step" id="step-motif">
+                <h4 style="font-size:16px; font-weight:600; color:var(--text-secondary);">Select weave motif embellishments</h4>
+                <div class="selector-grid">
+                  <div class="selector-card active" data-motif="peacock">Peacock</div>
+                  <div class="selector-card" data-motif="lotus">Lotus</div>
+                  <div class="selector-card" data-motif="elephant">Elephant</div>
+                  <div class="selector-card" data-motif="paisley">Paisley Art</div>
+                </div>
+              </div>
+              
+              <!-- Step 5: Choose Colors Swatches -->
+              <div class="wizard-step" id="step-colors">
+                <h4 style="font-size:16px; font-weight:600; color:var(--text-secondary);">Select Loom Colorway</h4>
+                <div class="color-swatch-picker">
+                  <div class="color-swatch active" style="background-color:#FAF9F6;" data-color="#FAF9F6"></div>
+                  <div class="color-swatch" style="background-color:#B85A38;" data-color="#B85A38"></div>
+                  <div class="color-swatch" style="background-color:#386A63;" data-color="#386A63"></div>
+                  <div class="color-swatch" style="background-color:#C5A059;" data-color="#C5A059"></div>
+                </div>
+              </div>
+            </div>
+            
+            <div style="display:flex; justify-content:space-between; margin-top:20px;">
+              <button type="button" class="btn-secondary" id="wiz-prev-btn" style="visibility:hidden;">Back</button>
+              <button type="button" class="btn-primary" id="wiz-next-btn">Next</button>
+            </div>
+          </form>
+        </div>
+        
+        <!-- Right Panel: Live concept preview renderer -->
+        <div class="preview-panel">
+          <h3 style="font-family:var(--font-heading); font-size:20px; align-self:flex-start; margin-bottom:10px;">Loom Concept Preview</h3>
+          
+          <div class="fabric-preview-block">
+            <!-- Simulated fabric block -->
+            <div class="fabric-base-texture" id="preview-base-fabric">
+              <!-- Central motif layer representation -->
+              <div class="fabric-motif-overlay" id="preview-motif-layer">🦚</div>
+              <!-- Border layer representation -->
+              <div class="fabric-border-overlay" id="preview-border-layer">▲▼▲▼▲▼▲</div>
+            </div>
+          </div>
+          
+          <div style="display:flex; gap:16px; width:100%; justify-content:center; margin-top:10px;">
+            <button class="btn-secondary" id="concept-share-btn">Share Design</button>
+            <button class="btn-primary" id="concept-save-btn">Save Loom Concept</button>
+          </div>
+        </div>
+        
+      </div>
+    </main>
+  </div>
+
+  <app-bottom-nav></app-bottom-nav>
+  
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/common.js"></script>
+  <script src="../components/navbar.js"></script>
+  <script src="../components/sidebar.js"></script>
+  <script src="../components/bottom-nav.js"></script>
+  
+  <script>
+    let activeWizardStep = 1;
+    const wizardSteps = ['product', 'fabric', 'border', 'motif', 'colors'];
+    
+    const label = document.getElementById('wizard-step-label');
+    const prevBtn = document.getElementById('wiz-prev-btn');
+    const nextBtn = document.getElementById('wiz-next-btn');
+    
+    // Updates wizard panel display states
+    const updateWizard = (stepNum) => {
+      activeWizardStep = stepNum;
+      label.textContent = `Step ${stepNum} of 5`;
+      
+      // Hide all tabs, show active
+      document.querySelectorAll('.wizard-step').forEach((panel, idx) => {
+        panel.classList.toggle('active', idx + 1 === stepNum);
+      });
+      
+      prevBtn.style.visibility = stepNum === 1 ? 'hidden' : 'visible';
+      nextBtn.textContent = stepNum === 5 ? 'Compile Concept' : 'Next';
+    };
+    
+    // Next/Back triggers click listeners
+    nextBtn.addEventListener('click', () => {
+      if (activeWizardStep < 5) {
+        updateWizard(activeWizardStep + 1);
+      } else {
+        window.AuraToasts.show("Weaving concept successfully compiled and rendering complete!", "success");
+      }
+    });
+    
+    prevBtn.addEventListener('click', () => {
+      if (activeWizardStep > 1) {
+        updateWizard(activeWizardStep - 1);
+      }
+    });
+    
+    // Grid cards active toggle bindings
+    document.querySelectorAll('.selector-card').forEach(card => {
+      card.addEventListener('click', () => {
+        card.parentNode.querySelectorAll('.selector-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+        
+        // Live update representation variables
+        const borderType = card.getAttribute('data-border');
+        const motifType = card.getAttribute('data-motif');
+        
+        if (borderType) {
+          const borderText = {
+            temple: '▲▼▲▼▲▼▲',
+            traditional: '❈❈❈❈❈❈❈',
+            geometric: '❖❖❖❖❖❖❖',
+            minimal: '─────────'
+          };
+          document.getElementById('preview-border-layer').textContent = borderText[borderType];
+        }
+        
+        if (motifType) {
+          const motifEmoji = {
+            peacock: '🦚',
+            lotus: '🪷',
+            elephant: '🐘',
+            paisley: '🍂'
+          };
+          document.getElementById('preview-motif-layer').textContent = motifEmoji[motifType];
+        }
+      });
+    });
+    
+    // Color swatches click listener
+    document.querySelectorAll('.color-swatch').forEach(swatch => {
+      swatch.addEventListener('click', () => {
+        swatch.parentNode.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+        swatch.classList.add('active');
+        
+        const hex = swatch.getAttribute('data-color');
+        document.getElementById('preview-base-fabric').style.backgroundColor = hex;
+      });
+    });
+    
+    document.getElementById('concept-save-btn').addEventListener('click', () => {
+      window.AuraToasts.show("Loom design saved to collection portfolio successfully!", "success");
+    });
+  </script>
+</body>
+</html>

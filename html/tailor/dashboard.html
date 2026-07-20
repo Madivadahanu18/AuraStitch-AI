@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tailor Studio Workspace - AuraStitch AI</title>
+  
+  <link rel="stylesheet" href="../assets/css/variables.css">
+  <link rel="stylesheet" href="../assets/css/theme.css">
+  <link rel="stylesheet" href="../assets/css/animations.css">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  
+  <style>
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    
+    .metric-card {
+      padding: 24px;
+      text-align: left;
+    }
+    
+    .metric-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--accent-gold-dark);
+      margin-top: 8px;
+    }
+    
+    .studio-dashboard-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 30px;
+    }
+    
+    /* Interactive Order Card List */
+    .dashboard-panel-title {
+      font-size: 20px;
+      margin-bottom: 20px;
+      font-family: var(--font-heading);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+    
+    .order-pipeline-card {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      padding: 20px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: transform var(--transition-fast);
+    }
+    
+    .order-pipeline-card:hover {
+      transform: translateX(4px);
+    }
+    
+    /* Timeline tracking bullet colors */
+    .timeline-bullet {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    
+    @media (max-width: 1024px) {
+      .metrics-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .studio-dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <app-navbar></app-navbar>
+
+  <div class="app-layout">
+    <app-sidebar class="app-sidebar"></app-sidebar>
+    
+    <main class="app-main">
+      
+      <!-- Top studio welcome banner -->
+      <div style="margin-bottom:30px;">
+        <h1 style="font-family:var(--font-heading); font-size:36px; margin-bottom:6px;">Fashion Studio Workspace</h1>
+        <p style="color:var(--text-secondary); font-size:15px;">Welcome back, Priya Sharma. Manage your custom designs and tailoring orders.</p>
+      </div>
+      
+      <!-- Performance Metrics counters row -->
+      <div class="metrics-row">
+        <div class="metric-card glass-panel fade-in">
+          <h4 style="font-size:13px; font-weight:600; color:var(--text-secondary);">Today's Deliveries</h4>
+          <div class="metric-value">03</div>
+        </div>
+        <div class="metric-card glass-panel fade-in">
+          <h4 style="font-size:13px; font-weight:600; color:var(--text-secondary);">Active Orders</h4>
+          <div class="metric-value">12</div>
+        </div>
+        <div class="metric-card glass-panel fade-in">
+          <h4 style="font-size:13px; font-weight:600; color:var(--text-secondary);">Monthly Revenue</h4>
+          <div class="metric-value">₹48,500</div>
+        </div>
+        <div class="metric-card glass-panel fade-in">
+          <h4 style="font-size:13px; font-weight:600; color:var(--text-secondary);">Overall Rating</h4>
+          <div class="metric-value">4.9 <span style="font-size:16px;">★</span></div>
+        </div>
+      </div>
+      
+      <!-- Studio orders list and schedule queue -->
+      <div class="studio-dashboard-grid">
+        
+        <!-- Orders list panel -->
+        <div class="glass-panel" style="padding:30px;">
+          <h3 class="dashboard-panel-title">Active Stitching Timeline</h3>
+          
+          <div class="order-pipeline-card">
+            <div>
+              <h4 style="font-size:16px; font-weight:600; margin-bottom:4px;">Zardozi Bridal Blouse</h4>
+              <p style="font-size:13px; color:var(--text-muted); margin-bottom:8px;">Order ID: #AS-9874 • Customer: Ananya Rao</p>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span class="timeline-bullet" style="background-color:var(--accent-copper);"></span>
+                <span style="font-size:12px; font-weight:600; color:var(--text-secondary);">Stitching Stage</span>
+              </div>
+            </div>
+            
+            <div style="text-align:right;">
+              <span style="font-weight:700; color:var(--text-primary); display:block; margin-bottom:10px;">Est. 19 Jul 2026</span>
+              <button class="btn-primary" style="padding:6px 12px; font-size:12px; border-radius:var(--border-radius-sm);" onclick="updateTimelineState()">Update State</button>
+            </div>
+          </div>
+          
+          <div class="order-pipeline-card">
+            <div>
+              <h4 style="font-size:16px; font-weight:600; margin-bottom:4px;">Traditional Pochampally Silk Saree</h4>
+              <p style="font-size:13px; color:var(--text-muted); margin-bottom:8px;">Order ID: #AS-7412 • Customer: Meera Nair</p>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span class="timeline-bullet" style="background-color:var(--accent-gold);"></span>
+                <span style="font-size:12px; font-weight:600; color:var(--text-secondary);">Cutting Stage</span>
+              </div>
+            </div>
+            
+            <div style="text-align:right;">
+              <span style="font-weight:700; color:var(--text-primary); display:block; margin-bottom:10px;">Est. 21 Jul 2026</span>
+              <button class="btn-primary" style="padding:6px 12px; font-size:12px; border-radius:var(--border-radius-sm);" onclick="updateTimelineState()">Update State</button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Quick actions and schedules list panel -->
+        <div class="glass-panel" style="padding:30px;">
+          <h3 class="dashboard-panel-title">Studio Actions</h3>
+          
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <button class="btn-primary" style="width:100%; text-align:center;" id="btn-upload-portfolio">Upload New Portfolio</button>
+            <button class="btn-secondary" style="width:100%; text-align:center;" id="btn-list-fabrics">Add Fabrics Stock</button>
+            <button class="btn-secondary" style="width:100%; text-align:center;" id="btn-view-scheduler">Working Hours Calendar</button>
+          </div>
+        </div>
+        
+      </div>
+    </main>
+  </div>
+
+  <app-bottom-nav></app-bottom-nav>
+  
+  <app-chat-system></app-chat-system>
+  <app-call-overlay></app-call-overlay>
+  
+  <div class="chat-widget-container">
+    <button class="chat-trigger-btn" onclick="window.dispatchEvent(new CustomEvent('togglechat'))">💬</button>
+  </div>
+
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/common.js"></script>
+  <script src="../components/navbar.js"></script>
+  <script src="../components/sidebar.js"></script>
+  <script src="../components/bottom-nav.js"></script>
+  <script src="../components/chat-system.js"></script>
+  <script src="../components/call-overlay.js"></script>
+  
+  <script>
+    const updateTimelineState = () => {
+      window.AuraModals.showConfirm({
+        title: "Update Stitching Stage",
+        text: "Are you sure you want to transition the selected garment to the next processing stage (Embroidery / Quality Check)? An update alert will be sent to the customer.",
+        onConfirm: () => {
+          window.AuraToasts.show("Stage updated! Customer notified.", "success");
+        }
+      });
+    };
+    
+    // Quick triggers binding
+    document.getElementById('btn-upload-portfolio').onclick = () => {
+      window.AuraToasts.show("Opening Portfolio Uploader panel...", "info");
+    };
+    
+    document.getElementById('btn-list-fabrics').onclick = () => {
+      window.AuraToasts.show("Redirecting to Fabrics catalog editor...", "info");
+    };
+  </script>
+</body>
+</html>

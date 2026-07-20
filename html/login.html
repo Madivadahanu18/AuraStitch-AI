@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unified Login - AuraStitch AI</title>
+  
+  <link rel="stylesheet" href="./assets/css/variables.css">
+  <link rel="stylesheet" href="./assets/css/theme.css">
+  <link rel="stylesheet" href="./assets/css/animations.css">
+  <link rel="stylesheet" href="./assets/css/common.css">
+  
+  <style>
+    .login-container {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, var(--bg-primary), var(--bg-tertiary));
+    }
+    
+    .login-card {
+      width: 90%;
+      max-width: 440px;
+      padding: 40px;
+      border-radius: var(--border-radius-lg);
+    }
+    
+    .login-title {
+      font-family: var(--font-heading);
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    
+    .login-subtitle {
+      font-size: 15px;
+      color: var(--text-secondary);
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .btn-google {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      padding: 12px;
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-sm);
+      font-weight: 500;
+      margin-bottom: 24px;
+      transition: background-color var(--transition-fast);
+    }
+    
+    .btn-google:hover {
+      background-color: var(--bg-tertiary);
+    }
+    
+    .divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 12px;
+      margin-bottom: 24px;
+    }
+    
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .divider:not(:empty)::before {
+      margin-right: .5em;
+    }
+    
+    .divider:not(:empty)::after {
+      margin-left: .5em;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <div class="login-card glass-panel fade-in slide-up">
+      <div style="text-align:center; margin-bottom:10px;">
+        <a href="./index.html" style="font-family:var(--font-heading); font-size:28px; font-weight:700; color:var(--text-primary);">
+          Aura<span style="color:var(--accent-gold)">Stitch</span>
+        </a>
+      </div>
+      
+      <h2 class="login-title">Welcome Back</h2>
+      <p class="login-subtitle">Enter your details to sign in</p>
+      
+      <!-- Google social auth placeholder button -->
+      <button class="btn-google">
+        <span style="font-size:18px;">🌐</span> Sign in with Google
+      </button>
+      
+      <div class="divider">OR</div>
+      
+      <form id="login-form-submit">
+        <div class="form-group">
+          <label class="form-label">Email or Phone Number</label>
+          <input type="text" class="form-input" id="auth-email-input" placeholder="e.g. tailor@aurastitch.ai" required>
+        </div>
+        
+        <div class="form-group">
+          <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+            <label class="form-label">Password</label>
+            <a href="#" style="font-size:12px; color:var(--accent-gold); font-weight:500;">Forgot password?</a>
+          </div>
+          <input type="password" class="form-input" id="auth-password-input" placeholder="••••••••" required>
+        </div>
+        
+        <button type="submit" class="btn-primary" style="width:100%; margin-top:10px;">Sign In</button>
+      </form>
+      
+      <div style="text-align:center; margin-top:24px; font-size:14px; color:var(--text-secondary);">
+        Don't have an account? <a href="./register.html" style="color:var(--accent-gold); font-weight:600;">Register Here</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="./assets/js/theme.js"></script>
+  <script src="./assets/js/common.js"></script>
+  
+  <script>
+    // Handles role matching routing automatically based on email domains
+    document.getElementById('login-form-submit').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const email = document.getElementById('auth-email-input').value.trim().toLowerCase();
+      
+      window.AuraToasts.show("Authenticating details...", "info");
+      
+      setTimeout(() => {
+        // Automatic Role Router
+        if (email.includes('customer') || email.includes('user')) {
+          // Send to customer onboarding if it is their first visit, else dashboard
+          if (!localStorage.getItem('onboarding-completed')) {
+            window.location.href = './onboarding.html';
+          } else {
+            window.location.href = './customer/dashboard.html';
+          }
+        }
+        else if (email.includes('tailor')) {
+          window.location.href = './tailor/dashboard.html';
+        }
+        else if (email.includes('weaver') || email.includes('handloom')) {
+          window.location.href = './handloom/dashboard.html';
+        }
+        else if (email.includes('supplier')) {
+          window.location.href = './supplier/dashboard.html';
+        }
+        else if (email.includes('admin')) {
+          window.location.href = './admin/dashboard.html';
+        }
+        else {
+          // Standard customer user default routing
+          window.location.href = './onboarding.html';
+        }
+      }, 1200);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AuraStitch AI - Premium Custom Fashion & Handloom Platform</title>
+  
+  <link rel="stylesheet" href="./assets/css/variables.css">
+  <link rel="stylesheet" href="./assets/css/theme.css">
+  <link rel="stylesheet" href="./assets/css/animations.css">
+  <link rel="stylesheet" href="./assets/css/common.css">
+  
+  <style>
+    /* Splash Screen Loader overlay style */
+    .splash-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: linear-gradient(135deg, #0A0A0B, #19191E);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      color: #FFFFFF;
+      transition: opacity var(--transition-slow) ease;
+    }
+    
+    .splash-logo {
+      font-family: var(--font-heading);
+      font-size: 48px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-bottom: 24px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: splashFadeIn 1s forwards ease;
+    }
+    
+    @keyframes splashFadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Landing page blocks */
+    .hero-banner {
+      width: 100%;
+      height: 480px;
+      border-radius: var(--border-radius-lg);
+      background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px;
+      color: #FFFFFF;
+      margin-bottom: 40px;
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .hero-title {
+      font-family: var(--font-heading);
+      font-size: 48px;
+      margin-bottom: 16px;
+      max-width: 600px;
+    }
+    
+    .hero-subtitle {
+      font-size: 18px;
+      margin-bottom: 30px;
+      max-width: 500px;
+      color: rgba(255, 255, 255, 0.85);
+    }
+    
+    /* Horizontal scrolling categories bar */
+    .scroll-row {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      padding-bottom: 16px;
+      margin-bottom: 40px;
+    }
+    
+    .scroll-card {
+      min-width: 150px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+    }
+    
+    .scroll-card-icon {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+    
+    .section-title {
+      margin-bottom: 24px;
+      font-size: 28px;
+      border-left: 4px solid var(--accent-gold);
+      padding-left: 14px;
+    }
+    
+    /* Grid items list */
+    .post-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 30px;
+      margin-bottom: 60px;
+    }
+    
+    .insta-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .insta-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+    }
+    
+    .insta-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    
+    .insta-img {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+    }
+    
+    .insta-actions {
+      display: flex;
+      gap: 16px;
+      padding: 16px;
+      font-size: 20px;
+    }
+    
+    .insta-actions span {
+      cursor: pointer;
+    }
+    
+    /* Guest restricting modal dialog popup details */
+    .auth-gate-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .auth-gate-modal.active {
+      display: flex;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loading Splash Screen -->
+  <div class="splash-screen" id="splash-screen-overlay">
+    <div class="splash-logo">AURA<span style="color:#C5A059">STITCH</span> AI</div>
+    <div class="spinner"></div>
+    <p style="margin-top:20px; font-size:14px; letter-spacing:3px; color:var(--text-muted);">DESIGNING FUTURE FASHION...</p>
+  </div>
+
+  <!-- Reusable top navbar custom tag -->
+  <app-navbar></app-navbar>
+
+  <div class="app-layout">
+    <!-- Reusable left sidebar menu custom tag -->
+    <app-sidebar class="app-sidebar"></app-sidebar>
+    
+    <main class="app-main">
+      <!-- 1. Hero banner -->
+      <div class="hero-banner slide-up">
+        <h1 class="hero-title">Experience AI Fashion Studio & Traditional Weaves</h1>
+        <p class="hero-subtitle">Design your own garment using AI mannequin customizers and order directly from local weavers and premium tailors.</p>
+        <div>
+          <a href="./login.html" class="btn-primary glow-btn">Launch Studio</a>
+        </div>
+      </div>
+      
+      <!-- 2. Search category scrolling row -->
+      <h3 class="section-title">Browse Fashion Styles</h3>
+      <div class="scroll-row" id="categories-scroll-row">
+        <!-- Categories card list -->
+        <div class="scroll-card glass-panel hover-scale" data-category="traditional">
+          <div class="scroll-card-icon">🥻</div>
+          <h4 style="font-size:14px;">Traditional</h4>
+        </div>
+        <div class="scroll-card glass-panel hover-scale" data-category="retro">
+          <div class="scroll-card-icon">🕶</div>
+          <h4 style="font-size:14px;">Retro Vintage</h4>
+        </div>
+        <div class="scroll-card glass-panel hover-scale" data-category="royal">
+          <div class="scroll-card-icon">👑</div>
+          <h4 style="font-size:14px;">Royal Wedding</h4>
+        </div>
+        <div class="scroll-card glass-panel hover-scale" data-category="handloom">
+          <div class="scroll-card-icon">🧵</div>
+          <h4 style="font-size:14px;">Handloom</h4>
+        </div>
+        <div class="scroll-card glass-panel hover-scale" data-category="festival">
+          <div class="scroll-card-icon">✨</div>
+          <h4 style="font-size:14px;">Festive Kurti</h4>
+        </div>
+      </div>
+      
+      <!-- 3. Trending posts grid -->
+      <h3 class="section-title">Trending Designers</h3>
+      <div class="post-grid">
+        <!-- Instagram Style post card -->
+        <div class="insta-card">
+          <div class="insta-header">
+            <img class="insta-avatar" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80">
+            <div>
+              <h4 style="font-size:14px; font-weight:600;">Priya Sharma <span style="color:#C5A059">★</span></h4>
+              <p style="font-size:12px; color:var(--text-secondary);">Bridal Specialization • Delhi</p>
+            </div>
+          </div>
+          <img class="insta-img" src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=600&q=80">
+          <div class="insta-actions">
+            <span class="restrict-trigger">♥</span>
+            <span class="restrict-trigger">💬</span>
+            <span class="restrict-trigger">↗</span>
+          </div>
+          <div style="padding:0 16px 16px;">
+            <p style="font-size:14px;"><strong style="font-weight:600;">Priya Sharma:</strong> Handwoven silk bridal lehenga customization completed.</p>
+          </div>
+        </div>
+        
+        <div class="insta-card">
+          <div class="insta-header">
+            <img class="insta-avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80">
+            <div>
+              <h4 style="font-size:14px; font-weight:600;">Kiran Handloom Weaves</h4>
+              <p style="font-size:12px; color:var(--text-secondary);">Artisan Pochampally • Hyderabad</p>
+            </div>
+          </div>
+          <img class="insta-img" src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80">
+          <div class="insta-actions">
+            <span class="restrict-trigger">♥</span>
+            <span class="restrict-trigger">💬</span>
+            <span class="restrict-trigger">↗</span>
+          </div>
+          <div style="padding:0 16px 16px;">
+            <p style="font-size:14px;"><strong style="font-weight:600;">Kiran:</strong> Fresh batch of Pochampally borders woven on request.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Reusable mobile navigation bar tag -->
+  <app-bottom-nav></app-bottom-nav>
+
+  <!-- Guest Restricting Gate Modal Popup -->
+  <div class="auth-gate-modal" id="guest-popup-modal">
+    <div class="glass-panel" style="width:90%; max-width:400px; padding:40px 30px; text-align:center;">
+      <div style="font-size:48px; margin-bottom:20px;">🔒</div>
+      <h3 style="margin-bottom:12px; font-size:24px; font-family:var(--font-heading);">Please Login or Register</h3>
+      <p style="margin-bottom:30px; color:var(--text-secondary); font-size:15px;">Unlock custom AI designers, measurements manager, messaging and ordering.</p>
+      
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <a href="./login.html" class="btn-primary">Login to Continue</a>
+        <a href="./register.html" class="btn-secondary">Register New Account</a>
+      </div>
+      <button class="btn-secondary" style="margin-top:16px; border:none; color:var(--text-muted);" id="close-popup-btn">Dismiss</button>
+    </div>
+  </div>
+
+  <!-- Common layouts tags scripts loads -->
+  <script src="./assets/js/theme.js"></script>
+  <script src="./assets/js/common.js"></script>
+  <script src="./components/navbar.js"></script>
+  <script src="./components/sidebar.js"></script>
+  <script src="./components/bottom-nav.js"></script>
+
+  <script>
+    // Splash screen animation timer loader
+    window.addEventListener('load', () => {
+      const splash = document.getElementById('splash-screen-overlay');
+      setTimeout(() => {
+        splash.style.opacity = '0';
+        setTimeout(() => splash.remove(), 500);
+      }, 1500);
+    });
+
+    // Theme categories swapper
+    document.querySelectorAll('.scroll-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const theme = card.getAttribute('data-category');
+        window.AuraTheme.setTheme(theme);
+        window.AuraToasts.show(`Loaded ${theme.toUpperCase()} themed style palette`, "info");
+      });
+    });
+
+    // Restrict interaction triggers logic
+    const gateModal = document.getElementById('guest-popup-modal');
+    document.querySelectorAll('.restrict-trigger').forEach(trigger => {
+      trigger.addEventListener('click', (e) => {
+        e.preventDefault();
+        gateModal.classList.add('active');
+      });
+    });
+
+    document.getElementById('close-popup-btn').addEventListener('click', () => {
+      gateModal.classList.remove('active');
+    });
+  </script>
+</body>
+</html>

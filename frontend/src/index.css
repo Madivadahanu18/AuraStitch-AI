@@ -1,0 +1,13 @@
+/* AuraStitch AI - Core Stylesheet imports */
+@import './assets/css/variables.css';
+@import './assets/css/theme.css';
+@import './assets/css/animations.css';
+@import './assets/css/common.css';
+
+/* Fix root layout for React Single Page Application */
+#root {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}

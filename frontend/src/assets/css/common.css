@@ -1,0 +1,152 @@
+/* AuraStitch AI - Layout and Common Structural Classes */
+
+/* App Shell Layout */
+.app-layout {
+  display: grid;
+  grid-template-rows: var(--navbar-height) 1fr;
+  grid-template-columns: var(--sidebar-width) 1fr;
+  grid-template-areas: 
+    "nav nav"
+    "sidebar main";
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.app-layout.collapsed {
+  grid-template-columns: var(--sidebar-collapsed-width) 1fr;
+}
+
+/* Nav Area */
+.app-nav {
+  grid-area: nav;
+  z-index: 100;
+}
+
+/* Sidebar Area */
+.app-sidebar {
+  grid-area: sidebar;
+  z-index: 90;
+}
+
+/* Main Main Content Container */
+.app-main {
+  grid-area: main;
+  overflow-y: auto;
+  padding: 30px;
+  background-color: var(--bg-primary);
+  transition: padding var(--transition-normal);
+}
+
+/* Floating widgets overlay - Chat messenger UI, calls UI */
+.chat-widget-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.chat-trigger-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--border-radius-round);
+  background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark));
+  color: #FFFFFF;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  border: none;
+  cursor: pointer;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.chat-trigger-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(var(--accent-gold-rgb), 0.4);
+}
+
+/* Shared dynamic call screens */
+.call-overlay-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(10, 10, 11, 0.95);
+  backdrop-filter: blur(20px);
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #FFFFFF;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-normal);
+}
+
+.call-overlay-screen.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Forms general styling */
+.form-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: var(--border-radius-sm);
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.form-input:focus {
+  border-color: var(--accent-gold);
+  background-color: var(--bg-secondary);
+}
+
+/* Responsive configurations */
+@media (max-width: 1024px) {
+  .app-layout {
+    grid-template-columns: var(--sidebar-collapsed-width) 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-layout {
+    grid-template-rows: var(--navbar-height) 1fr;
+    grid-template-columns: 1fr;
+    grid-template-areas: 
+      "nav"
+      "main";
+  }
+  
+  .app-sidebar {
+    display: none;
+  }
+  
+  .app-main {
+    padding: 16px;
+    padding-bottom: 90px; /* Space for mobile bottom bar */
+  }
+}

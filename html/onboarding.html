@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Onboarding - AuraStitch AI</title>
+  
+  <link rel="stylesheet" href="./assets/css/variables.css">
+  <link rel="stylesheet" href="./assets/css/theme.css">
+  <link rel="stylesheet" href="./assets/css/animations.css">
+  <link rel="stylesheet" href="./assets/css/common.css">
+  
+  <style>
+    .onboard-container {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, var(--bg-primary), var(--bg-tertiary));
+      overflow: hidden;
+    }
+    
+    .onboard-card {
+      width: 90%;
+      max-width: 680px;
+      height: 560px;
+      padding: 40px;
+      border-radius: var(--border-radius-lg);
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+    }
+    
+    .step-indicator {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+    
+    .indicator-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--border-color);
+      transition: background-color var(--transition-fast);
+    }
+    
+    .indicator-dot.active {
+      background-color: var(--accent-gold);
+    }
+    
+    .step-panel {
+      display: none;
+      flex-direction: column;
+      height: 100%;
+      overflow-y: auto;
+      padding: 10px 0;
+    }
+    
+    .step-panel.active {
+      display: flex;
+    }
+    
+    .tag-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    
+    .interest-tag {
+      padding: 10px 20px;
+      border-radius: 9999px;
+      border: 1px solid var(--border-color);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      background-color: var(--bg-secondary);
+      transition: all var(--transition-fast);
+    }
+    
+    .interest-tag:hover, .interest-tag.active {
+      border-color: var(--accent-gold);
+      background-color: rgba(var(--accent-gold-rgb), 0.1);
+      color: var(--accent-gold-dark);
+    }
+    
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 20px;
+    }
+    
+    .color-swatch-card {
+      padding: 14px;
+      border-radius: var(--border-radius-md);
+      text-align: center;
+      cursor: pointer;
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-secondary);
+      transition: border-color var(--transition-fast);
+    }
+    
+    .color-swatch-card:hover, .color-swatch-card.active {
+      border-color: var(--accent-gold);
+    }
+    
+    .color-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      margin: 0 auto 10px;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .fabric-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 20px;
+    }
+    
+    .fabric-card {
+      padding: 20px;
+      border-radius: var(--border-radius-md);
+      text-align: center;
+      cursor: pointer;
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-secondary);
+      transition: all var(--transition-fast);
+    }
+    
+    .fabric-card:hover, .fabric-card.active {
+      border-color: var(--accent-gold);
+      background-color: rgba(var(--accent-gold-rgb), 0.05);
+    }
+    
+    .fabric-emoji {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="onboard-container">
+    <div class="onboard-card glass-panel fade-in slide-up">
+      <!-- Step dots -->
+      <div class="step-indicator">
+        <div class="indicator-dot active" data-step="1"></div>
+        <div class="indicator-dot" data-step="2"></div>
+        <div class="indicator-dot" data-step="3"></div>
+        <div class="indicator-dot" data-step="4"></div>
+        <div class="indicator-dot" data-step="5"></div>
+      </div>
+      
+      <!-- Content panel -->
+      <div id="panels-wrapper" style="overflow:hidden;">
+        <!-- Step 1: Language selection -->
+        <div class="step-panel active" id="panel-step-1">
+          <h2 style="font-family:var(--font-heading); font-size:28px; margin-bottom:8px; text-align:center;">Choose Language</h2>
+          <p style="color:var(--text-secondary); text-align:center; font-size:15px; margin-bottom:30px;">Select your preferred language. You can change this later in Settings.</p>
+          
+          <div style="display:flex; flex-direction:column; gap:12px; max-width:280px; margin: 40px auto 0;">
+            <button class="btn-secondary lang-select-btn" data-lang="en" style="padding:16px;">English</button>
+            <button class="btn-secondary lang-select-btn" data-lang="te" style="padding:16px;">తెలుగు</button>
+            <button class="btn-secondary lang-select-btn" data-lang="hi" style="padding:16px;">हिंदी</button>
+          </div>
+        </div>
+        
+        <!-- Step 2: Interest tags -->
+        <div class="step-panel" id="panel-step-2">
+          <h2 style="font-family:var(--font-heading); font-size:28px; margin-bottom:8px;">Choose Interests</h2>
+          <p style="color:var(--text-secondary); font-size:15px;">Pick styles and garments you want to customize</p>
+          
+          <div class="tag-grid">
+            <span class="interest-tag">Wedding</span>
+            <span class="interest-tag">Traditional</span>
+            <span class="interest-tag">Retro</span>
+            <span class="interest-tag">Royal</span>
+            <span class="interest-tag">Minimalist</span>
+            <span class="interest-tag">Modern</span>
+            <span class="interest-tag">Bridal Saree</span>
+            <span class="interest-tag">Designer Blouse</span>
+            <span class="interest-tag">Kurti</span>
+            <span class="interest-tag">Lehenga</span>
+            <span class="interest-tag">Festival Wear</span>
+            <span class="interest-tag">Men Wear</span>
+            <span class="interest-tag">Kids Wear</span>
+            <span class="interest-tag">Office Look</span>
+          </div>
+        </div>
+        
+        <!-- Step 3: Color Palette -->
+        <div class="step-panel" id="panel-step-3">
+          <h2 style="font-family:var(--font-heading); font-size:28px; margin-bottom:8px;">Favorite Colors</h2>
+          <p style="color:var(--text-secondary); font-size:15px;">Select colors you wear most often</p>
+          
+          <div class="color-grid">
+            <div class="color-swatch-card" data-color="#C5A059">
+              <div class="color-circle" style="background-color:#C5A059;"></div>
+              <h4 style="font-size:13px; font-weight:600;">Gold</h4>
+            </div>
+            <div class="color-swatch-card" data-color="#B85A38">
+              <div class="color-circle" style="background-color:#B85A38;"></div>
+              <h4 style="font-size:13px; font-weight:600;">Terracotta</h4>
+            </div>
+            <div class="color-swatch-card" data-color="#19233C">
+              <div class="color-circle" style="background-color:#19233C;"></div>
+              <h4 style="font-size:13px; font-weight:600;">Navy</h4>
+            </div>
+            <div class="color-swatch-card" data-color="#386A63">
+              <div class="color-circle" style="background-color:#386A63;"></div>
+              <h4 style="font-size:13px; font-weight:600;">Sage Green</h4>
+            </div>
+            <div class="color-swatch-card" data-color="#D66885">
+              <div class="color-circle" style="background-color:#D66885;"></div>
+              <h4 style="font-size:13px; font-weight:600;">Blush</h4>
+            </div>
+            <div class="color-swatch-card" data-color="#E65C00">
+              <div class="color-circle" style="background-color:#E65C00;"></div>
+              <h4 style="font-size:13px; font-weight:600;">Saffron</h4>
+            </div>
+            <div class="color-swatch-card" data-color="#FAF9F6">
+              <div class="color-circle" style="background-color:#FAF9F6; border:1px solid var(--border-color);"></div>
+              <h4 style="font-size:13px; font-weight:600;">Ivory</h4>
+            </div>
+            <div class="color-swatch-card" data-color="#1A1A1A">
+              <div class="color-circle" style="background-color:#1A1A1A;"></div>
+              <h4 style="font-size:13px; font-weight:600;">Onyx</h4>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Step 4: Fabrics Selector -->
+        <div class="step-panel" id="panel-step-4">
+          <h2 style="font-family:var(--font-heading); font-size:28px; margin-bottom:8px;">Choose Fabrics</h2>
+          <p style="color:var(--text-secondary); font-size:15px;">Pick fabrics you prefer for customized design mapping</p>
+          
+          <div class="fabric-grid">
+            <div class="fabric-card" data-fabric="cotton">
+              <div class="fabric-emoji">🌿</div>
+              <h4 style="font-size:14px; font-weight:600;">Cotton</h4>
+            </div>
+            <div class="fabric-card" data-fabric="silk">
+              <div class="fabric-emoji">🧶</div>
+              <h4 style="font-size:14px; font-weight:600;">Silk</h4>
+            </div>
+            <div class="fabric-card" data-fabric="linen">
+              <div class="fabric-emoji">🌾</div>
+              <h4 style="font-size:14px; font-weight:600;">Linen</h4>
+            </div>
+            <div class="fabric-card" data-fabric="banarasi">
+              <div class="fabric-emoji">✨</div>
+              <h4 style="font-size:14px; font-weight:600;">Banarasi</h4>
+            </div>
+            <div class="fabric-card" data-fabric="khadi">
+              <div class="fabric-emoji">🧵</div>
+              <h4 style="font-size:14px; font-weight:600;">Khadi</h4>
+            </div>
+            <div class="fabric-card" data-fabric="handloom">
+              <div class="fabric-emoji">🚜</div>
+              <h4 style="font-size:14px; font-weight:600;">Handloom</h4>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Step 5: Finish screen -->
+        <div class="step-panel" id="panel-step-5" style="text-align:center;">
+          <div style="font-size:64px; margin: 30px 0 20px; animation:bounce 2s infinite ease-in-out;">🎉</div>
+          <h2 style="font-family:var(--font-heading); font-size:32px; margin-bottom:12px;">You're Ready!</h2>
+          <p style="color:var(--text-secondary); font-size:15px; max-width:400px; margin: 0 auto 30px; line-height:1.6;">
+            We have customized your feed and design options based on your selection. Let's open your personalized Dashboard.
+          </p>
+          <div>
+            <button class="btn-primary glow-btn" id="finish-onboard-btn" style="padding:14px 40px;">Open Dashboard</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Footer navigations -->
+      <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border-color); padding-top:16px;">
+        <button class="btn-secondary" style="border:none;" id="onboard-back-btn">Back</button>
+        <button class="btn-primary" id="onboard-next-btn">Next</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./assets/js/theme.js"></script>
+  <script src="./assets/js/common.js"></script>
+  
+  <script>
+    let currentStep = 1;
+    const totalSteps = 5;
+    
+    const dots = document.querySelectorAll('.indicator-dot');
+    const panels = document.querySelectorAll('.step-panel');
+    const nextBtn = document.getElementById('onboard-next-btn');
+    const backBtn = document.getElementById('onboard-back-btn');
+    
+    // Updates layout step states
+    const updateStep = (step) => {
+      currentStep = step;
+      
+      // Update dots indicator active
+      dots.forEach((dot, idx) => {
+        dot.classList.toggle('active', idx + 1 === step);
+      });
+      
+      // Update display panels active
+      panels.forEach((panel, idx) => {
+        panel.classList.toggle('active', idx + 1 === step);
+      });
+      
+      // Back button visibility
+      backBtn.style.visibility = step === 1 ? 'hidden' : 'visible';
+      
+      // Next buttons labels
+      if (step === 1) {
+        nextBtn.style.display = 'none'; // Language has direct buttons
+      } else if (step === totalSteps) {
+        nextBtn.style.display = 'none'; // Finish step has direct dashboard button
+      } else {
+        nextBtn.style.display = 'block';
+        nextBtn.textContent = 'Next';
+      }
+    };
+    
+    // Initial call setup
+    updateStep(1);
+    
+    // Lang click button logic
+    document.querySelectorAll('.lang-select-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const lang = btn.getAttribute('data-lang');
+        window.AuraLanguage.setLanguage(lang);
+        updateStep(2);
+      });
+    });
+    
+    // Select tag toggles
+    document.querySelectorAll('.interest-tag').forEach(tag => {
+      tag.addEventListener('click', () => tag.classList.toggle('active'));
+    });
+    
+    // Select color swatch toggles
+    document.querySelectorAll('.color-swatch-card').forEach(card => {
+      card.addEventListener('click', () => card.classList.toggle('active'));
+    });
+    
+    // Select fabric card toggles
+    document.querySelectorAll('.fabric-card').forEach(card => {
+      card.addEventListener('click', () => card.classList.toggle('active'));
+    });
+    
+    // Next/Back triggers click listeners
+    nextBtn.addEventListener('click', () => {
+      if (currentStep < totalSteps) updateStep(currentStep + 1);
+    });
+    
+    backBtn.addEventListener('click', () => {
+      if (currentStep > 1) updateStep(currentStep - 1);
+    });
+    
+    // Onboarding complete finish and redirect to customer dashboard
+    document.getElementById('finish-onboard-btn').addEventListener('click', () => {
+      localStorage.setItem('onboarding-completed', 'true');
+      window.AuraToasts.show("Preferences saved!", "success");
+      setTimeout(() => {
+        window.location.href = './customer/dashboard.html';
+      }, 1000);
+    });
+  </script>
+</body>
+</html>

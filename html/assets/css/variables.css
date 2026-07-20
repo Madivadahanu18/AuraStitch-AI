@@ -1,0 +1,132 @@
+/* AuraStitch AI - Design Tokens & Variables System */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+
+:root {
+  /* Fonts */
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'Outfit', sans-serif;
+
+  /* Screen sizes */
+  --navbar-height: 70px;
+  --sidebar-width: 260px;
+  --sidebar-collapsed-width: 80px;
+
+  /* Standard transitions */
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Light Theme Colors (Default Premium) */
+  --bg-primary: #FAF9F6;      /* Off-white canvas */
+  --bg-secondary: #FFFFFF;    /* Pure card white */
+  --bg-tertiary: #F3F1EB;     /* Soft linen gray */
+  --border-color: #E6E1D6;    /* Subtle separation lines */
+  --text-primary: #1A1A1A;    /* Onyx main text */
+  --text-secondary: #6B6861;  /* Slate body text */
+  --text-muted: #9E9B93;      /* Muted placeholder text */
+  
+  /* Brand luxury colors */
+  --accent-gold: #C5A059;     /* Champage gold primary accent */
+  --accent-gold-rgb: 197, 160, 89;
+  --accent-gold-dark: #A47E3D;
+  --accent-gold-glow: rgba(197, 160, 89, 0.15);
+  
+  --accent-teal: #4A7A75;     /* Traditional handloom green */
+  --accent-copper: #B85A38;   /* Earthy terracotta */
+
+  /* Glassmorphism settings */
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.3);
+  --glass-blur: blur(12px);
+  
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.1);
+  --shadow-glow: 0 0 15px var(--accent-gold-glow);
+  
+  --border-radius-sm: 8px;
+  --border-radius-md: 16px;
+  --border-radius-lg: 24px;
+  --border-radius-round: 50%;
+}
+
+/* Dark Mode Bindings */
+[data-theme="dark"] {
+  --bg-primary: #0A0A0B;      /* Deep obsidian black */
+  --bg-secondary: #121215;    /* Charcoal card dark */
+  --bg-tertiary: #19191E;     /* Slaty panel tint */
+  --border-color: #26262B;    /* Neon-cut border line */
+  --text-primary: #F5F5F7;    /* Bright clean text */
+  --text-secondary: #A0A0AB;  /* Slate text */
+  --text-muted: #52525B;      /* Muted line info */
+
+  /* Glow variations */
+  --accent-gold: #E5C180;     /* Rich gold metallic glow */
+  --accent-gold-rgb: 229, 193, 128;
+  --accent-gold-dark: #C5A059;
+  --accent-gold-glow: rgba(229, 193, 128, 0.2);
+
+  --glass-bg: rgba(18, 18, 21, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.05);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Category Inspired Themes */
+[data-theme="traditional"] {
+  --bg-primary: #F7F2EA;      /* Earthy warm linen */
+  --bg-secondary: #FEFDF9;    /* Cream silk */
+  --bg-tertiary: #EFE6D8;     /* Clay sand */
+  --border-color: #E2D2BE;    /* Soft clay outlines */
+  --text-primary: #2C1E14;    /* Mud-earth dark */
+  --text-secondary: #654E3C;  /* Warm clay text */
+  --accent-gold: #B85A38;     /* Terracotta copper primary */
+  --accent-gold-glow: rgba(184, 90, 56, 0.15);
+}
+
+[data-theme="retro"] {
+  --bg-primary: #F0E6EF;      /* Vintage lavender pastel */
+  --bg-secondary: #FFFFFF;    /* Vintage paper */
+  --bg-tertiary: #E8D5E5;     /* Warm pink tint */
+  --border-color: #DFBFD9;    /* Soft purple frames */
+  --text-primary: #2B1828;    /* Deep eggplant */
+  --text-secondary: #704F6B;  /* Muted plum */
+  --accent-gold: #D66885;     /* Retro blush rose gold */
+  --accent-gold-glow: rgba(214, 104, 133, 0.15);
+}
+
+[data-theme="royal"] {
+  --bg-primary: #0A0F1D;      /* Deep midnight blue */
+  --bg-secondary: #11182C;    /* Velvet Navy cards */
+  --bg-tertiary: #19233C;     /* Indigo details */
+  --border-color: #233153;    /* Brass metallic divider */
+  --text-primary: #F1F5F9;    /* Starlight white */
+  --text-secondary: #94A3B8;  /* Sky slate */
+  --accent-gold: #D4AF37;     /* Pure imperial gold */
+  --accent-gold-glow: rgba(212, 175, 55, 0.25);
+}
+
+[data-theme="handloom"] {
+  --bg-primary: #ECE9E4;      /* Handspun raw khadi */
+  --bg-secondary: #F6F4F1;    /* Soft white thread */
+  --bg-tertiary: #DFDAD2;     /* Organic jute fiber */
+  --border-color: #CEC7BA;    /* Loom wooden framing */
+  --text-primary: #232220;    /* Dark charcoal weave */
+  --text-secondary: #58554E;  /* Earthy fiber */
+  --accent-gold: #386A63;     /* Organic leaf green dye */
+  --accent-gold-glow: rgba(56, 106, 99, 0.15);
+}
+
+[data-theme="festival"] {
+  --bg-primary: #FFF1E6;      /* Festive marigold light */
+  --bg-secondary: #FFFFFF;    /* Pure paper white */
+  --bg-tertiary: #FFE3CC;     /* Mild saffron shading */
+  --border-color: #FFCDA6;    /* Warm orange trims */
+  --text-primary: #471900;    /* Dark henna brown */
+  --text-secondary: #8C4723;  /* Marigold shadow */
+  --accent-gold: #E65C00;     /* Rich saffron orange */
+  --accent-gold-glow: rgba(230, 92, 0, 0.15);
+}

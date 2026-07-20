@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Dress Designer Lab - AuraStitch AI</title>
+  
+  <link rel="stylesheet" href="../assets/css/variables.css">
+  <link rel="stylesheet" href="../assets/css/theme.css">
+  <link rel="stylesheet" href="../assets/css/animations.css">
+  <link rel="stylesheet" href="../assets/css/common.css">
+  
+  <style>
+    .designer-grid {
+      display: grid;
+      grid-template-columns: 280px 1fr 340px;
+      height: calc(100vh - var(--navbar-height) - 60px);
+      gap: 24px;
+    }
+    
+    .panel-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-md);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow-y: auto;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    /* Dress categories left panel */
+    .designer-category-btn {
+      padding: 14px;
+      border-radius: var(--border-radius-sm);
+      border: 1px solid var(--border-color);
+      margin-bottom: 12px;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all var(--transition-fast);
+    }
+    
+    .designer-category-btn.active, .designer-category-btn:hover {
+      border-color: var(--accent-gold);
+      background-color: var(--bg-tertiary);
+      color: var(--accent-gold-dark);
+    }
+    
+    /* Mannequin center workspace styling */
+    .mannequin-workspace {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      position: relative;
+    }
+    
+    .mannequin-container {
+      width: 100%;
+      max-width: 440px;
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    
+    .mannequin-svg {
+      width: 100%;
+      height: 100%;
+      max-height: 500px;
+    }
+    
+    /* Options selector styling cards */
+    .customization-section {
+      margin-bottom: 24px;
+    }
+    
+    .section-cards-row {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 10px 0;
+    }
+    
+    .option-swatch-card {
+      min-width: 90px;
+      padding: 10px;
+      border-radius: var(--border-radius-sm);
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-primary);
+      text-align: center;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all var(--transition-fast);
+    }
+    
+    .option-swatch-card:hover, .option-swatch-card.active {
+      border-color: var(--accent-gold);
+      background-color: var(--bg-secondary);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    /* Toggle preview buttons */
+    .controls-panel {
+      display: flex;
+      gap: 10px;
+      background-color: var(--bg-secondary);
+      padding: 10px 20px;
+      border-radius: var(--border-radius-lg);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 20px;
+    }
+    
+    .ctrl-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color var(--transition-fast);
+    }
+    
+    .ctrl-btn:hover, .ctrl-btn.active {
+      background-color: var(--bg-tertiary);
+      border-color: var(--accent-gold);
+    }
+    
+    @media (max-width: 1024px) {
+      .designer-grid {
+        grid-template-columns: 1fr;
+        height: auto;
+        gap: 20px;
+      }
+      .panel-box {
+        height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <app-navbar></app-navbar>
+
+  <div class="app-layout">
+    <app-sidebar class="app-sidebar"></app-sidebar>
+    
+    <main class="app-main">
+      <div class="designer-grid">
+        
+        <!-- Left Panel: Categories -->
+        <div class="panel-box">
+          <h3 style="margin-bottom:20px; font-family:var(--font-heading); font-size:20px;">Garment Category</h3>
+          <button class="designer-category-btn active" data-category="blouse">
+            <span>🥻</span> Blouse Designer
+          </button>
+          <button class="designer-category-btn" data-category="kurti">
+            <span>👗</span> Kurti Designer
+          </button>
+          <button class="designer-category-btn" data-category="lehenga">
+            <span>💃</span> Lehenga Designer
+          </button>
+          <button class="designer-category-btn" data-category="shirt">
+            <span>👔</span> Men's Shirt
+          </button>
+        </div>
+        
+        <!-- Center Panel: Mannequin workspace -->
+        <div class="mannequin-workspace glass-panel">
+          <!-- Toggle modes tools -->
+          <div class="controls-panel">
+            <button class="ctrl-btn active" id="view-front-btn" title="Front View">F</button>
+            <button class="ctrl-btn" id="view-back-btn" title="Back View">B</button>
+            <button class="ctrl-btn" id="view-zoom-btn" title="Zoom Mode">🔍</button>
+            <button class="ctrl-btn" id="view-rotate-btn" title="Auto Rotate Mode">🔄</button>
+          </div>
+          
+          <!-- Mannequin render block -->
+          <div class="mannequin-container" id="mannequin-canvas-wrapper">
+            <!-- Modular custom SVG mannequin layers -->
+            <svg class="mannequin-svg" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+              <!-- Grid Background pattern -->
+              <defs>
+                <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                  <path d="M 20 0 L 0 0 0 20" fill="none" stroke="var(--border-color)" stroke-width="0.5"/>
+                </pattern>
+                
+                <!-- Fabric textures mappings defs patterns -->
+                <pattern id="tex-cotton" width="40" height="40" patternUnits="userSpaceOnUse">
+                  <rect width="40" height="40" fill="#FAF9F6"/>
+                  <path d="M0,10 L40,10 M0,20 L40,20 M0,30 L40,30 M10,0 L10,40 M20,0 L20,40 M30,0 L30,40" stroke="rgba(0,0,0,0.03)" stroke-width="1"/>
+                </pattern>
+                
+                <pattern id="tex-silk" width="60" height="60" patternUnits="userSpaceOnUse">
+                  <rect width="60" height="60" fill="#FFE5D9"/>
+                  <!-- Diag lines simulating silk gloss luster shine -->
+                  <path d="M0,60 L60,0 M0,30 L30,0 M30,60 L60,30" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+                </pattern>
+              </defs>
+              
+              <rect width="100%" height="100%" fill="url(#grid)" opacity="0.3" />
+              
+              <!-- Mannequin Gray base shape body -->
+              <path d="M120,460 L140,220 C140,220 120,200 120,160 C120,120 150,80 200,80 C250,80 280,120 280,160 C280,200 260,220 260,220 L280,460 Z" fill="#E6E1D6" stroke="#9E9B93" stroke-width="1"/>
+              
+              <!-- Custom Neck Shape SVG Layer -->
+              <path id="svg-layer-neck" d="M150,130 C150,130 200,180 250,130" fill="none" stroke="var(--accent-gold)" stroke-width="8" stroke-linecap="round"/>
+              
+              <!-- Custom Sleeve SVG Layer -->
+              <path id="svg-layer-sleeves" d="M120,160 C100,160 80,180 80,220" fill="none" stroke="url(#tex-cotton)" stroke-width="24" stroke-linecap="round"/>
+              <path id="svg-layer-sleeves-right" d="M280,160 C300,160 320,180 320,220" fill="none" stroke="url(#tex-cotton)" stroke-width="24" stroke-linecap="round"/>
+              
+              <!-- Custom Body Bodice overlay -->
+              <path id="svg-layer-body" d="M140,220 C140,220 160,180 200,180 C240,180 260,220 260,220 L275,360 L125,360 Z" fill="url(#tex-cotton)" stroke="var(--border-color)" stroke-width="1"/>
+            </svg>
+          </div>
+          
+          <div style="display:flex; gap:16px; width:100%; justify-content:center;">
+            <button class="btn-secondary" id="action-reset-btn">Reset</button>
+            <button class="btn-primary" id="action-save-btn">Save Design</button>
+          </div>
+        </div>
+        
+        <!-- Right Panel: Configurations options -->
+        <div class="panel-box" id="options-panel-wrapper">
+          <h3 style="margin-bottom:24px; font-family:var(--font-heading); font-size:20px;" id="options-title-heading">Customizations</h3>
+          
+          <!-- Category Option block: Neck selection -->
+          <div class="customization-section">
+            <h4 style="font-size:14px; font-weight:600; color:var(--text-secondary); margin-bottom:10px;">Front Neck Cut</h4>
+            <div class="section-cards-row">
+              <div class="option-swatch-card active" data-neck="boat">Boat Neck</div>
+              <div class="option-swatch-card" data-neck="vneck">V-Neck</div>
+              <div class="option-swatch-card" data-neck="sweet">Sweetheart</div>
+              <div class="option-swatch-card" data-neck="round">Round Cut</div>
+            </div>
+          </div>
+          
+          <!-- Category Option block: Sleeves selection -->
+          <div class="customization-section">
+            <h4 style="font-size:14px; font-weight:600; color:var(--text-secondary); margin-bottom:10px;">Sleeves Pattern</h4>
+            <div class="section-cards-row">
+              <div class="option-swatch-card active" data-sleeve="short">Short Sleeves</div>
+              <div class="option-swatch-card" data-sleeve="puff">Puff Sleeves</div>
+              <div class="option-swatch-card" data-sleeve="elbow">Elbow Length</div>
+              <div class="option-swatch-card" data-sleeve="sleeveless">Sleeveless</div>
+            </div>
+          </div>
+          
+          <!-- Category Option block: Fabric texture selection -->
+          <div class="customization-section">
+            <h4 style="font-size:14px; font-weight:600; color:var(--text-secondary); margin-bottom:10px;">Select Fabric Material</h4>
+            <div class="section-cards-row">
+              <div class="option-swatch-card active" data-texture="tex-cotton">Organic Cotton</div>
+              <div class="option-swatch-card" data-texture="tex-silk">Raw Silk</div>
+            </div>
+          </div>
+          
+          <!-- Government Mock Fabric Image Upload -->
+          <div class="customization-section" style="border-top:1px solid var(--border-color); padding-top:20px;">
+            <h4 style="font-size:14px; font-weight:600; color:var(--text-secondary); margin-bottom:10px;">Upload Custom Fabric Pattern</h4>
+            <input type="file" class="form-input" id="fabric-file-upload">
+          </div>
+        </div>
+        
+      </div>
+    </main>
+  </div>
+
+  <app-bottom-nav></app-bottom-nav>
+
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/common.js"></script>
+  <script src="../components/navbar.js"></script>
+  <script src="../components/sidebar.js"></script>
+  <script src="../components/bottom-nav.js"></script>
+  
+  <script>
+    // State machine matching selected items and design parameters
+    const designState = {
+      neck: 'boat',
+      sleeve: 'short',
+      texture: 'tex-cotton'
+    };
+
+    // Swaps Neck cut shapes inside mannequin SVGs
+    const neckOptions = {
+      boat: "M150,130 C150,130 200,180 250,130",
+      vneck: "M150,130 L200,210 L250,130",
+      sweet: "M150,130 C150,130 180,210 200,200 C220,210 250,130 250,130",
+      round: "M150,130 C150,130 200,240 250,130"
+    };
+
+    // Neck selectors click listener
+    document.querySelectorAll('[data-neck]').forEach(card => {
+      card.addEventListener('click', () => {
+        // Toggle selected styling
+        card.parentNode.querySelectorAll('.option-swatch-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+        
+        const selection = card.getAttribute('data-neck');
+        designState.neck = selection;
+        
+        // Update SVG Neck layer
+        document.getElementById('svg-layer-neck').setAttribute('d', neckOptions[selection]);
+        window.AuraToasts.show(`Neck cut changed to ${selection.toUpperCase()}`, "info");
+      });
+    });
+
+    // Sleeves selectors click listener
+    document.querySelectorAll('[data-sleeve]').forEach(card => {
+      card.addEventListener('click', () => {
+        card.parentNode.querySelectorAll('.option-swatch-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+        
+        const selection = card.getAttribute('data-sleeve');
+        designState.sleeve = selection;
+        
+        const leftSleeve = document.getElementById('svg-layer-sleeves');
+        const rightSleeve = document.getElementById('svg-layer-sleeves-right');
+        
+        if (selection === 'sleeveless') {
+          leftSleeve.style.display = 'none';
+          rightSleeve.style.display = 'none';
+        } else {
+          leftSleeve.style.display = 'block';
+          rightSleeve.style.display = 'block';
+          
+          if (selection === 'short') {
+            leftSleeve.setAttribute('d', "M120,160 C100,160 80,180 80,220");
+            rightSleeve.setAttribute('d', "M280,160 C300,160 320,180 320,220");
+          } else if (selection === 'elbow') {
+            leftSleeve.setAttribute('d', "M120,160 C90,160 60,200 60,260");
+            rightSleeve.setAttribute('d', "M280,160 C310,160 340,200 340,260");
+          } else if (selection === 'puff') {
+            leftSleeve.setAttribute('d', "M120,160 C70,140 70,220 80,220");
+            rightSleeve.setAttribute('d', "M280,160 C330,140 330,220 320,220");
+          }
+        }
+        window.AuraToasts.show(`Sleeves cut changed to ${selection.toUpperCase()}`, "info");
+      });
+    });
+
+    // Texture fabric swapper
+    document.querySelectorAll('[data-texture]').forEach(card => {
+      card.addEventListener('click', () => {
+        card.parentNode.querySelectorAll('.option-swatch-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+        
+        const selection = card.getAttribute('data-texture');
+        designState.texture = selection;
+        
+        document.getElementById('svg-layer-body').setAttribute('fill', `url(#${selection})`);
+        document.getElementById('svg-layer-sleeves').setAttribute('stroke', `url(#${selection})`);
+        document.getElementById('svg-layer-sleeves-right').setAttribute('stroke', `url(#${selection})`);
+        
+        window.AuraToasts.show(`Garment texture set to ${selection.replace('tex-', '').toUpperCase()}`, "info");
+      });
+    });
+
+    // Mock upload fabric texture processor
+    document.getElementById('fabric-file-upload').addEventListener('change', () => {
+      window.AuraToasts.show("Uploading fabric pattern image...", "info");
+      setTimeout(() => {
+        window.AuraToasts.show("Fabric uploaded! AI overlay texture generated.", "success");
+      }, 1000);
+    });
+
+    // Reset controls action
+    document.getElementById('action-reset-btn').addEventListener('click', () => {
+      window.AuraModals.showConfirm({
+        title: "Reset Layout",
+        text: "Are you sure you want to discard your styling options and reset the mannequin?",
+        onConfirm: () => {
+          document.getElementById('svg-layer-neck').setAttribute('d', neckOptions.boat);
+          document.getElementById('svg-layer-body').setAttribute('fill', 'url(#tex-cotton)');
+          window.AuraToasts.show("Mannequin reset completed.", "info");
+        }
+      });
+    });
+
+    // Save triggers save list popup
+    document.getElementById('action-save-btn').addEventListener('click', () => {
+      window.AuraToasts.show("Design successfully saved to Saved Designs portfolio!", "success");
+    });
+  </script>
+</body>
+</html>
