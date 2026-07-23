@@ -26,7 +26,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed, showT
       { path: '/customer', label: 'Feed & Discover', icon: '📱' },
       { path: '/customer/design-lab', label: 'AI Design Lab', icon: '🎨' },
       { path: '/ai', label: 'AI Recommendation', icon: '🤖' },
-      { path: '/customer/wishlist', label: 'Wishlist', icon: '♥' },
       { path: '/customer/cart', label: 'Cart', icon: '🛒' },
       { path: '/customer/orders', label: 'Order Timeline', icon: '📦' },
       { path: '/customer/measurements', label: 'Measurements', icon: '📏' },
@@ -49,7 +48,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed, showT
       { path: '/handloom/products', label: 'Products', icon: '🌾' },
       { path: '/handloom/collections', label: 'Collections', icon: '📂' },
       { path: '/handloom/inventory', label: 'Inventory list', icon: '📦' },
-      { path: '/handloom/ratings', label: 'Artisan Ratings', icon: '★' },
+      { path: '/handloom/ratings', label: 'Raw Materials Marketplace', icon: '🧶' },
       { path: '/handloom/settings', label: 'Settings', icon: '⚙' },
       { path: '/logout', label: 'Logout', icon: '🚪', isLogout: true }
     ],

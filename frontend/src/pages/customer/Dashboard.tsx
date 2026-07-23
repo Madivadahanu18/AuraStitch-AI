@@ -2,6 +2,22 @@ import React, { useState } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
 
+// Relative image imports from ./images/
+import dothiImg from './images/dothi.jpg';
+import dupattaImg from './images/duppatta.jpg';
+import kanchipuramSareeImg from './images/kanchipuramsaree.jpg';
+import mangalagiriDressImg from './images/Mangalagiridress.jpg';
+import pochampallyDressImg from './images/pochampallydress.jpg';
+import sareesImg from './images/Sarees.jpg';
+
+// Helper to ensure Vite resolves imported local image assets into URL strings
+const getImageSrc = (img: any): string => {
+  if (!img) return '';
+  if (typeof img === 'string') return img;
+  if (typeof img === 'object' && 'default' in img) return (img as any).default;
+  return String(img);
+};
+
 interface OutletContextType {
   showToast: (msg: string, type?: 'success' | 'error' | 'warning' | 'info') => void;
 }
@@ -26,7 +42,7 @@ interface ProductItem {
 const customerFeedProducts: ProductItem[] = [
   {
     id: 'c-1',
-    name: 'Pochampally Double Ikat Silk Saree',
+    name: 'Pochampally Dress Material',
     handloomType: 'Pochampally Ikat',
     state: 'Telangana',
     weaverName: 'Kiran Handloom Looms',
@@ -38,11 +54,11 @@ const customerFeedProducts: ProductItem[] = [
     rating: 4.8,
     reviewsCount: 324,
     soldCount: 1256,
-    image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80'
+    image: getImageSrc(pochampallyDressImg)
   },
   {
     id: 'c-2',
-    name: 'Kanchipuram Brocade Bridal Silk Saree',
+    name: 'Kanchipuram Saree',
     handloomType: 'Kanchipuram Silk',
     state: 'Tamil Nadu',
     weaverName: 'Kanchi Silk Artisans',
@@ -54,11 +70,11 @@ const customerFeedProducts: ProductItem[] = [
     rating: 4.9,
     reviewsCount: 640,
     soldCount: 1890,
-    image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=600&q=80'
+    image: getImageSrc(kanchipuramSareeImg)
   },
   {
     id: 'c-3',
-    name: 'Mangalagiri Cotton Unstitched Fabric',
+    name: 'Mangalagiri Dress',
     handloomType: 'Mangalagiri Cotton',
     state: 'Andhra Pradesh',
     weaverName: 'Mangalagiri Weavers Co-op',
@@ -70,23 +86,55 @@ const customerFeedProducts: ProductItem[] = [
     rating: 4.7,
     reviewsCount: 210,
     soldCount: 980,
-    image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=600&q=80'
+    image: getImageSrc(mangalagiriDressImg)
   },
   {
     id: 'c-4',
-    name: 'Chanderi Zari Border Sheer Kurti Material',
-    handloomType: 'Chanderi',
-    state: 'Madhya Pradesh',
-    weaverName: 'Chanderi Collective',
-    price: 3200,
-    originalPrice: 4000,
+    name: 'Traditional Handwoven Dhoti',
+    handloomType: 'Traditional Handloom Cotton',
+    state: 'Kerala',
+    weaverName: 'Kerala Weaver Collective',
+    price: 1450,
+    originalPrice: 1800,
+    discount: 19,
+    availability: 'In Stock',
+    estimatedDelivery: '4–6 Days',
+    rating: 4.6,
+    reviewsCount: 145,
+    soldCount: 680,
+    image: getImageSrc(dothiImg)
+  },
+  {
+    id: 'c-5',
+    name: 'Handloom Dupatta',
+    handloomType: 'Pure Fine Cotton Dupatta',
+    state: 'West Bengal',
+    weaverName: 'Bengal Artisan Forum',
+    price: 1250,
+    originalPrice: 1600,
+    discount: 22,
+    availability: 'In Stock',
+    estimatedDelivery: '5–7 Days',
+    rating: 4.8,
+    reviewsCount: 310,
+    soldCount: 840,
+    image: getImageSrc(dupattaImg)
+  },
+  {
+    id: 'c-6',
+    name: 'Cotton Saree Collection',
+    handloomType: 'Pure Cotton Handloom',
+    state: 'Andhra Pradesh',
+    weaverName: 'Heritage Weaver Society',
+    price: 2800,
+    originalPrice: 3500,
     discount: 20,
     availability: 'In Stock',
     estimatedDelivery: '6–8 Days',
-    rating: 4.8,
-    reviewsCount: 410,
-    soldCount: 1620,
-    image: 'https://images.unsplash.com/photo-1608748010899-18f300247112?auto=format&fit=crop&w=600&q=80'
+    rating: 4.9,
+    reviewsCount: 512,
+    soldCount: 1420,
+    image: getImageSrc(sareesImg)
   }
 ];
 
@@ -274,26 +322,51 @@ export const CustomerDashboard: React.FC = () => {
       <div className="stories-row">
         <div className="story-bubble">
           <div className="story-avatar-border">
-            <img className="story-img" src="https://images.unsplash.com/photo-1610030469668-93535c17b6b3?auto=format&fit=crop&w=100&q=80" alt="pochampally" />
+            <img className="story-img" src={getImageSrc(pochampallyDressImg)} alt="pochampally" />
           </div>
           <span style={{ fontSize: '12px' }}>Pochampally</span>
         </div>
         
         <div className="story-bubble">
           <div className="story-avatar-border">
-            <img className="story-img" src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=100&q=80" alt="kanchi" />
+            <img className="story-img" src={getImageSrc(kanchipuramSareeImg)} alt="kanchi" />
           </div>
           <span style={{ fontSize: '12px' }}>Kanchi Silk</span>
         </div>
         
         <div className="story-bubble">
           <div className="story-avatar-border">
-            <img className="story-img" src="https://images.unsplash.com/photo-1608748010899-18f300247112?auto=format&fit=crop&w=100&q=80" alt="mangalagiri" />
+            <img className="story-img" src={getImageSrc(mangalagiriDressImg)} alt="mangalagiri" />
           </div>
           <span style={{ fontSize: '12px' }}>Mangalagiri</span>
         </div>
       </div>
       
+      {/* Preloaded Cart Section */}
+      <div className="glass-panel" style={{ padding: '20px', marginBottom: '28px', borderLeft: '4px solid var(--accent-gold)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+          <h3 style={{ margin: 0, fontSize: '18px', fontFamily: 'var(--font-heading)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            🛒 My Active Shopping Cart <span style={{ fontSize: '12px', background: 'var(--accent-gold)', color: '#000', padding: '2px 8px', borderRadius: '12px', fontWeight: 800 }}>1 Item</span>
+          </h3>
+          <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Preloaded Customer Order</span>
+        </div>
+
+        <div style={{ display: 'flex', gap: '16px', background: 'var(--bg-primary)', padding: '14px', borderRadius: '10px', border: '1px solid var(--border-color)', alignItems: 'center', flexWrap: 'wrap' }}>
+          <img src={getImageSrc(dothiImg)} alt="Traditional Handwoven Cotton Dhoti" style={{ width: '70px', height: '70px', borderRadius: '8px', objectFit: 'cover' }} />
+          <div style={{ flex: 1, minWidth: '200px' }}>
+            <span style={{ fontSize: '11px', color: 'var(--accent-gold)', fontWeight: 700 }}>Traditional Handloom Cotton</span>
+            <h4 style={{ margin: '2px 0 4px', fontSize: '16px', fontWeight: 700 }}>Traditional Handwoven Cotton Dhoti</h4>
+            <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+              Seller: <strong>Kerala Weaver Collective</strong> • Qty: <strong>1</strong>
+            </div>
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Price: ₹1,450</div>
+            <div style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)' }}>Total: ₹1,450</div>
+          </div>
+        </div>
+      </div>
+
       {/* Horizontal Category Tabs for Theme Shifts */}
       <div className="category-tabs">
         {[

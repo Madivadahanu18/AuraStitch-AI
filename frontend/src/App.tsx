@@ -22,6 +22,11 @@ import DesignLab from './pages/customer/DesignLab';
 import TailorDashboard from './pages/tailor/Dashboard';
 import HandloomDashboard from './pages/handloom/Dashboard';
 import AIHandloomStudio from './pages/handloom/AIHandloomStudio';
+import HandloomProducts from './pages/handloom/Products';
+import HandloomCollections from './pages/handloom/Collections';
+import HandloomInventory from './pages/handloom/Inventory';
+import RawMaterialsMarketplace from './pages/handloom/RawMaterialsMarketplace';
+import HandloomSettings from './pages/handloom/Settings';
 import SupplierDashboard from './pages/supplier/Dashboard';
 import AdminDashboard from './pages/admin/Dashboard';
 import AIDashboard from './pages/ai/Dashboard';
@@ -29,6 +34,8 @@ import AIDashboard from './pages/ai/Dashboard';
 import DiscoverPage from './pages/DiscoverPage';
 import ReelsPage from './pages/ReelsPage';
 import WishlistPage from './pages/WishlistPage';
+import CartPage from './pages/CartPage';
+import OrderTimeline from './pages/OrderTimeline';
 import MessagesPage from './pages/MessagesPage';
 import NotificationsPage from './pages/NotificationsPage';
 import ProfilePage from './pages/ProfilePage';
@@ -173,6 +180,11 @@ const AppContent: React.FC = () => {
           
           {/* Weaver */}
           <Route path="/handloom" element={<RoleRoute allowedRoles={['weaver']}><HandloomDashboard /></RoleRoute>} />
+          <Route path="/handloom/products" element={<RoleRoute allowedRoles={['weaver']}><HandloomProducts /></RoleRoute>} />
+          <Route path="/handloom/collections" element={<RoleRoute allowedRoles={['weaver']}><HandloomCollections /></RoleRoute>} />
+          <Route path="/handloom/inventory" element={<RoleRoute allowedRoles={['weaver']}><HandloomInventory /></RoleRoute>} />
+          <Route path="/handloom/ratings" element={<RoleRoute allowedRoles={['weaver']}><RawMaterialsMarketplace /></RoleRoute>} />
+          <Route path="/handloom/settings" element={<RoleRoute allowedRoles={['weaver']}><HandloomSettings /></RoleRoute>} />
           <Route path="/handloom/ai-handloom-studio" element={<RoleRoute allowedRoles={['weaver']}><AIHandloomStudio /></RoleRoute>} />
 
           {/* Supplier */}
@@ -188,6 +200,8 @@ const AppContent: React.FC = () => {
           <Route path="/discover" element={<DiscoverPage />} />
           <Route path="/reels" element={<ReelsPage />} />
           <Route path="/wishlist" element={<WishlistPage />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/order-timeline" element={<OrderTimeline />} />
           <Route path="/messages" element={<MessagesPage />} />
           <Route path="/notifications" element={<NotificationsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
