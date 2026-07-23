@@ -165,6 +165,8 @@ export const DesignLab: React.FC = () => {
     budget: 'all'
   });
 
+  const texture = selectedFilters.fabric?.toLowerCase() === 'cotton' ? 'tex-cotton' : 'tex-silk';
+
   // AI Chat Panel States
   const [chatInput, setChatInput] = useState('');
   const [messages, setMessages] = useState<Array<{ sender: 'user' | 'ai'; text: string; time: string }>>([
