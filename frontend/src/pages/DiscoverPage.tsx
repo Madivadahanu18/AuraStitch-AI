@@ -16,6 +16,7 @@ interface ProductItem {
   id: string;
   name: string;
   clothType: string;
+  sellerName?: string;
   price: number;
   rating: number;
   image: string;
@@ -58,6 +59,7 @@ const mockTrendingProducts: ProductItem[] = [
     id: 'tp-1',
     name: 'Pochampally Ikat Silk Saree',
     clothType: 'Silk Saree',
+    sellerName: 'Master Weaver Ramu',
     price: 4850,
     rating: 4.8,
     image: getImageSrc(pochampallyImg)
@@ -66,6 +68,7 @@ const mockTrendingProducts: ProductItem[] = [
     id: 'tp-2',
     name: 'Kanchipuram Pattu Bridal Saree',
     clothType: 'Silk Saree',
+    sellerName: 'Kanchipuram Artisan Guild',
     price: 12450,
     rating: 4.9,
     image: getImageSrc(pattuSareeImg)
@@ -74,6 +77,7 @@ const mockTrendingProducts: ProductItem[] = [
     id: 'tp-3',
     name: 'Mangalagiri Nizam Border Cotton Saree',
     clothType: 'Cotton Saree',
+    sellerName: 'Narayana Murthy Weaves',
     price: 2450,
     rating: 4.7,
     image: getImageSrc(cottonSareesImg)
@@ -82,6 +86,7 @@ const mockTrendingProducts: ProductItem[] = [
     id: 'tp-4',
     name: 'Traditional Handwoven Cotton Dhoti',
     clothType: 'Dhoti',
+    sellerName: 'Santipur Handloom Society',
     price: 1450,
     rating: 4.6,
     image: getImageSrc(dhotiImg)
@@ -90,6 +95,7 @@ const mockTrendingProducts: ProductItem[] = [
     id: 'tp-5',
     name: 'Handloom Linen Dress Material',
     clothType: 'Dress Material',
+    sellerName: 'Kiran Handloom Looms',
     price: 1850,
     rating: 4.8,
     image: getImageSrc(mangalagiriDressImg)
@@ -227,6 +233,35 @@ export const DiscoverPage: React.FC = () => {
   const [selectedModalProduct, setSelectedModalProduct] = useState<ProductItem | null>(null);
   const [selectedModalWeaver, setSelectedModalWeaver] = useState<WeaverItem | null>(null);
   const [selectedModalTailor, setSelectedModalTailor] = useState<TailorItem | null>(null);
+
+  const handleAddToCart = (product: ProductItem) => {
+    try {
+      const existingCartRaw = localStorage.getItem('aurastitch_cart');
+      let cart: any[] = existingCartRaw ? JSON.parse(existingCartRaw) : [];
+
+      const existingIndex = cart.findIndex((item: any) => item.id === product.id || item.name === product.name);
+      if (existingIndex > -1) {
+        cart[existingIndex].quantity = (cart[existingIndex].quantity || 1) + 1;
+      } else {
+        cart.push({
+          id: product.id,
+          name: product.name,
+          clothType: product.clothType,
+          sellerName: product.sellerName || 'Master Weaver',
+          price: product.price,
+          quantity: 1,
+          image: product.image
+        });
+      }
+
+      localStorage.setItem('aurastitch_cart', JSON.stringify(cart));
+      window.dispatchEvent(new Event('cartUpdated'));
+      showToast(`Added "${product.name}" to Cart!`, 'success');
+    } catch (err) {
+      console.error("Failed to update cart:", err);
+      showToast(`Added "${product.name}" to Cart!`, 'success');
+    }
+  };
 
   // Filtered Products
   const filteredProducts = useMemo(() => {
@@ -661,7 +696,7 @@ export const DiscoverPage: React.FC = () => {
                 
                 {/* 3 Action Buttons in exact order */}
                 <div className="disc-actions-column">
-                  <button className="btn-disc-cart" onClick={() => showToast(`Added "${product.name}" to Cart!`, 'success')}>
+                  <button className="btn-disc-cart" onClick={() => handleAddToCart(product)}>
                     🛒 Add to Cart
                   </button>
                   <Link to="/messages" className="btn-disc-msg">

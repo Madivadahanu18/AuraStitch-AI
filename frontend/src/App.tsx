@@ -34,6 +34,7 @@ import AIDashboard from './pages/ai/Dashboard';
 import DiscoverPage from './pages/DiscoverPage';
 import ReelsPage from './pages/ReelsPage';
 import WishlistPage from './pages/WishlistPage';
+import Cart from './pages/Cart';
 import CartPage from './pages/CartPage';
 import OrderTimeline from './pages/OrderTimeline';
 import MessagesPage from './pages/MessagesPage';
@@ -200,7 +201,8 @@ const AppContent: React.FC = () => {
           <Route path="/discover" element={<DiscoverPage />} />
           <Route path="/reels" element={<ReelsPage />} />
           <Route path="/wishlist" element={<WishlistPage />} />
-          <Route path="/cart" element={<CartPage />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/customer/cart" element={<Cart />} />
           <Route path="/order-timeline" element={<OrderTimeline />} />
           <Route path="/messages" element={<MessagesPage />} />
           <Route path="/notifications" element={<NotificationsPage />} />
