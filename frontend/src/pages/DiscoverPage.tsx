@@ -827,29 +827,30 @@ export const DiscoverPage: React.FC = () => {
         /* Product Cards Grid */
         .cards-scroll-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-          gap: 20px;
+          grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+          gap: 24px;
         }
 
         .disc-prod-card {
           background: var(--bg-secondary);
           border: 1px solid var(--border-color);
-          border-radius: var(--border-radius-lg);
+          border-radius: 20px;
           overflow: hidden;
-          box-shadow: var(--shadow-sm);
+          box-shadow: 0 8px 25px rgba(212, 163, 115, 0.08);
           display: flex;
           flex-direction: column;
-          transition: transform 0.3s ease, border-color 0.3s ease;
+          transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .disc-prod-card:hover {
-          transform: translateY(-4px);
-          border-color: var(--accent-gold);
+          transform: translateY(-6px);
+          border-color: #D4A373;
+          box-shadow: 0 14px 35px rgba(212, 163, 115, 0.2);
         }
 
         .disc-img-box {
           width: 100%;
-          height: 190px;
+          height: 220px;
           overflow: hidden;
           background: #111;
           position: relative;
@@ -863,11 +864,11 @@ export const DiscoverPage: React.FC = () => {
         }
 
         .disc-prod-card:hover .disc-prod-img {
-          transform: scale(1.05);
+          transform: scale(1.06);
         }
 
         .disc-prod-body {
-          padding: 16px;
+          padding: 18px;
           display: flex;
           flex-direction: column;
           flex: 1;

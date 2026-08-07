@@ -218,23 +218,25 @@ export const CartPage: React.FC = () => {
         .cart-item-card {
           background: var(--bg-secondary);
           border: 1px solid var(--border-color);
-          border-radius: var(--border-radius-lg);
-          padding: 20px;
+          border-radius: 20px;
+          padding: 22px;
           display: flex;
-          gap: 20px;
-          box-shadow: var(--shadow-sm);
+          gap: 22px;
+          box-shadow: 0 8px 25px rgba(212, 163, 115, 0.08);
           position: relative;
-          transition: border-color 0.2s ease;
+          transition: all 0.3s ease;
         }
 
         .cart-item-card:hover {
-          border-color: var(--accent-gold);
+          border-color: #D4A373;
+          box-shadow: 0 12px 32px rgba(212, 163, 115, 0.18);
+          transform: translateY(-3px);
         }
 
         .cart-item-img {
-          width: 110px;
-          height: 110px;
-          border-radius: 10px;
+          width: 130px;
+          height: 130px;
+          border-radius: 16px;
           object-fit: cover;
           background: #111;
           flex-shrink: 0;
@@ -250,7 +252,7 @@ export const CartPage: React.FC = () => {
         .cart-cloth-tag {
           font-size: 11px;
           font-weight: 700;
-          color: var(--accent-gold);
+          color: #D4A373;
           text-transform: uppercase;
           letter-spacing: 0.5px;
         }
@@ -274,8 +276,8 @@ export const CartPage: React.FC = () => {
           display: inline-flex;
           align-items: center;
           gap: 4px;
-          padding: 3px 8px;
-          border-radius: 6px;
+          padding: 4px 10px;
+          border-radius: 12px;
           font-size: 11px;
           font-weight: 800;
           width: fit-content;
@@ -283,8 +285,8 @@ export const CartPage: React.FC = () => {
         }
 
         .badge-only-left { background: rgba(230, 57, 70, 0.15); color: #e63946; border: 1px solid #e63946; }
-        .badge-price-updated { background: rgba(197, 160, 89, 0.2); color: var(--accent-gold-dark); border: 1px solid var(--accent-gold); }
-        .badge-in-stock { background: rgba(42, 157, 143, 0.15); color: #2a9d8f; border: 1px solid #2a9d8f; }
+        .badge-price-updated { background: rgba(212, 163, 115, 0.2); color: #B88555; border: 1px solid #D4A373; }
+        .badge-in-stock { background: rgba(46, 139, 87, 0.15); color: #2E8B57; border: 1px solid #2E8B57; }
 
         .cart-item-actions-flex {
           display: flex;
@@ -293,36 +295,36 @@ export const CartPage: React.FC = () => {
         }
 
         .btn-action-sm {
-          padding: 7px 12px;
+          padding: 8px 16px;
           font-size: 12px;
           font-weight: 700;
-          border-radius: 6px;
+          border-radius: 20px;
           cursor: pointer;
           border: 1px solid var(--border-color);
           background: var(--bg-tertiary);
           color: var(--text-primary);
-          transition: all 0.2s ease;
+          transition: all 0.25s ease;
         }
 
         .btn-action-sm:hover {
-          border-color: var(--accent-gold);
-          color: var(--accent-gold);
+          border-color: #D4A373;
+          color: #D4A373;
         }
 
         .btn-action-remove {
-          padding: 7px 12px;
+          padding: 8px 16px;
           font-size: 12px;
           font-weight: 700;
-          border-radius: 6px;
+          border-radius: 20px;
           cursor: pointer;
-          border: 1px solid #e63946;
-          background: rgba(230, 57, 70, 0.1);
-          color: #e63946;
-          transition: all 0.2s ease;
+          border: 1px solid #C06C84;
+          background: rgba(192, 108, 132, 0.1);
+          color: #C06C84;
+          transition: all 0.25s ease;
         }
 
         .btn-action-remove:hover {
-          background: #e63946;
+          background: #C06C84;
           color: #ffffff;
         }
 
@@ -337,30 +339,32 @@ export const CartPage: React.FC = () => {
         .qty-control-box {
           display: flex;
           align-items: center;
-          gap: 8px;
-          background: var(--bg-primary);
+          gap: 10px;
+          background: var(--bg-tertiary);
           border: 1px solid var(--border-color);
-          border-radius: 8px;
-          padding: 3px 8px;
+          border-radius: 24px;
+          padding: 4px 12px;
         }
 
         .btn-qty {
-          width: 26px;
-          height: 26px;
-          border-radius: 6px;
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
           border: 1px solid var(--border-color);
-          background: var(--bg-tertiary);
+          background: var(--bg-secondary);
           color: var(--text-primary);
           font-weight: 800;
           cursor: pointer;
           display: flex;
           align-items: center;
           justify-content: center;
+          transition: all 0.2s ease;
         }
 
         .btn-qty:hover {
-          border-color: var(--accent-gold);
-          color: var(--accent-gold);
+          border-color: #D4A373;
+          color: #D4A373;
+          transform: scale(1.1);
         }
 
         .qty-val-num {

@@ -44,7 +44,8 @@ export const Navbar: React.FC<NavbarProps> = ({ showToast }) => {
           background: var(--glass-bg);
           backdrop-filter: var(--glass-blur);
           -webkit-backdrop-filter: var(--glass-blur);
-          border-bottom: 1px solid var(--border-color);
+          border-bottom: 1px solid var(--glass-border);
+          box-shadow: var(--shadow-sm);
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -61,9 +62,10 @@ export const Navbar: React.FC<NavbarProps> = ({ showToast }) => {
           align-items: center;
           gap: 10px;
           font-family: var(--font-heading);
-          font-size: 24px;
-          font-weight: 700;
+          font-size: 26px;
+          font-weight: 800;
           color: var(--text-primary);
+          letter-spacing: -0.5px;
         }
         
         .logo-gold {
@@ -73,27 +75,29 @@ export const Navbar: React.FC<NavbarProps> = ({ showToast }) => {
         .search-wrapper {
           position: relative;
           width: 100%;
-          max-width: 400px;
+          max-width: 420px;
         }
         
         .search-bar-input {
           width: 100%;
-          padding: 10px 16px 10px 40px;
-          border-radius: var(--border-radius-lg);
-          background-color: var(--bg-tertiary);
+          padding: 10px 18px 10px 42px;
+          border-radius: 30px;
+          background-color: var(--bg-secondary);
           border: 1px solid var(--border-color);
           color: var(--text-primary);
-          transition: border-color var(--transition-fast), background-color var(--transition-fast);
+          transition: all 0.3s ease;
+          box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.02);
         }
         
         .search-bar-input:focus {
           border-color: var(--accent-gold);
           background-color: var(--bg-secondary);
+          box-shadow: 0 0 0 3px var(--accent-gold-glow);
         }
         
         .search-icon {
           position: absolute;
-          left: 14px;
+          left: 16px;
           top: 50%;
           transform: translateY(-50%);
           color: var(--text-muted);

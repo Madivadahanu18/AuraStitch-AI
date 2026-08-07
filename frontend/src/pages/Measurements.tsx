@@ -242,11 +242,11 @@ export const Measurements: React.FC = () => {
         }
 
         .profile-chip.active {
-          background: var(--accent-gold);
-          color: #000;
-          border-color: var(--accent-gold);
+          background: linear-gradient(135deg, #D4A373 0%, #C06C84 100%);
+          color: #FFFFFF;
+          border-color: #D4A373;
           font-weight: 800;
-          box-shadow: 0 2px 8px rgba(212, 160, 23, 0.3);
+          box-shadow: 0 4px 15px rgba(212, 163, 115, 0.3);
         }
 
         .unit-toggle-box {
@@ -255,13 +255,13 @@ export const Measurements: React.FC = () => {
           gap: 4px;
           background: var(--bg-tertiary);
           padding: 4px;
-          border-radius: 8px;
+          border-radius: 20px;
           border: 1px solid var(--border-color);
         }
 
         .unit-btn {
-          padding: 4px 10px;
-          border-radius: 6px;
+          padding: 6px 14px;
+          border-radius: 16px;
           border: none;
           background: transparent;
           font-size: 12px;
@@ -271,8 +271,8 @@ export const Measurements: React.FC = () => {
         }
 
         .unit-btn.active {
-          background: var(--accent-gold);
-          color: #000;
+          background: #D4A373;
+          color: #FFFFFF;
         }
 
         /* Main Grid: Form + Silhouette + Preview */
@@ -291,9 +291,9 @@ export const Measurements: React.FC = () => {
         .m-form-card {
           background: var(--bg-secondary);
           border: 1px solid var(--border-color);
-          border-radius: var(--border-radius-lg);
-          padding: 24px;
-          box-shadow: var(--shadow-sm);
+          border-radius: 20px;
+          padding: 26px;
+          box-shadow: 0 8px 25px rgba(212, 163, 115, 0.08);
         }
 
         .m-inputs-grid {
@@ -319,20 +319,20 @@ export const Measurements: React.FC = () => {
         }
 
         .m-input-field {
-          padding: 10px 14px;
-          border-radius: 8px;
+          padding: 11px 16px;
+          border-radius: 12px;
           border: 1px solid var(--border-color);
-          background: var(--bg-primary);
+          background: var(--bg-secondary);
           color: var(--text-primary);
           font-size: 14px;
           font-weight: 600;
           outline: none;
-          transition: border-color 0.2s ease, box-shadow 0.2s ease;
+          transition: all 0.25s ease;
         }
 
         .m-input-field:focus, .m-input-field:hover {
-          border-color: var(--accent-gold);
-          box-shadow: 0 0 0 2px rgba(212, 160, 23, 0.15);
+          border-color: #D4A373;
+          box-shadow: 0 0 0 3px rgba(212, 163, 115, 0.2);
         }
 
         /* Buttons Row */
@@ -347,19 +347,21 @@ export const Measurements: React.FC = () => {
         .btn-m-save {
           flex: 2;
           min-width: 140px;
-          padding: 12px 20px;
-          border-radius: 8px;
-          background: linear-gradient(135deg, var(--accent-gold) 0%, #b38627 100%);
+          padding: 12px 24px;
+          border-radius: 30px;
+          background: linear-gradient(135deg, #D4A373 0%, #C06C84 100%);
           border: none;
-          color: #000;
+          color: #FFFFFF;
           font-weight: 800;
           font-size: 14px;
           cursor: pointer;
-          transition: transform 0.2s ease;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 15px rgba(212, 163, 115, 0.3);
         }
 
         .btn-m-save:hover {
           transform: translateY(-2px);
+          box-shadow: 0 8px 22px rgba(212, 163, 115, 0.45);
         }
 
         .btn-m-update {

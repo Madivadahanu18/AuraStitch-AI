@@ -118,10 +118,10 @@ export const BottomNav: React.FC<BottomNavProps> = () => {
           left: 0;
           right: 0;
           height: 68px;
-          background: var(--glass-bg, rgba(255,255,255,0.85));
+          background: var(--glass-bg, rgba(250,247,242,0.85));
           backdrop-filter: var(--glass-blur, blur(20px));
           -webkit-backdrop-filter: var(--glass-blur, blur(20px));
-          border-top: 1px solid var(--border-color, rgba(0,0,0,0.1));
+          border-top: 1px solid var(--glass-border, rgba(200,155,60,0.2));
           z-index: 999;
           display: flex;
           justify-content: space-around;
@@ -132,8 +132,8 @@ export const BottomNav: React.FC<BottomNavProps> = () => {
         }
 
         .dark-mode .bottom-nav-container {
-          background: rgba(20,20,25,0.85);
-          border-top: 1px solid rgba(255,255,255,0.1);
+          background: rgba(24,23,26,0.85);
+          border-top: 1px solid rgba(214,168,72,0.15);
         }
         
         .bottom-nav-item {

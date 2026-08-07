@@ -39,6 +39,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setLoading(false);
   }, []);
 
+  useEffect(() => {
+    if (user?.role) {
+      document.documentElement.setAttribute('data-user-role', user.role);
+    } else {
+      document.documentElement.removeAttribute('data-user-role');
+    }
+  }, [user]);
+
   const login = async (email: string, password: string): Promise<UserType> => {
     setLoading(true);
     try {

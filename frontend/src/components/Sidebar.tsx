@@ -119,17 +119,26 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed, showT
           display: flex;
           align-items: center;
           gap: 14px;
-          padding: 12px 16px;
-          border-radius: var(--border-radius-sm);
+          padding: 12px 18px;
+          border-radius: var(--border-radius-md);
           font-size: 15px;
           font-weight: 500;
           color: var(--text-secondary);
-          transition: background-color var(--transition-fast), color var(--transition-fast);
+          transition: all 0.3s ease;
         }
         
-        .menu-link:hover, .menu-link.active {
-          background-color: var(--bg-tertiary);
+        .menu-link:hover {
+          background-color: rgba(var(--accent-gold-rgb), 0.08);
           color: var(--accent-gold);
+          transform: translateX(4px);
+        }
+
+        .menu-link.active {
+          background: linear-gradient(135deg, rgba(200, 155, 60, 0.15), rgba(122, 46, 46, 0.08));
+          border-left: 4px solid var(--accent-gold);
+          color: var(--accent-gold);
+          font-weight: 700;
+          box-shadow: var(--shadow-sm);
         }
         
         .menu-icon {

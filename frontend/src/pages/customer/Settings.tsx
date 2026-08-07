@@ -206,15 +206,16 @@ export const CustomerSettings: React.FC = () => {
         .cs-section-card {
           background: var(--bg-secondary);
           border: 1px solid var(--border-color);
-          border-radius: var(--border-radius-lg);
-          padding: 24px;
+          border-radius: 20px;
+          padding: 26px;
           margin-bottom: 24px;
-          box-shadow: var(--shadow-sm);
-          transition: border-color 0.2s ease;
+          box-shadow: 0 8px 25px rgba(212, 163, 115, 0.08);
+          transition: all 0.3s ease;
         }
 
         .cs-section-card:hover {
-          border-color: var(--accent-gold);
+          border-color: #D4A373;
+          box-shadow: 0 12px 32px rgba(212, 163, 115, 0.18);
         }
 
         .cs-section-title {
@@ -222,7 +223,7 @@ export const CustomerSettings: React.FC = () => {
           font-size: 18px;
           font-weight: 800;
           margin: 0 0 20px;
-          color: var(--accent-gold);
+          color: #D4A373;
           display: flex;
           align-items: center;
           gap: 10px;
@@ -244,7 +245,8 @@ export const CustomerSettings: React.FC = () => {
           height: 100px;
           border-radius: 50%;
           overflow: hidden;
-          border: 3px solid var(--accent-gold);
+          border: 3px solid #D4A373;
+          box-shadow: 0 4px 15px rgba(212, 163, 115, 0.25);
           flex-shrink: 0;
           background: #111;
         }
@@ -291,14 +293,14 @@ export const CustomerSettings: React.FC = () => {
         }
 
         .cs-input {
-          padding: 10px 14px;
-          border-radius: 8px;
+          padding: 11px 16px;
+          border-radius: 12px;
           border: 1px solid var(--border-color);
-          background: var(--bg-primary);
+          background: var(--bg-secondary);
           color: var(--text-primary);
           font-size: 14px;
           outline: none;
-          transition: border-color 0.2s ease;
+          transition: all 0.25s ease;
         }
 
         .cs-input:disabled {
@@ -307,7 +309,8 @@ export const CustomerSettings: React.FC = () => {
         }
 
         .cs-input:focus {
-          border-color: var(--accent-gold);
+          border-color: #D4A373;
+          box-shadow: 0 0 0 3px rgba(212, 163, 115, 0.2);
         }
 
         .account-btn-row {
@@ -328,9 +331,9 @@ export const CustomerSettings: React.FC = () => {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 12px 14px;
+          padding: 14px 18px;
           background: var(--bg-tertiary);
-          border-radius: 8px;
+          border-radius: 16px;
           border: 1px solid var(--border-color);
         }
 
@@ -341,7 +344,7 @@ export const CustomerSettings: React.FC = () => {
         }
 
         .switch-input {
-          width: 44px;
+          width: 46px;
           height: 24px;
           appearance: none;
           background: var(--border-color);
@@ -353,7 +356,7 @@ export const CustomerSettings: React.FC = () => {
         }
 
         .switch-input:checked {
-          background: var(--accent-gold);
+          background: linear-gradient(135deg, #D4A373 0%, #C06C84 100%);
         }
 
         .switch-input::before {
@@ -369,8 +372,8 @@ export const CustomerSettings: React.FC = () => {
         }
 
         .switch-input:checked::before {
-          transform: translateX(20px);
-          background: #000;
+          transform: translateX(22px);
+          background: #FFFFFF;
         }
 
         /* Application List */

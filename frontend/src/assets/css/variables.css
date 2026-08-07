@@ -1,6 +1,6 @@
-/* AuraStitch AI - Design Tokens & Variables System */
+/* AuraStitch AI - Luxury Design System Tokens */
 
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght=0,400;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght=0,400;0,600;0,700;0,800;1,400&display=swap');
 
 :root {
   /* Fonts */
@@ -8,7 +8,7 @@
   --font-body: 'Outfit', sans-serif;
 
   /* Screen sizes */
-  --navbar-height: 70px;
+  --navbar-height: 72px;
   --sidebar-width: 260px;
   --sidebar-collapsed-width: 80px;
 
@@ -16,117 +16,154 @@
   --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  /* Light Theme Colors (Default Premium) */
-  --bg-primary: #FAF9F6;      /* Off-white canvas */
-  --bg-secondary: #FFFFFF;    /* Pure card white */
-  --bg-tertiary: #F3F1EB;     /* Soft linen gray */
-  --border-color: #E6E1D6;    /* Subtle separation lines */
-  --text-primary: #1A1A1A;    /* Onyx main text */
-  --text-secondary: #6B6861;  /* Slate body text */
-  --text-muted: #9E9B93;      /* Muted placeholder text */
+  /* Light Theme - Warm Luxury Palette */
+  --bg-primary: #FAF7F2;      /* Ivory main background canvas */
+  --bg-secondary: #FFFFFF;    /* Pure White card container */
+  --bg-tertiary: #F5EFE6;     /* Beige soft textured background */
+  --border-color: #E6DDD0;    /* Soft gold/beige border line */
+  --text-primary: #2E2E2E;    /* Charcoal main typography */
+  --text-secondary: #5C5852;  /* Warm muted slate body text */
+  --text-muted: #8C867D;      /* Muted placeholder text */
   
-  /* Brand luxury colors */
-  --accent-gold: #C5A059;     /* Champage gold primary accent */
-  --accent-gold-rgb: 197, 160, 89;
-  --accent-gold-dark: #A47E3D;
-  --accent-gold-glow: rgba(197, 160, 89, 0.15);
+  /* Brand Luxury Colors */
+  --accent-gold: #C89B3C;     /* Royal Gold primary accent */
+  --accent-gold-rgb: 200, 155, 60;
+  --accent-gold-dark: #A67D28;
+  --accent-gold-light: #DFBA6A;
+  --accent-gold-glow: rgba(200, 155, 60, 0.2);
   
-  --accent-teal: #4A7A75;     /* Traditional handloom green */
-  --accent-copper: #B85A38;   /* Earthy terracotta */
+  --accent-maroon: #7A2E2E;   /* Deep Maroon secondary accent */
+  --accent-emerald: #2E6F57;  /* Emerald Green secondary accent */
+  --accent-teal: #2E6F57;     /* Emerald Green fallback alias */
+  --accent-copper: #B85A38;   /* Warm Terracotta copper */
 
   /* Glassmorphism settings */
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.3);
-  --glass-blur: blur(12px);
+  --glass-bg: rgba(250, 247, 242, 0.85);
+  --glass-border: rgba(200, 155, 60, 0.2);
+  --glass-blur: blur(16px);
   
-  /* Shadows */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.1);
-  --shadow-glow: 0 0 15px var(--accent-gold-glow);
+  /* Soft Luxury Shadows */
+  --shadow-sm: 0 4px 12px rgba(46, 46, 46, 0.04);
+  --shadow-md: 0 10px 30px rgba(46, 46, 46, 0.07);
+  --shadow-lg: 0 20px 48px rgba(46, 46, 46, 0.12);
+  --shadow-hover: 0 14px 36px rgba(200, 155, 60, 0.22);
+  --shadow-glow: 0 0 20px var(--accent-gold-glow);
   
-  --border-radius-sm: 8px;
-  --border-radius-md: 16px;
-  --border-radius-lg: 24px;
+  /* Rounded Corners */
+  --border-radius-sm: 10px;
+  --border-radius-md: 18px;
+  --border-radius-lg: 26px;
   --border-radius-round: 50%;
 }
 
-/* Dark Mode Bindings */
+/* Customer Luxury Fashion Theme Override */
+[data-user-role="customer"],
+.customer-theme {
+  --bg-primary: #FFF9F5;       /* Warm Soft Cream canvas */
+  --bg-secondary: #FFFFFF;     /* Pure White cards */
+  --bg-tertiary: #F8ECE3;      /* Soft Rose-Beige accent tint */
+  --border-color: #F0DACE;     /* Soft Rose Gold outline */
+  --text-primary: #2B2B2B;     /* Charcoal main text */
+  --text-secondary: #635852;   /* Muted warm body text */
+  --text-muted: #9E9188;       /* Subtle detail text */
+  
+  --accent-gold: #D4A373;      /* Rose Gold primary accent */
+  --accent-gold-rgb: 212, 163, 115;
+  --accent-gold-dark: #B88555;
+  --accent-rose: #C06C84;      /* Soft Pink secondary accent */
+  --accent-beige: #E9C46A;     /* Golden Beige accent */
+  --accent-success: #2E8B57;   /* Emerald Success */
+  --accent-gold-glow: rgba(212, 163, 115, 0.25);
+  
+  --glass-bg: rgba(255, 249, 245, 0.88);
+  --glass-border: rgba(212, 163, 115, 0.25);
+  --shadow-sm: 0 4px 14px rgba(192, 108, 132, 0.05);
+  --shadow-md: 0 10px 28px rgba(212, 163, 115, 0.12);
+  --shadow-lg: 0 18px 45px rgba(212, 163, 115, 0.18);
+  --shadow-hover: 0 14px 35px rgba(212, 163, 115, 0.25);
+}
+
+/* Dark Mode Bindings - Luxury Obsidian Gold */
 [data-theme="dark"] {
-  --bg-primary: #0A0A0B;      /* Deep obsidian black */
-  --bg-secondary: #121215;    /* Charcoal card dark */
-  --bg-tertiary: #19191E;     /* Slaty panel tint */
-  --border-color: #26262B;    /* Neon-cut border line */
-  --text-primary: #F5F5F7;    /* Bright clean text */
-  --text-secondary: #A0A0AB;  /* Slate text */
-  --text-muted: #52525B;      /* Muted line info */
+  --bg-primary: #18171A;      /* Dark Charcoal canvas */
+  --bg-secondary: #222126;    /* Dark Velvet Card background */
+  --bg-tertiary: #2B2A30;     /* Deep Slate panel */
+  --border-color: #3D3B45;    /* Metallic gold-charcoal border line */
+  --text-primary: #FAF7F2;    /* Ivory text */
+  --text-secondary: #C4C0B8;  /* Beige soft text */
+  --text-muted: #7D7983;      /* Muted line info */
 
-  /* Glow variations */
-  --accent-gold: #E5C180;     /* Rich gold metallic glow */
-  --accent-gold-rgb: 229, 193, 128;
-  --accent-gold-dark: #C5A059;
-  --accent-gold-glow: rgba(229, 193, 128, 0.2);
+  /* Gold Variations */
+  --accent-gold: #D6A848;     /* Rich Royal Gold metallic glow */
+  --accent-gold-rgb: 214, 168, 72;
+  --accent-gold-dark: #C89B3C;
+  --accent-gold-glow: rgba(214, 168, 72, 0.25);
 
-  --glass-bg: rgba(18, 18, 21, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.05);
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.4);
+  --accent-maroon: #9E3E3E;
+  --accent-emerald: #3DA07F;
+
+  --glass-bg: rgba(24, 23, 26, 0.85);
+  --glass-border: rgba(214, 168, 72, 0.15);
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.45);
+  --shadow-hover: 0 14px 36px rgba(214, 168, 72, 0.3);
 }
 
 /* Category Inspired Themes */
 [data-theme="traditional"] {
-  --bg-primary: #F7F2EA;      /* Earthy warm linen */
-  --bg-secondary: #FEFDF9;    /* Cream silk */
-  --bg-tertiary: #EFE6D8;     /* Clay sand */
-  --border-color: #E2D2BE;    /* Soft clay outlines */
-  --text-primary: #2C1E14;    /* Mud-earth dark */
-  --text-secondary: #654E3C;  /* Warm clay text */
-  --accent-gold: #B85A38;     /* Terracotta copper primary */
-  --accent-gold-glow: rgba(184, 90, 56, 0.15);
+  --bg-primary: #FAF7F2;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #F5EFE6;
+  --border-color: #E6DDD0;
+  --text-primary: #2E2E2E;
+  --text-secondary: #5C5852;
+  --accent-gold: #7A2E2E;     /* Deep Maroon primary */
+  --accent-gold-glow: rgba(122, 46, 46, 0.2);
 }
 
 [data-theme="retro"] {
-  --bg-primary: #F0E6EF;      /* Vintage lavender pastel */
-  --bg-secondary: #FFFFFF;    /* Vintage paper */
-  --bg-tertiary: #E8D5E5;     /* Warm pink tint */
-  --border-color: #DFBFD9;    /* Soft purple frames */
-  --text-primary: #2B1828;    /* Deep eggplant */
-  --text-secondary: #704F6B;  /* Muted plum */
-  --accent-gold: #D66885;     /* Retro blush rose gold */
-  --accent-gold-glow: rgba(214, 104, 133, 0.15);
+  --bg-primary: #F8F4F8;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #F0E6F0;
+  --border-color: #E2D2E2;
+  --text-primary: #2A1A2A;
+  --text-secondary: #6A4D6A;
+  --accent-gold: #7A2E2E;
+  --accent-gold-glow: rgba(122, 46, 46, 0.2);
 }
 
 [data-theme="royal"] {
-  --bg-primary: #0A0F1D;      /* Deep midnight blue */
-  --bg-secondary: #11182C;    /* Velvet Navy cards */
-  --bg-tertiary: #19233C;     /* Indigo details */
-  --border-color: #233153;    /* Brass metallic divider */
-  --text-primary: #F1F5F9;    /* Starlight white */
-  --text-secondary: #94A3B8;  /* Sky slate */
-  --accent-gold: #D4AF37;     /* Pure imperial gold */
-  --accent-gold-glow: rgba(212, 175, 55, 0.25);
+  --bg-primary: #121824;
+  --bg-secondary: #1A2336;
+  --bg-tertiary: #243048;
+  --border-color: #324263;
+  --text-primary: #FAF7F2;
+  --text-secondary: #A0B0CC;
+  --accent-gold: #C89B3C;
+  --accent-gold-glow: rgba(200, 155, 60, 0.3);
 }
 
 [data-theme="handloom"] {
-  --bg-primary: #ECE9E4;      /* Handspun raw khadi */
-  --bg-secondary: #F6F4F1;    /* Soft white thread */
-  --bg-tertiary: #DFDAD2;     /* Organic jute fiber */
-  --border-color: #CEC7BA;    /* Loom wooden framing */
-  --text-primary: #232220;    /* Dark charcoal weave */
-  --text-secondary: #58554E;  /* Earthy fiber */
-  --accent-gold: #386A63;     /* Organic leaf green dye */
-  --accent-gold-glow: rgba(56, 106, 99, 0.15);
+  --bg-primary: #F7F5F0;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #EFECE4;
+  --border-color: #DDD6CA;
+  --text-primary: #262420;
+  --text-secondary: #58554E;
+  --accent-gold: #2E6F57;     /* Emerald Green primary */
+  --accent-gold-glow: rgba(46, 111, 87, 0.2);
 }
 
 [data-theme="festival"] {
-  --bg-primary: #FFF1E6;      /* Festive marigold light */
-  --bg-secondary: #FFFFFF;    /* Pure paper white */
-  --bg-tertiary: #FFE3CC;     /* Mild saffron shading */
-  --border-color: #FFCDA6;    /* Warm orange trims */
-  --text-primary: #471900;    /* Dark henna brown */
-  --text-secondary: #8C4723;  /* Marigold shadow */
-  --accent-gold: #E65C00;     /* Rich saffron orange */
-  --accent-gold-glow: rgba(230, 92, 0, 0.15);
+  --bg-primary: #FAF7F2;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #F5EFE6;
+  --border-color: #E8D7C0;
+  --text-primary: #2E2E2E;
+  --text-secondary: #5C5852;
+  --accent-gold: #C89B3C;
+  --accent-gold-glow: rgba(200, 155, 60, 0.2);
 }

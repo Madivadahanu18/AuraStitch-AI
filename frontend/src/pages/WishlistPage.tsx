@@ -104,12 +104,18 @@ export const WishlistPage: React.FC = () => {
           color: var(--text-primary);
         }
 
+        @keyframes heartPulse {
+          0% { transform: scale(1); }
+          50% { transform: scale(1.25); }
+          100% { transform: scale(1); }
+        }
+
         .wishlist-count-badge {
-          background: rgba(197, 160, 89, 0.15);
-          color: var(--accent-gold);
-          border: 1px solid var(--accent-gold);
+          background: rgba(212, 163, 115, 0.15);
+          color: #D4A373;
+          border: 1px solid #D4A373;
           padding: 4px 14px;
-          border-radius: 16px;
+          border-radius: 20px;
           font-size: 13px;
           font-weight: 700;
         }
@@ -122,7 +128,7 @@ export const WishlistPage: React.FC = () => {
 
         .wishlist-search-input {
           width: 100%;
-          padding: 12px 20px;
+          padding: 14px 22px;
           border-radius: 30px;
           border: 1px solid var(--border-color);
           background: var(--bg-secondary);
@@ -130,41 +136,42 @@ export const WishlistPage: React.FC = () => {
           font-size: 14px;
           outline: none;
           box-shadow: var(--shadow-sm);
-          transition: border-color 0.2s ease;
+          transition: all 0.3s ease;
         }
 
         .wishlist-search-input:focus {
-          border-color: var(--accent-gold);
+          border-color: #D4A373;
+          box-shadow: 0 0 0 3px rgba(212, 163, 115, 0.2);
         }
 
-        /* Responsive Product Cards Grid */
+        /* Pinterest Inspired Product Cards Grid */
         .wishlist-cards-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-          gap: 24px;
+          gap: 28px;
         }
 
         .wishlist-prod-card {
           background: var(--bg-secondary);
           border: 1px solid var(--border-color);
-          border-radius: var(--border-radius-lg);
+          border-radius: 22px;
           overflow: hidden;
-          box-shadow: var(--shadow-sm);
+          box-shadow: 0 10px 30px rgba(212, 163, 115, 0.1);
           display: flex;
           flex-direction: column;
-          transition: transform 0.3s ease, border-color 0.3s ease;
+          transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .wishlist-prod-card:hover {
-          transform: translateY(-4px);
-          border-color: var(--accent-gold);
-          box-shadow: var(--shadow-md);
+          transform: translateY(-6px);
+          border-color: #D4A373;
+          box-shadow: 0 16px 40px rgba(212, 163, 115, 0.22);
         }
 
         .wishlist-img-box {
           position: relative;
           width: 100%;
-          height: 230px;
+          height: 250px;
           overflow: hidden;
           background: #111;
         }
@@ -177,18 +184,18 @@ export const WishlistPage: React.FC = () => {
         }
 
         .wishlist-prod-card:hover .wishlist-card-img {
-          transform: scale(1.04);
+          transform: scale(1.06);
         }
 
         .badge-state {
           position: absolute;
-          top: 12px;
-          left: 12px;
-          background: rgba(10, 15, 25, 0.85);
-          border: 1px solid var(--accent-gold);
-          color: var(--accent-gold);
-          padding: 4px 10px;
-          border-radius: 12px;
+          top: 14px;
+          left: 14px;
+          background: rgba(43, 43, 43, 0.85);
+          border: 1px solid #D4A373;
+          color: #D4A373;
+          padding: 4px 12px;
+          border-radius: 14px;
           font-size: 11px;
           font-weight: 700;
           backdrop-filter: blur(4px);
@@ -196,13 +203,13 @@ export const WishlistPage: React.FC = () => {
 
         .badge-availability {
           position: absolute;
-          top: 12px;
-          right: 12px;
-          background: rgba(42, 157, 143, 0.2);
-          border: 1px solid #2a9d8f;
-          color: #2a9d8f;
-          padding: 4px 10px;
-          border-radius: 12px;
+          top: 14px;
+          right: 14px;
+          background: rgba(46, 139, 87, 0.2);
+          border: 1px solid #2E8B57;
+          color: #2E8B57;
+          padding: 4px 12px;
+          border-radius: 14px;
           font-size: 11px;
           font-weight: 800;
           backdrop-filter: blur(4px);
@@ -218,7 +225,7 @@ export const WishlistPage: React.FC = () => {
         .wishlist-cloth-tag {
           font-size: 11px;
           font-weight: 700;
-          color: var(--accent-gold);
+          color: #D4A373;
           text-transform: uppercase;
           letter-spacing: 0.6px;
           margin-bottom: 4px;
@@ -269,26 +276,28 @@ export const WishlistPage: React.FC = () => {
         .wishlist-actions-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 8px;
+          gap: 10px;
           margin-top: auto;
         }
 
         .btn-wish-cart {
           grid-column: span 2;
-          padding: 10px;
-          font-size: 13px;
-          font-weight: 800;
-          border-radius: 8px;
+          padding: 12px;
+          font-size: 14px;
+          font-weight: 700;
+          border-radius: 30px;
           cursor: pointer;
           border: none;
-          background: linear-gradient(135deg, var(--accent-gold) 0%, #b38627 100%);
-          color: #000;
-          transition: transform 0.2s ease;
+          background: linear-gradient(135deg, #D4A373 0%, #C06C84 100%);
+          color: #FFFFFF;
+          transition: all 0.3s ease;
           text-align: center;
+          box-shadow: 0 4px 15px rgba(212, 163, 115, 0.3);
         }
 
         .btn-wish-cart:hover {
           transform: translateY(-2px);
+          box-shadow: 0 8px 22px rgba(212, 163, 115, 0.45);
         }
 
         .btn-wish-action {

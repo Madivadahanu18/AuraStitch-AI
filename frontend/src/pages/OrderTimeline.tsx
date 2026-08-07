@@ -229,14 +229,16 @@ export const OrderTimeline: React.FC = () => {
         .ot-card {
           background: var(--bg-secondary);
           border: 1px solid var(--border-color);
-          border-radius: var(--border-radius-lg);
+          border-radius: 20px;
           padding: 24px;
-          box-shadow: var(--shadow-sm);
-          transition: transform 0.2s ease, border-color 0.2s ease;
+          box-shadow: 0 8px 25px rgba(212, 163, 115, 0.08);
+          transition: all 0.35s ease;
         }
 
         .ot-card:hover {
-          border-color: var(--accent-gold);
+          border-color: #D4A373;
+          box-shadow: 0 14px 35px rgba(212, 163, 115, 0.18);
+          transform: translateY(-4px);
         }
 
         /* Top Order Info Row */
@@ -251,9 +253,9 @@ export const OrderTimeline: React.FC = () => {
         }
 
         .ot-prod-img {
-          width: 100px;
-          height: 100px;
-          border-radius: 12px;
+          width: 110px;
+          height: 110px;
+          border-radius: 14px;
           object-fit: cover;
           border: 1px solid var(--border-color);
           background: #111;
@@ -278,7 +280,7 @@ export const OrderTimeline: React.FC = () => {
 
         .ot-weaver-tag {
           font-size: 13px;
-          color: var(--accent-gold);
+          color: #D4A373;
           font-weight: 600;
           display: flex;
           align-items: center;
@@ -295,30 +297,30 @@ export const OrderTimeline: React.FC = () => {
         }
 
         .ot-status-pill {
-          padding: 6px 14px;
+          padding: 6px 16px;
           border-radius: 20px;
           font-size: 12px;
           font-weight: 800;
           text-transform: uppercase;
           letter-spacing: 0.5px;
           align-self: flex-start;
-          background: rgba(212, 160, 23, 0.15);
-          color: var(--accent-gold);
-          border: 1px solid var(--accent-gold);
+          background: rgba(212, 163, 115, 0.18);
+          color: #B88555;
+          border: 1px solid #D4A373;
         }
 
         .ot-status-pill.delivered {
-          background: rgba(42, 157, 143, 0.15);
-          color: #2a9d8f;
-          border-color: #2a9d8f;
+          background: rgba(46, 139, 87, 0.15);
+          color: #2E8B57;
+          border-color: #2E8B57;
         }
 
         /* Progress Tracker Flow */
         .ot-tracker-section {
           margin-bottom: 24px;
-          padding: 16px;
-          background: var(--bg-primary);
-          border-radius: var(--border-radius-md);
+          padding: 20px;
+          background: var(--bg-tertiary);
+          border-radius: 16px;
           border: 1px solid var(--border-color);
         }
 

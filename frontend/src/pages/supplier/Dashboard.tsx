@@ -413,17 +413,30 @@ export const SupplierDashboard: React.FC = () => {
         }
 
         .summary-card {
-          background: var(--bg-secondary);
+          background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
           border: 1px solid var(--border-color);
           border-radius: var(--border-radius-lg);
-          padding: 22px;
+          padding: 24px;
           box-shadow: var(--shadow-sm);
-          transition: transform 0.2s ease, border-color 0.2s ease;
+          transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+          position: relative;
+          overflow: hidden;
+        }
+
+        .summary-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 4px;
+          height: 100%;
+          background: linear-gradient(to bottom, var(--accent-gold), var(--accent-maroon));
         }
 
         .summary-card:hover {
-          transform: translateY(-3px);
+          transform: translateY(-5px);
           border-color: var(--accent-gold);
+          box-shadow: var(--shadow-hover);
         }
 
         .summary-card-title {

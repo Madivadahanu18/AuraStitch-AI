@@ -13,9 +13,11 @@
 body {
   font-family: var(--font-body);
   background-color: var(--bg-primary);
+  background-image: radial-gradient(circle at 10% 20%, rgba(200, 155, 60, 0.04) 0%, transparent 40%),
+                    radial-gradient(circle at 90% 80%, rgba(122, 46, 46, 0.04) 0%, transparent 40%);
   color: var(--text-primary);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 1.6;
   transition: background-color var(--transition-normal), color var(--transition-normal);
   overflow-x: hidden;
   height: 100vh;
@@ -46,8 +48,9 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
   color: var(--text-primary);
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.25;
+  letter-spacing: -0.01em;
 }
 
 a {
@@ -112,59 +115,100 @@ img {
   border-radius: var(--border-radius-md);
 }
 
+/* Buttons System */
 .btn-primary {
   background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark));
   color: #FFFFFF;
-  padding: 12px 24px;
-  border-radius: var(--border-radius-sm);
-  font-weight: 600;
-  box-shadow: 0 4px 12px var(--accent-gold-glow);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  padding: 12px 26px;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.3px;
+  border: none;
+  box-shadow: 0 6px 18px var(--accent-gold-glow);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px var(--accent-gold-glow);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(var(--accent-gold-rgb), 0.35);
 }
 
 .btn-primary:active {
-  transform: translateY(0);
+  transform: translateY(0) scale(0.98);
 }
 
 .btn-secondary {
-  background: transparent;
+  background: var(--bg-secondary);
   color: var(--text-primary);
   border: 1px solid var(--border-color);
-  padding: 12px 24px;
-  border-radius: var(--border-radius-sm);
-  font-weight: 500;
-  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+  padding: 12px 26px;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 14px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .btn-secondary:hover {
   background-color: var(--bg-tertiary);
   border-color: var(--accent-gold);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
+/* Cards System */
+.card-luxury {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.card-luxury:hover {
+  transform: translateY(-6px);
+  border-color: var(--accent-gold);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Badges */
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px 10px;
-  border-radius: 9999px;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 20px;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.4px;
   text-transform: uppercase;
 }
 
 .badge-gold {
-  background-color: rgba(var(--accent-gold-rgb), 0.15);
+  background: rgba(var(--accent-gold-rgb), 0.15);
   color: var(--accent-gold-dark);
-  border: 1px solid rgba(var(--accent-gold-rgb), 0.3);
+  border: 1px solid rgba(var(--accent-gold-rgb), 0.35);
 }
 
 .badge-verified {
-  background-color: rgba(56, 106, 99, 0.15);
-  color: #386A63;
-  border: 1px solid rgba(56, 106, 99, 0.3);
+  background: rgba(46, 111, 87, 0.15);
+  color: var(--accent-emerald);
+  border: 1px solid rgba(46, 111, 87, 0.35);
+}
+
+.badge-maroon {
+  background: rgba(122, 46, 46, 0.15);
+  color: var(--accent-maroon);
+  border: 1px solid rgba(122, 46, 46, 0.35);
 }
