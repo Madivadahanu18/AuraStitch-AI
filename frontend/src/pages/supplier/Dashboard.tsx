@@ -115,46 +115,146 @@ const mockSupplierProducts: ProductItem[] = [
   }
 ];
 
-const featuredCategories = [
+interface SupplierMaterialCardItem {
+  id: string;
+  name: string;
+  category: 'Textile Materials' | 'Handloom Materials';
+  price: string;
+  status: 'In Stock' | 'Low Stock' | 'Out of Stock';
+  image: string;
+}
+
+const featuredTextileMaterials: SupplierMaterialCardItem[] = [
   {
-    name: 'Dress Materials',
-    image: getImageSrc(beads2Img),
-    description: 'Unstitched suit sets, dress fabrics, and boutique material rolls.'
+    id: 'tex-1',
+    name: 'Cotton Fabric',
+    category: 'Textile Materials',
+    price: '₹350 / meter',
+    status: 'In Stock',
+    image: getImageSrc(lays1Img)
   },
   {
-    name: 'Fabrics',
-    image: getImageSrc(lays1Img),
-    description: 'Premium cotton, silk blends, linings, and garment fabrics.'
+    id: 'tex-2',
+    name: 'Silk Fabric',
+    category: 'Textile Materials',
+    price: '₹850 / meter',
+    status: 'In Stock',
+    image: getImageSrc(lays1Img)
   },
   {
-    name: 'Laces',
-    image: getImageSrc(lays1Img),
-    description: 'Designer lace borders, embroidered trims, and decorative edgings.'
+    id: 'tex-3',
+    name: 'Lining Material',
+    category: 'Textile Materials',
+    price: '₹120 / meter',
+    status: 'In Stock',
+    image: getImageSrc(lays1Img)
   },
   {
-    name: 'Beads',
-    image: getImageSrc(beads1Img),
-    description: 'Pearl beads, glass crystals, and heavy embroidery embellishments.'
+    id: 'tex-4',
+    name: 'Bridal Lace',
+    category: 'Textile Materials',
+    price: '₹680 / roll',
+    status: 'In Stock',
+    image: getImageSrc(lays1Img)
   },
   {
+    id: 'tex-5',
+    name: 'Decorative Beads',
+    category: 'Textile Materials',
+    price: '₹450 / pack',
+    status: 'In Stock',
+    image: getImageSrc(beads1Img)
+  },
+  {
+    id: 'tex-6',
+    name: 'Designer Buttons',
+    category: 'Textile Materials',
+    price: '₹280 / box',
+    status: 'In Stock',
+    image: getImageSrc(beads1Img)
+  },
+  {
+    id: 'tex-7',
+    name: 'Zippers',
+    category: 'Textile Materials',
+    price: '₹150 / dozen',
+    status: 'In Stock',
+    image: getImageSrc(beads2Img)
+  },
+  {
+    id: 'tex-8',
+    name: 'Embroidery Thread',
+    category: 'Textile Materials',
+    price: '₹320 / set',
+    status: 'In Stock',
+    image: getImageSrc(threads1Img)
+  }
+];
+
+const featuredHandloomMaterials: SupplierMaterialCardItem[] = [
+  {
+    id: 'hlm-1',
     name: 'Cotton Yarn',
-    image: getImageSrc(threads1Img),
-    description: 'High-count combed cotton yarns and warping thread cones.'
+    category: 'Handloom Materials',
+    price: '₹650 / kg',
+    status: 'In Stock',
+    image: getImageSrc(threads1Img)
   },
   {
+    id: 'hlm-2',
     name: 'Silk Yarn',
-    image: getImageSrc(threads1Img),
-    description: 'Mulberry silk spools, Tussar raw silk, and fine silk threads.'
+    category: 'Handloom Materials',
+    price: '₹1,850 / kg',
+    status: 'In Stock',
+    image: getImageSrc(threads1Img)
   },
   {
-    name: 'Machine Spare Parts',
-    image: getImageSrc(machinary1Img),
-    description: 'Teakwood shuttles, steel reeds, gears, and loom accessories.'
-  },
-  {
+    id: 'hlm-3',
     name: 'Natural Dyes',
-    image: getImageSrc(machinary2Img),
-    description: 'Eco-friendly plant dyes, organic indigo vats, and coloring extracts.'
+    category: 'Handloom Materials',
+    price: '₹480 / pack',
+    status: 'In Stock',
+    image: getImageSrc(machinary2Img)
+  },
+  {
+    id: 'hlm-4',
+    name: 'Zari Thread',
+    category: 'Handloom Materials',
+    price: '₹920 / spool',
+    status: 'In Stock',
+    image: getImageSrc(threads1Img)
+  },
+  {
+    id: 'hlm-5',
+    name: 'Loom Shuttle',
+    category: 'Handloom Materials',
+    price: '₹1,250 / piece',
+    status: 'In Stock',
+    image: getImageSrc(machinary1Img)
+  },
+  {
+    id: 'hlm-6',
+    name: 'Reed',
+    category: 'Handloom Materials',
+    price: '₹850 / piece',
+    status: 'Low Stock',
+    image: getImageSrc(machinary1Img)
+  },
+  {
+    id: 'hlm-7',
+    name: 'Machine Spare Parts',
+    category: 'Handloom Materials',
+    price: '₹2,400 / kit',
+    status: 'Low Stock',
+    image: getImageSrc(machinary2Img)
+  },
+  {
+    id: 'hlm-8',
+    name: 'Weaving Tools',
+    category: 'Handloom Materials',
+    price: '₹750 / set',
+    status: 'In Stock',
+    image: getImageSrc(machinary1Img)
   }
 ];
 
@@ -492,6 +592,113 @@ export const SupplierDashboard: React.FC = () => {
           color: var(--text-secondary);
           line-height: 1.4;
           margin: 0;
+        }
+
+        /* Featured Textile & Handloom Materials */
+        .featured-materials-section {
+          margin-bottom: 48px;
+        }
+
+        .material-cards-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+          gap: 20px;
+        }
+
+        .material-item-card {
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius-lg);
+          overflow: hidden;
+          box-shadow: var(--shadow-sm);
+          display: flex;
+          flex-direction: column;
+          transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .material-item-card:hover {
+          transform: translateY(-4px);
+          border-color: var(--accent-gold);
+          box-shadow: var(--shadow-md);
+        }
+
+        .material-card-img-box {
+          position: relative;
+          width: 100%;
+          height: 160px;
+          overflow: hidden;
+          background-color: #111115;
+        }
+
+        .material-card-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.4s ease;
+        }
+
+        .material-item-card:hover .material-card-img {
+          transform: scale(1.05);
+        }
+
+        .material-status-badge {
+          position: absolute;
+          top: 12px;
+          right: 12px;
+          padding: 4px 10px;
+          border-radius: 12px;
+          font-size: 11px;
+          font-weight: 700;
+        }
+
+        .material-status-badge.In-Stock {
+          background: rgba(42, 157, 143, 0.2);
+          border: 1px solid #2a9d8f;
+          color: #2a9d8f;
+        }
+
+        .material-status-badge.Low-Stock {
+          background: rgba(244, 162, 97, 0.2);
+          border: 1px solid #f4a261;
+          color: #f4a261;
+        }
+
+        .material-status-badge.Out-of-Stock {
+          background: rgba(230, 57, 70, 0.2);
+          border: 1px solid #e63946;
+          color: #e63946;
+        }
+
+        .material-card-body {
+          padding: 16px;
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+        }
+
+        .material-category-tag {
+          font-size: 11px;
+          font-weight: 700;
+          color: var(--accent-gold);
+          text-transform: uppercase;
+          letter-spacing: 0.8px;
+          margin-bottom: 4px;
+        }
+
+        .material-card-title {
+          font-family: var(--font-heading);
+          font-size: 16px;
+          font-weight: 700;
+          color: var(--text-primary);
+          margin-bottom: 8px;
+          line-height: 1.3;
+        }
+
+        .material-card-price {
+          font-size: 16px;
+          font-weight: 800;
+          color: var(--text-primary);
+          margin-top: auto;
         }
 
         /* Recent Orders */
@@ -1035,18 +1242,44 @@ export const SupplierDashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Featured Categories Section */}
-      <div className="featured-categories-section">
-        <h3 className="section-heading">Featured Categories</h3>
-        <div className="featured-categories-grid">
-          {featuredCategories.map((cat, idx) => (
-            <div key={idx} className="featured-category-card">
-              <div className="cat-card-img-box">
-                <img src={cat.image} alt={cat.name} className="cat-card-img" />
+      {/* Featured Textile Materials Section */}
+      <div className="featured-materials-section">
+        <h3 className="section-heading">Featured Textile Materials</h3>
+        <div className="material-cards-grid">
+          {featuredTextileMaterials.map((item) => (
+            <div key={item.id} className="material-item-card">
+              <div className="material-card-img-box">
+                <img src={item.image} alt={item.name} className="material-card-img" />
+                <span className={`material-status-badge ${item.status.replace(/\s+/g, '-')}`}>
+                  {item.status}
+                </span>
               </div>
-              <div className="cat-card-body">
-                <h4 className="cat-card-title">{cat.name}</h4>
-                <p className="cat-card-desc">{cat.description}</p>
+              <div className="material-card-body">
+                <span className="material-category-tag">{item.category}</span>
+                <h4 className="material-card-title">{item.name}</h4>
+                <div className="material-card-price">{item.price}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Featured Handloom Materials Section */}
+      <div className="featured-materials-section">
+        <h3 className="section-heading">Featured Handloom Materials</h3>
+        <div className="material-cards-grid">
+          {featuredHandloomMaterials.map((item) => (
+            <div key={item.id} className="material-item-card">
+              <div className="material-card-img-box">
+                <img src={item.image} alt={item.name} className="material-card-img" />
+                <span className={`material-status-badge ${item.status.replace(/\s+/g, '-')}`}>
+                  {item.status}
+                </span>
+              </div>
+              <div className="material-card-body">
+                <span className="material-category-tag">{item.category}</span>
+                <h4 className="material-card-title">{item.name}</h4>
+                <div className="material-card-price">{item.price}</div>
               </div>
             </div>
           ))}

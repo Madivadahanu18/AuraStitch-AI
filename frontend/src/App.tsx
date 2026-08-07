@@ -28,6 +28,11 @@ import HandloomInventory from './pages/handloom/Inventory';
 import RawMaterialsMarketplace from './pages/handloom/RawMaterialsMarketplace';
 import HandloomSettings from './pages/handloom/Settings';
 import SupplierDashboard from './pages/supplier/Dashboard';
+import SupplierMaterialProducts from './pages/supplier/MaterialProducts';
+import SupplierCategories from './pages/supplier/Categories';
+import SupplierInventory from './pages/supplier/Inventory';
+import SupplierB2BSalesOrders from './pages/supplier/B2BSalesOrders';
+import SupplierSettings from './pages/supplier/Settings';
 import AdminDashboard from './pages/admin/Dashboard';
 import AIDashboard from './pages/ai/Dashboard';
 
@@ -192,6 +197,11 @@ const AppContent: React.FC = () => {
 
           {/* Supplier */}
           <Route path="/supplier" element={<RoleRoute allowedRoles={['supplier']}><SupplierDashboard /></RoleRoute>} />
+          <Route path="/supplier/materials" element={<RoleRoute allowedRoles={['supplier']}><SupplierMaterialProducts /></RoleRoute>} />
+          <Route path="/supplier/categories" element={<RoleRoute allowedRoles={['supplier']}><SupplierCategories /></RoleRoute>} />
+          <Route path="/supplier/inventory" element={<RoleRoute allowedRoles={['supplier']}><SupplierInventory /></RoleRoute>} />
+          <Route path="/supplier/orders" element={<RoleRoute allowedRoles={['supplier']}><SupplierB2BSalesOrders /></RoleRoute>} />
+          <Route path="/supplier/settings" element={<RoleRoute allowedRoles={['supplier']}><SupplierSettings /></RoleRoute>} />
 
           {/* Admin */}
           <Route path="/admin" element={<RoleRoute allowedRoles={['admin']}><AdminDashboard /></RoleRoute>} />

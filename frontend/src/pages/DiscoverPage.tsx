@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 // Relative imports for handloom images
 import cottonSareesImg from './handloom/handloomimages/cottonsarees.jpg';
@@ -7,6 +8,14 @@ import dhotiImg from './handloom/handloomimages/dhoti.jpg';
 import mangalagiriDressImg from './handloom/handloomimages/Mangalagiridress.jpg';
 import pattuSareeImg from './handloom/handloomimages/pattusaree.jpg';
 import pochampallyImg from './handloom/handloomimages/pochampally.jpg';
+
+// Relative imports for supplier images
+import beads1Img from './supplier/images/Beads1.jpg';
+import beads2Img from './supplier/images/Beads2.jpg';
+import lays1Img from './supplier/images/Lays1.jpg';
+import machinary1Img from './supplier/images/Machinary1.jpg';
+import machinary2Img from './supplier/images/Machinary2.jpg';
+import threads1Img from './supplier/images/Threads1.jpg';
 
 interface OutletContextType {
   showToast?: (msg: string, type?: 'success' | 'error' | 'warning' | 'info') => void;
@@ -222,7 +231,190 @@ const mockSeasonal: CollectionItem[] = [
   }
 ];
 
+interface SupplierMaterialItem {
+  id: string;
+  name: string;
+  category: 'Textile Materials' | 'Handloom Materials';
+  price: string;
+  status: 'In Stock' | 'Low Stock' | 'Out of Stock';
+  image: string;
+}
+
+const mockSupplierMaterials: SupplierMaterialItem[] = [
+  // Textile Materials
+  {
+    id: 'sm-1',
+    name: 'Cotton Fabric',
+    category: 'Textile Materials',
+    price: '₹350 / meter',
+    status: 'In Stock',
+    image: getImageSrc(lays1Img)
+  },
+  {
+    id: 'sm-2',
+    name: 'Silk Fabric',
+    category: 'Textile Materials',
+    price: '₹850 / meter',
+    status: 'In Stock',
+    image: getImageSrc(lays1Img)
+  },
+  {
+    id: 'sm-3',
+    name: 'Lining Material',
+    category: 'Textile Materials',
+    price: '₹120 / meter',
+    status: 'In Stock',
+    image: getImageSrc(lays1Img)
+  },
+  {
+    id: 'sm-4',
+    name: 'Bridal Lace',
+    category: 'Textile Materials',
+    price: '₹680 / roll',
+    status: 'In Stock',
+    image: getImageSrc(lays1Img)
+  },
+  {
+    id: 'sm-5',
+    name: 'Decorative Beads',
+    category: 'Textile Materials',
+    price: '₹450 / pack',
+    status: 'In Stock',
+    image: getImageSrc(beads1Img)
+  },
+  {
+    id: 'sm-6',
+    name: 'Designer Buttons',
+    category: 'Textile Materials',
+    price: '₹280 / box',
+    status: 'In Stock',
+    image: getImageSrc(beads1Img)
+  },
+  {
+    id: 'sm-7',
+    name: 'Zippers',
+    category: 'Textile Materials',
+    price: '₹150 / dozen',
+    status: 'In Stock',
+    image: getImageSrc(beads2Img)
+  },
+  {
+    id: 'sm-8',
+    name: 'Embroidery Thread',
+    category: 'Textile Materials',
+    price: '₹320 / set',
+    status: 'In Stock',
+    image: getImageSrc(threads1Img)
+  },
+
+  // Handloom Materials
+  {
+    id: 'sm-9',
+    name: 'Cotton Yarn',
+    category: 'Handloom Materials',
+    price: '₹650 / kg',
+    status: 'In Stock',
+    image: getImageSrc(threads1Img)
+  },
+  {
+    id: 'sm-10',
+    name: 'Silk Yarn',
+    category: 'Handloom Materials',
+    price: '₹1,850 / kg',
+    status: 'In Stock',
+    image: getImageSrc(threads1Img)
+  },
+  {
+    id: 'sm-11',
+    name: 'Natural Dyes',
+    category: 'Handloom Materials',
+    price: '₹480 / pack',
+    status: 'In Stock',
+    image: getImageSrc(machinary2Img)
+  },
+  {
+    id: 'sm-12',
+    name: 'Zari Thread',
+    category: 'Handloom Materials',
+    price: '₹920 / spool',
+    status: 'In Stock',
+    image: getImageSrc(threads1Img)
+  },
+  {
+    id: 'sm-13',
+    name: 'Loom Shuttle',
+    category: 'Handloom Materials',
+    price: '₹1,250 / piece',
+    status: 'In Stock',
+    image: getImageSrc(machinary1Img)
+  },
+  {
+    id: 'sm-14',
+    name: 'Reed',
+    category: 'Handloom Materials',
+    price: '₹850 / piece',
+    status: 'Low Stock',
+    image: getImageSrc(machinary1Img)
+  },
+  {
+    id: 'sm-15',
+    name: 'Machine Spare Parts',
+    category: 'Handloom Materials',
+    price: '₹2,400 / kit',
+    status: 'Low Stock',
+    image: getImageSrc(machinary2Img)
+  },
+  {
+    id: 'sm-16',
+    name: 'Weaving Tools',
+    category: 'Handloom Materials',
+    price: '₹750 / set',
+    status: 'In Stock',
+    image: getImageSrc(machinary1Img)
+  }
+];
+
+const popularMaterialCategories = [
+  {
+    id: 'pcat-1',
+    name: 'Fabrics',
+    image: getImageSrc(lays1Img),
+    description: 'Cotton, linen, silk, and specialty lining fabrics.'
+  },
+  {
+    id: 'pcat-2',
+    name: 'Yarn & Threads',
+    image: getImageSrc(threads1Img),
+    description: 'High-count cotton, silk spools, zari, and embroidery yarns.'
+  },
+  {
+    id: 'pcat-3',
+    name: 'Dyes',
+    image: getImageSrc(machinary2Img),
+    description: 'Organic natural dyes, indigo vats, and color extracts.'
+  },
+  {
+    id: 'pcat-4',
+    name: 'Loom Accessories',
+    image: getImageSrc(machinary1Img),
+    description: 'Wooden shuttles, reeds, warping bobbins, and pirns.'
+  },
+  {
+    id: 'pcat-5',
+    name: 'Tailoring Accessories',
+    image: getImageSrc(beads2Img),
+    description: 'Zippers, designer buttons, linings, and sewing notions.'
+  },
+  {
+    id: 'pcat-6',
+    name: 'Decorative Materials',
+    image: getImageSrc(beads1Img),
+    description: 'Pearl beads, glass crystals, laces, and embroidery trims.'
+  }
+];
+
 export const DiscoverPage: React.FC = () => {
+  const { user } = useAuth();
   const context = useOutletContext<OutletContextType | null>();
   const showToast = (msg: string, type: 'success' | 'error' | 'warning' | 'info' = 'info') => {
     if (context?.showToast) context.showToast(msg, type);
@@ -233,6 +425,311 @@ export const DiscoverPage: React.FC = () => {
   const [selectedModalProduct, setSelectedModalProduct] = useState<ProductItem | null>(null);
   const [selectedModalWeaver, setSelectedModalWeaver] = useState<WeaverItem | null>(null);
   const [selectedModalTailor, setSelectedModalTailor] = useState<TailorItem | null>(null);
+
+  const isSupplier = user?.role === 'supplier';
+
+  if (isSupplier) {
+    const filteredSupplierMaterials = mockSupplierMaterials.filter(mat =>
+      !searchQuery ||
+      mat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      mat.category.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    return (
+      <div className="supplier-discover-container fade-in" style={{ padding: '24px', paddingBottom: '90px', maxWidth: '1240px', margin: '0 auto', color: 'var(--text-primary)' }}>
+        <style>{`
+          .discover-top-header {
+            margin-bottom: 32px;
+          }
+
+          .discover-main-heading {
+            font-family: var(--font-heading);
+            font-size: 32px;
+            font-weight: 800;
+            margin: 0 0 16px;
+            color: var(--text-primary);
+          }
+
+          .discover-search-box {
+            position: relative;
+            max-width: 720px;
+            width: 100%;
+          }
+
+          .discover-search-input {
+            width: 100%;
+            padding: 14px 22px;
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 14px;
+            outline: none;
+            box-shadow: var(--shadow-sm);
+            transition: border-color 0.2s ease;
+          }
+
+          .discover-search-input:focus {
+            border-color: var(--accent-gold);
+          }
+
+          .discover-section-block {
+            margin-bottom: 44px;
+          }
+
+          .section-header-title {
+            font-family: var(--font-heading);
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+          }
+
+          .section-header-title::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 22px;
+            background: var(--accent-gold);
+            border-radius: 4px;
+          }
+
+          .supplier-materials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 24px;
+          }
+
+          .supplier-material-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+          }
+
+          .supplier-material-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-gold);
+            box-shadow: var(--shadow-md);
+          }
+
+          .material-card-img-box {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+            background-color: #111115;
+          }
+
+          .material-card-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+          }
+
+          .supplier-material-card:hover .material-card-img {
+            transform: scale(1.05);
+          }
+
+          .material-status-pill {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+          }
+
+          .material-status-pill.In-Stock {
+            background: rgba(42, 157, 143, 0.2);
+            border: 1px solid #2a9d8f;
+            color: #2a9d8f;
+          }
+
+          .material-status-pill.Low-Stock {
+            background: rgba(244, 162, 97, 0.2);
+            border: 1px solid #f4a261;
+            color: #f4a261;
+          }
+
+          .material-status-pill.Out-of-Stock {
+            background: rgba(230, 57, 70, 0.2);
+            border: 1px solid #e63946;
+            color: #e63946;
+          }
+
+          .material-card-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+          }
+
+          .material-card-category {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 4px;
+          }
+
+          .material-card-name {
+            font-family: var(--font-heading);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0 0 12px 0;
+            line-height: 1.3;
+          }
+
+          .material-card-price {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-top: auto;
+          }
+
+          .popular-categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+          }
+
+          .popular-cat-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+          }
+
+          .popular-cat-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-gold);
+            box-shadow: var(--shadow-md);
+          }
+
+          .pop-cat-img-box {
+            height: 150px;
+            overflow: hidden;
+            background-color: #111115;
+          }
+
+          .pop-cat-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+          }
+
+          .popular-cat-card:hover .pop-cat-img {
+            transform: scale(1.06);
+          }
+
+          .pop-cat-body {
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+          }
+
+          .pop-cat-title {
+            font-family: var(--font-heading);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0 0 6px 0;
+          }
+
+          .pop-cat-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+            margin: 0;
+          }
+        `}</style>
+
+        {/* TOP SECTION: Heading & Search Bar */}
+        <div className="discover-top-header">
+          <h1 className="discover-main-heading">Discover</h1>
+          <div className="discover-search-box">
+            <input 
+              type="text" 
+              className="discover-search-input" 
+              placeholder="Search fabrics, yarns, dyes, machine parts, beads..." 
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+            />
+          </div>
+        </div>
+
+        {/* SECTION 1: Trending Supplier Materials */}
+        <div className="discover-section-block">
+          <h2 className="section-header-title">
+            <span>🔥 Trending Supplier Materials</span>
+          </h2>
+
+          {filteredSupplierMaterials.length === 0 ? (
+            <div style={{ background: 'var(--bg-secondary)', padding: '40px', borderRadius: '12px', textAlign: 'center', color: 'var(--text-secondary)' }}>
+              No supplier materials found matching your search criteria.
+            </div>
+          ) : (
+            <div className="supplier-materials-grid">
+              {filteredSupplierMaterials.map(material => (
+                <div key={material.id} className="supplier-material-card">
+                  <div className="material-card-img-box">
+                    <img src={material.image} alt={material.name} className="material-card-img" />
+                    <span className={`material-status-pill ${material.status.replace(/\s+/g, '-')}`}>
+                      {material.status}
+                    </span>
+                  </div>
+                  <div className="material-card-body">
+                    <span className="material-card-category">{material.category}</span>
+                    <h3 className="material-card-name">{material.name}</h3>
+                    <div className="material-card-price">{material.price}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* SECTION 2: Popular Material Categories */}
+        <div className="discover-section-block">
+          <h2 className="section-header-title">
+            <span>📂 Popular Material Categories</span>
+          </h2>
+
+          <div className="popular-categories-grid">
+            {popularMaterialCategories.map(cat => (
+              <div key={cat.id} className="popular-cat-card">
+                <div className="pop-cat-img-box">
+                  <img src={cat.image} alt={cat.name} className="pop-cat-img" />
+                </div>
+                <div className="pop-cat-body">
+                  <h3 className="pop-cat-title">{cat.name}</h3>
+                  <p className="pop-cat-desc">{cat.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const handleAddToCart = (product: ProductItem) => {
     try {
