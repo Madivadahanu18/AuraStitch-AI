@@ -1,577 +1,829 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useRef } from 'react';
 import { useOutletContext } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+
+import beads1Img from './images/Beads1.jpg';
+import beads2Img from './images/Beads2.jpg';
+import lays1Img from './images/Lays1.jpg';
+import machinary1Img from './images/Machinary1.jpg';
+import machinary2Img from './images/Machinary2.jpg';
+import threads1Img from './images/Threads1.jpg';
+
+const getImageSrc = (img: any): string => {
+  if (!img) return '';
+  if (typeof img === 'string') return img;
+  if (typeof img === 'object' && 'default' in img) return (img as any).default;
+  return String(img);
+};
 
 interface OutletContextType {
   showToast: (msg: string, type?: 'success' | 'error' | 'warning' | 'info') => void;
 }
 
-interface Supplier {
+interface ProductItem {
   id: string;
   name: string;
-  location: string;
-  state: string;
-  products: string[];
-  experienceYears: number;
-  rating: number;
-  ordersDelivered: string;
-  verified: boolean;
-  logo: string;
-  banner: string;
-  about: string;
-  businessSince: string;
-  gstin: string;
-  contactEmail: string;
-  contactPhone: string;
-  address: string;
-  certifications: string[];
-  deliveryLocations: string[];
-  reviews: { author: string; rating: number; comment: string; date: string }[];
-}
-
-interface SupplierProduct {
-  id: string;
-  name: string;
-  supplierId: string;
-  supplierName: string;
-  category: string;
+  category: 'Textile Materials' | 'Handloom Materials';
+  subCategory: string;
   price: string;
   numericPrice: number;
+  stock: number;
   rating: number;
-  availability: string;
+  status: 'In Stock' | 'Low Stock' | 'Out of Stock';
   image: string;
   description: string;
 }
 
-const mockSuppliers: Supplier[] = [
-  {
-    id: 'sup-1',
-    name: 'Andhra Cotton Mills',
-    location: 'Guntur, Andhra Pradesh',
-    state: 'Andhra Pradesh',
-    products: ['Premium Cotton Yarn', 'Organic Cotton', 'Cotton Thread', 'Handloom Accessories'],
-    experienceYears: 22,
-    rating: 4.9,
-    ordersDelivered: '12,500+',
-    verified: true,
-    logo: '🧵',
-    banner: 'https://images.unsplash.com/photo-1608748010899-18f300247112?auto=format&fit=crop&w=1200&q=80',
-    about: 'Leading manufacturer and bulk supplier of high-count combed cotton yarn, organic cotton cones, and certified eco-friendly dyes to weavers across South India.',
-    businessSince: '2004',
-    gstin: '37AACCA1234F1Z9',
-    contactEmail: 'orders@andhracottonmills.in',
-    contactPhone: '+91 98480 12345',
-    address: 'Plot 45, Industrial Estate, Guntur, AP - 522001',
-    certifications: ['ISO 9001:2015', 'GOTS Organic Certified', 'Handloom Mark Authorized'],
-    deliveryLocations: ['Andhra Pradesh', 'Telangana', 'Tamil Nadu', 'Karnataka', 'Maharashtra', 'Odisha'],
-    reviews: [
-      { author: 'Mangalagiri Weavers Co-op', rating: 5, comment: 'Highest yarn strength and zero breakage during warp preparation.', date: '12 May 2026' },
-      { author: 'Pochampally Loom Guild', rating: 5, comment: 'Consistent yarn count and prompt B2B delivery every month.', date: '04 Apr 2026' }
-    ]
-  },
-  {
-    id: 'sup-2',
-    name: 'Golden Silk Traders',
-    location: 'Kanchipuram, Tamil Nadu',
-    state: 'Tamil Nadu',
-    products: ['Silk Yarn', 'Mulberry Silk', 'Premium Zari', 'Natural Dye Packs'],
-    experienceYears: 18,
-    rating: 4.8,
-    ordersDelivered: '8,200+',
-    verified: true,
-    logo: '✨',
-    banner: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80',
-    about: 'Specialized importers and refiners of 100% pure Mulberry Raw Silk yarn and real gold/silver Tested Zari spools for Kanchipuram and Banarasi handloom sarees.',
-    businessSince: '2008',
-    gstin: '33AABBG5678K1ZP',
-    contactEmail: 'sales@goldensilktraders.in',
-    contactPhone: '+91 94440 87654',
-    address: '112 Silk Weavers Street, Kanchipuram, TN - 631501',
-    certifications: ['Silk Mark India Certified', 'Tested Gold Zari Compliance', 'Bureau of Indian Standards'],
-    deliveryLocations: ['Tamil Nadu', 'Karnataka', 'Telangana', 'Uttar Pradesh', 'West Bengal'],
-    reviews: [
-      { author: 'Kanchi Heritage Silk', rating: 5, comment: 'Genuine Silk Mark certified silk yarn. Outstanding shine and tensile strength.', date: '20 Jun 2026' },
-      { author: 'Yeola Paithani Artisans', rating: 4, comment: 'Excellent Zari luster, perfect for intricate peacock borders.', date: '18 Mar 2026' }
-    ]
-  },
-  {
-    id: 'sup-3',
-    name: 'Eco Threads India',
-    location: 'Hyderabad, Telangana',
-    state: 'Telangana',
-    products: ['Natural Dyes', 'Organic Fibres', 'Linen Yarn', 'Sustainable Cotton'],
-    experienceYears: 15,
-    rating: 4.7,
-    ordersDelivered: '6,500+',
-    verified: true,
-    logo: '🌿',
-    banner: 'https://images.unsplash.com/photo-1590736704728-f4730bb30770?auto=format&fit=crop&w=1200&q=80',
-    about: 'Pioneering organic plant dyes, indigo vats, madder root extracts, and GOTS-certified unbleached linen yarn for sustainable eco-friendly handloom weaving.',
-    businessSince: '2011',
-    gstin: '36AAACE9012J1ZX',
-    contactEmail: 'support@ecothreads.in',
-    contactPhone: '+91 99890 34567',
-    address: 'Bio-Park Lane, Jubilee Hills, Hyderabad, TS - 500033',
-    certifications: ['Global Organic Textile Standard (GOTS)', 'Zero Chemical Discharge', 'OEKO-TEX Standard 100'],
-    deliveryLocations: ['Telangana', 'Andhra Pradesh', 'Kerala', 'Gujarat', 'Rajasthan', 'Delhi NCR'],
-    reviews: [
-      { author: 'Jaipur Block Prints', rating: 5, comment: 'Natural Indigo dyes produce rich, fast blues that do not bleed.', date: '01 Jul 2026' }
-    ]
-  },
-  {
-    id: 'sup-4',
-    name: 'Resham Silk Mills',
-    location: 'Bhagalpur, Bihar',
-    state: 'Bihar',
-    products: ['Tussar Silk Yarn', 'Eri Silk', 'Linen Blend Yarn', 'Natural Silk Waste'],
-    experienceYears: 25,
-    rating: 4.9,
-    ordersDelivered: '14,100+',
-    verified: true,
-    logo: '🧶',
-    banner: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1200&q=80',
-    about: 'Renowned producers of authentic Bhagalpuri Tussar and wild Eri silk yarns supplying master weaver co-operatives across Northern and Eastern India.',
-    businessSince: '1999',
-    gstin: '10AAACR3456N1ZB',
-    contactEmail: 'contact@reshamsilkmills.com',
-    contactPhone: '+91 93040 11223',
-    address: 'Silk City Road, Bhagalpur, Bihar - 812001',
-    certifications: ['Silk Mark Certified', 'Handloom Export Promotion Council', 'ISO 9001'],
-    deliveryLocations: ['Bihar', 'West Bengal', 'Assam', 'Odisha', 'Jharkhand', 'Uttar Pradesh'],
-    reviews: [
-      { author: 'Chanderi Weavers Guild', rating: 5, comment: 'Premium raw Tussar silk slub textures.', date: '15 May 2026' }
-    ]
-  }
-];
-
-const mockSupplierProducts: SupplierProduct[] = [
+const mockSupplierProducts: ProductItem[] = [
   {
     id: 'sp-1',
-    name: 'Premium 80s Count Combed Cotton Yarn',
-    supplierId: 'sup-1',
-    supplierName: 'Andhra Cotton Mills',
-    category: 'Cotton Yarn',
-    price: '₹450 / kg',
+    name: 'Designer Glass & Pearl Beads Pack',
+    category: 'Textile Materials',
+    subCategory: 'Beads & Accessories',
+    price: '₹450 / pack',
     numericPrice: 450,
+    stock: 120,
     rating: 4.9,
-    availability: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1584992236310-6edddc08acff?auto=format&fit=crop&w=500&q=80',
-    description: '80s high-count combed cotton yarn for fine Mangalagiri and Jamdani weaving.'
+    status: 'In Stock',
+    image: getImageSrc(beads1Img),
+    description: 'High-grade decorative glass and pearl beads for boutique dresses, blouses, and heavy embroidery work.'
   },
   {
     id: 'sp-2',
-    name: 'Mulberry Raw Silk Yarn (Grade AAAA)',
-    supplierId: 'sup-2',
-    supplierName: 'Golden Silk Traders',
-    category: 'Silk Yarn',
-    price: '₹3,200 / kg',
-    numericPrice: 3200,
+    name: 'Royal Embroidered Border Laces & Trims',
+    category: 'Textile Materials',
+    subCategory: 'Laces & Linings',
+    price: '₹680 / roll',
+    numericPrice: 680,
+    stock: 85,
     rating: 4.8,
-    availability: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=500&q=80',
-    description: '100% pure Mulberry silk yarn for heavy Kanchipuram and Pochampally silk sarees.'
+    status: 'In Stock',
+    image: getImageSrc(lays1Img),
+    description: 'Intricate embroidered lace borders suitable for dress materials, sarees, and designer garment borders.'
   },
   {
     id: 'sp-3',
-    name: 'Organic Plant Dye Powder Starter Pack',
-    supplierId: 'sup-3',
-    supplierName: 'Eco Threads India',
-    category: 'Natural Dyes',
-    price: '₹850 / set',
-    numericPrice: 850,
+    name: 'Multicolor Craft Beads & Embellishments',
+    category: 'Textile Materials',
+    subCategory: 'Beads & Dress Materials',
+    price: '₹520 / pack',
+    numericPrice: 520,
+    stock: 14,
     rating: 4.7,
-    availability: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1590736704728-f4730bb30770?auto=format&fit=crop&w=500&q=80',
-    description: 'Indigo, Madder Root, Turmeric and Pomegranate peel natural dye extracts.'
+    status: 'Low Stock',
+    image: getImageSrc(beads2Img),
+    description: 'Assorted vibrant crafting beads and embellishments for fashion designers and custom dressmakers.'
   },
   {
     id: 'sp-4',
-    name: 'Tested Golden Zari Thread Spool (250g)',
-    supplierId: 'sup-2',
-    supplierName: 'Golden Silk Traders',
-    category: 'Premium Zari',
-    price: '₹1,400 / spool',
-    numericPrice: 1400,
+    name: 'Premium High-Count Weaving Yarns',
+    category: 'Handloom Materials',
+    subCategory: 'Yarns & Dyes',
+    price: '₹1,250 / bundle',
+    numericPrice: 1250,
+    stock: 200,
     rating: 4.9,
-    availability: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=80',
-    description: 'Fine metallic zari wire wrapped over silk core for rich traditional borders.'
+    status: 'In Stock',
+    image: getImageSrc(threads1Img),
+    description: 'Combed cotton and silk weaving yarn spools engineered for traditional handloom pit looms.'
   },
   {
     id: 'sp-5',
-    name: 'Unbleached Organic Linen Fabric Roll',
-    supplierId: 'sup-3',
-    supplierName: 'Eco Threads India',
-    category: 'Linen Roll',
-    price: '₹650 / meter',
-    numericPrice: 650,
+    name: 'Heavy-Duty Handloom Shuttle & Spare Assembly',
+    category: 'Handloom Materials',
+    subCategory: 'Machine Spare Parts',
+    price: '₹1,850 / set',
+    numericPrice: 1850,
+    stock: 42,
     rating: 4.8,
-    availability: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=500&q=80',
-    description: 'Pure European flax linen yarn rolls ready for handloom warping.'
+    status: 'In Stock',
+    image: getImageSrc(machinary1Img),
+    description: 'Precision-crafted wooden shuttles, reeds, and mechanical components for artisan looms.'
   },
   {
     id: 'sp-6',
-    name: 'High Strength Cotton Yarn Cones (Pack of 6)',
-    supplierId: 'sup-1',
-    supplierName: 'Andhra Cotton Mills',
-    category: 'Cotton Yarn',
-    price: '₹1,920 / pack',
-    numericPrice: 1920,
+    name: 'Industrial Loom Machinery Spare Parts',
+    category: 'Handloom Materials',
+    subCategory: 'Weaving Accessories',
+    price: '₹2,400 / kit',
+    numericPrice: 2400,
+    stock: 8,
     rating: 4.9,
-    availability: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1608748010899-18f300247112?auto=format&fit=crop&w=500&q=80',
-    description: 'Precision-wound yarn cones compatible with automatic pirn winders and pit looms.'
+    status: 'Low Stock',
+    image: getImageSrc(machinary2Img),
+    description: 'Essential replacement gears, shafts, and weaving accessories for handloom & powerloom maintenance.'
+  }
+];
+
+const featuredCategories = [
+  {
+    name: 'Dress Materials',
+    image: getImageSrc(beads2Img),
+    description: 'Unstitched suit sets, dress fabrics, and boutique material rolls.'
   },
   {
-    id: 'sp-7',
-    name: 'Handloom Weaving Shuttles & Reed Set',
-    supplierId: 'sup-1',
-    supplierName: 'Andhra Cotton Mills',
-    category: 'Handloom Accessories',
-    price: '₹1,250 / set',
-    numericPrice: 1250,
-    rating: 4.8,
-    availability: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?auto=format&fit=crop&w=500&q=80',
-    description: 'Polished teakwood flying shuttles and stainless steel reed combs for weavers.'
+    name: 'Fabrics',
+    image: getImageSrc(lays1Img),
+    description: 'Premium cotton, silk blends, linings, and garment fabrics.'
   },
   {
-    id: 'sp-8',
-    name: 'Pure Tussar Raw Silk Skeins',
-    supplierId: 'sup-4',
-    supplierName: 'Resham Silk Mills',
-    category: 'Silk Yarn',
-    price: '₹2,800 / kg',
-    numericPrice: 2800,
-    rating: 4.9,
-    availability: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=500&q=80',
-    description: 'Hand-reeled natural golden Tussar silk skeins from Bhagalpur.'
+    name: 'Laces',
+    image: getImageSrc(lays1Img),
+    description: 'Designer lace borders, embroidered trims, and decorative edgings.'
+  },
+  {
+    name: 'Beads',
+    image: getImageSrc(beads1Img),
+    description: 'Pearl beads, glass crystals, and heavy embroidery embellishments.'
+  },
+  {
+    name: 'Cotton Yarn',
+    image: getImageSrc(threads1Img),
+    description: 'High-count combed cotton yarns and warping thread cones.'
+  },
+  {
+    name: 'Silk Yarn',
+    image: getImageSrc(threads1Img),
+    description: 'Mulberry silk spools, Tussar raw silk, and fine silk threads.'
+  },
+  {
+    name: 'Machine Spare Parts',
+    image: getImageSrc(machinary1Img),
+    description: 'Teakwood shuttles, steel reeds, gears, and loom accessories.'
+  },
+  {
+    name: 'Natural Dyes',
+    image: getImageSrc(machinary2Img),
+    description: 'Eco-friendly plant dyes, organic indigo vats, and coloring extracts.'
+  }
+];
+
+const mockRecentOrders = [
+  {
+    id: 'ORD-101',
+    productName: 'Designer Glass & Pearl Beads Pack',
+    productImage: getImageSrc(beads1Img),
+    buyerName: 'Pochampally Weavers Guild',
+    quantity: '25 packs',
+    status: 'Processing'
+  },
+  {
+    id: 'ORD-102',
+    productName: 'Premium High-Count Weaving Yarns',
+    productImage: getImageSrc(threads1Img),
+    buyerName: 'Kanchi Heritage Silks',
+    quantity: '50 kg',
+    status: 'Ready to Ship'
+  },
+  {
+    id: 'ORD-103',
+    productName: 'Heavy-Duty Handloom Shuttle Assembly',
+    productImage: getImageSrc(machinary1Img),
+    buyerName: 'Mangalagiri Artisan Co-op',
+    quantity: '10 sets',
+    status: 'Delivered'
+  }
+];
+
+const mockInventoryAlerts = [
+  {
+    id: 'inv-1',
+    name: 'Multicolor Craft Beads & Embellishments',
+    image: getImageSrc(beads2Img),
+    quantityText: 'Only 5 left',
+    badgeType: 'critical'
+  },
+  {
+    id: 'inv-2',
+    name: 'Industrial Loom Machinery Spare Parts',
+    image: getImageSrc(machinary2Img),
+    quantityText: 'Low Stock (8 units remaining)',
+    badgeType: 'warning'
+  },
+  {
+    id: 'inv-3',
+    name: 'Natural Indigo Organic Dye Powder',
+    image: getImageSrc(machinary1Img),
+    quantityText: 'Out of Stock',
+    badgeType: 'out'
+  }
+];
+
+const supplierNavCards = [
+  {
+    icon: '📦',
+    title: 'Products',
+    description: 'Manage your textile and handloom material listings and pricing.'
+  },
+  {
+    icon: '📊',
+    title: 'Inventory',
+    description: 'Track stock levels, set reorder points, and handle warehouse stock.'
+  },
+  {
+    icon: '🛍️',
+    title: 'Orders',
+    description: 'Fulfill B2B buyer purchases, track dispatches, and delivery status.'
+  },
+  {
+    icon: '💬',
+    title: 'Messages',
+    description: 'Chat directly with artisan weavers, tailors, and bulk buyers.'
+  },
+  {
+    icon: '📈',
+    title: 'Analytics',
+    description: 'View sales performance, popular raw materials, and revenue insights.'
+  },
+  {
+    icon: '⚙️',
+    title: 'Settings',
+    description: 'Update business GSTIN, warehouse address, and profile preferences.'
   }
 ];
 
 export const SupplierDashboard: React.FC = () => {
-  const context = useOutletContext<OutletContextType | null>();
+  const { user } = useAuth();
+  const outletContext = useOutletContext<OutletContextType | null>();
+
   const showToast = (msg: string, type: 'success' | 'error' | 'warning' | 'info' = 'success') => {
-    if (context?.showToast) context.showToast(msg, type);
-    else alert(msg);
+    if (outletContext?.showToast) {
+      outletContext.showToast(msg, type);
+    } else {
+      alert(msg);
+    }
   };
 
-  // State Filters
+  const [products] = useState<ProductItem[]>(mockSupplierProducts);
+  const [activeCategory, setActiveCategory] = useState<'All' | 'Textile Materials' | 'Handloom Materials'>('All');
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [selectedLocation, setSelectedLocation] = useState('All');
-  const [selectedMaterialType, setSelectedMaterialType] = useState('All');
-  const [verifiedOnly, setVerifiedOnly] = useState(false);
-  const [selectedPriceRange, setSelectedPriceRange] = useState('All');
-  const [selectedRating, setSelectedRating] = useState('All');
-  const [selectedExperience, setSelectedExperience] = useState('All');
+  const [viewingProduct, setViewingProduct] = useState<ProductItem | null>(null);
 
-  // Supplier Detail Drawer State
-  const [activeSupplierProfile, setActiveSupplierProfile] = useState<Supplier | null>(null);
+  const productsSectionRef = useRef<HTMLDivElement>(null);
 
-  // Filtered Suppliers
-  const filteredSuppliers = useMemo(() => {
-    return mockSuppliers.filter(sup => {
-      // Search
-      const matchesSearch = !searchQuery || 
-        sup.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        sup.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        sup.products.some(p => p.toLowerCase().includes(searchQuery.toLowerCase()));
-
-      // Location
-      const matchesLocation = selectedLocation === 'All' || sup.state === selectedLocation;
-
-      // Material Type
-      const matchesMaterial = selectedMaterialType === 'All' || 
-        sup.products.some(p => p.toLowerCase().includes(selectedMaterialType.toLowerCase()));
-
-      // Verified
-      const matchesVerified = !verifiedOnly || sup.verified;
-
-      // Rating
-      const matchesRating = selectedRating === 'All' || 
-        (selectedRating === '4.5+' && sup.rating >= 4.5) ||
-        (selectedRating === '4.8+' && sup.rating >= 4.8);
-
-      // Experience
-      const matchesExperience = selectedExperience === 'All' || 
-        (selectedExperience === '10+' && sup.experienceYears >= 10) ||
-        (selectedExperience === '20+' && sup.experienceYears >= 20);
-
-      return matchesSearch && matchesLocation && matchesMaterial && matchesVerified && matchesRating && matchesExperience;
-    });
-  }, [searchQuery, selectedLocation, selectedMaterialType, verifiedOnly, selectedRating, selectedExperience]);
-
-  // Filtered Products
-  const filteredProducts = useMemo(() => {
-    return mockSupplierProducts.filter(prod => {
-      const matchesSearch = !searchQuery || 
-        prod.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        prod.supplierName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        prod.category.toLowerCase().includes(searchQuery.toLowerCase());
-
-      const matchesCategory = selectedCategory === 'All' || prod.category === selectedCategory;
-
-      const matchesPrice = selectedPriceRange === 'All' ||
-        (selectedPriceRange === 'Under ₹1000' && prod.numericPrice < 1000) ||
-        (selectedPriceRange === '₹1000 - ₹5000' && prod.numericPrice >= 1000 && prod.numericPrice <= 5000) ||
-        (selectedPriceRange === '₹5000+' && prod.numericPrice > 5000);
-
-      return matchesSearch && matchesCategory && matchesPrice;
-    });
-  }, [searchQuery, selectedCategory, selectedPriceRange]);
-
-  const handleContactSupplier = (supplierName: string) => {
-    showToast(`Inquiry sent to ${supplierName}! Their B2B manager will contact you directly.`, "success");
+  const handleQuickAction = (category: 'Textile Materials' | 'Handloom Materials') => {
+    setActiveCategory(category);
+    if (productsSectionRef.current) {
+      productsSectionRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+    showToast(`Viewing ${category} catalog`, 'info');
   };
 
-  const handleAddToWishlist = (productName: string) => {
-    showToast(`Added "${productName}" to Raw Material Wishlist!`, "info");
-  };
+  const filteredProducts = products.filter(prod => {
+    const matchesCategory = activeCategory === 'All' || prod.category === activeCategory;
+    const matchesSearch = !searchQuery || 
+      prod.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      prod.subCategory.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      prod.description.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   return (
-    <div className="supplier-marketplace-container fade-in" style={{ padding: '24px', paddingBottom: '90px', maxWidth: '1240px', margin: '0 auto' }}>
+    <div className="supplier-dashboard-container fade-in" style={{ paddingBottom: '80px', color: 'var(--text-primary)' }}>
       <style>{`
-        .supplier-marketplace-container {
-          color: var(--text-primary);
+        .supplier-dashboard-container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 24px;
         }
 
-        .supplier-hero-header {
-          background: linear-gradient(135deg, rgba(26, 35, 60, 0.9) 0%, rgba(10, 15, 25, 0.95) 100%),
-                      url('https://images.unsplash.com/photo-1584992236310-6edddc08acff?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat;
-          border: 1px solid var(--border-color);
-          border-radius: var(--border-radius-lg);
-          padding: 40px;
-          color: #FFFFFF;
-          margin-bottom: 30px;
-          box-shadow: var(--shadow-md);
+        .dashboard-header-block {
+          margin-bottom: 28px;
         }
 
-        .supplier-hero-title {
+        .dashboard-main-title {
           font-family: var(--font-heading);
-          font-size: 34px;
+          font-size: 28px;
           font-weight: 800;
-          margin-bottom: 10px;
-          color: #FFFFFF;
+          color: var(--text-primary);
+          margin-bottom: 6px;
         }
 
-        .supplier-hero-subtitle {
-          font-size: 15px;
-          color: rgba(255, 255, 255, 0.85);
-          max-width: 680px;
+        .dashboard-sub-text {
+          color: var(--text-secondary);
+          font-size: 14px;
           line-height: 1.5;
         }
 
-        /* Search & Filter Bar */
-        .marketplace-control-panel {
-          background: var(--bg-secondary);
-          border: 1px solid var(--border-color);
-          border-radius: var(--border-radius-lg);
-          padding: 24px;
-          margin-bottom: 36px;
-          box-shadow: var(--shadow-sm);
-          display: flex;
-          flex-direction: column;
+        .summary-cards-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
           gap: 20px;
+          margin-bottom: 36px;
         }
 
-        .search-input-wrapper {
-          display: flex;
-          gap: 12px;
-          width: 100%;
-        }
-
-        .supplier-search-input {
-          flex: 1;
-          padding: 14px 20px;
-          border-radius: 30px;
-          border: 1px solid var(--border-color);
-          background: var(--bg-primary);
-          color: var(--text-primary);
-          font-size: 15px;
-          outline: none;
-        }
-
-        .supplier-search-input:focus {
-          border-color: var(--accent-gold);
-        }
-
-        .filter-row-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-          gap: 14px;
-          align-items: center;
-        }
-
-        .filter-select-group {
-          display: flex;
-          flex-direction: column;
-          gap: 6px;
-        }
-
-        .filter-label {
-          font-size: 11px;
-          font-weight: 700;
-          color: var(--text-muted);
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-        }
-
-        .filter-dropdown {
-          padding: 9px 12px;
-          border-radius: 8px;
-          border: 1px solid var(--border-color);
-          background: var(--bg-primary);
-          color: var(--text-primary);
-          font-size: 13px;
-          outline: none;
-          cursor: pointer;
-        }
-
-        .filter-dropdown:focus {
-          border-color: var(--accent-gold);
-        }
-
-        .categories-chips-scroll {
-          display: flex;
-          gap: 10px;
-          overflow-x: auto;
-          padding-bottom: 8px;
-        }
-
-        .category-chip {
-          padding: 8px 16px;
-          border-radius: 20px;
-          border: 1px solid var(--border-color);
-          background: var(--bg-primary);
-          color: var(--text-secondary);
-          font-size: 13px;
-          font-weight: 600;
-          cursor: pointer;
-          white-space: nowrap;
-          transition: all 0.2s ease;
-        }
-
-        .category-chip.active, .category-chip:hover {
-          border-color: var(--accent-gold);
-          color: var(--accent-gold);
-          background: var(--bg-tertiary);
-        }
-
-        /* Supplier Cards Grid */
-        .suppliers-marketplace-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-          gap: 24px;
-          margin-bottom: 50px;
-        }
-
-        .supplier-marketplace-card {
+        .summary-card {
           background: var(--bg-secondary);
           border: 1px solid var(--border-color);
           border-radius: var(--border-radius-lg);
-          padding: 24px;
-          display: flex;
-          flex-direction: column;
-          gap: 16px;
+          padding: 22px;
           box-shadow: var(--shadow-sm);
           transition: transform 0.2s ease, border-color 0.2s ease;
         }
 
-        .supplier-marketplace-card:hover {
+        .summary-card:hover {
+          transform: translateY(-3px);
+          border-color: var(--accent-gold);
+        }
+
+        .summary-card-title {
+          font-size: 13px;
+          color: var(--text-secondary);
+          font-weight: 600;
+          margin-bottom: 10px;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        .summary-card-value {
+          font-size: 32px;
+          font-weight: 800;
+          line-height: 1;
+        }
+
+        .quick-actions-section {
+          margin-bottom: 48px;
+        }
+
+        .quick-actions-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+          gap: 24px;
+        }
+
+        .quick-action-card {
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius-lg);
+          overflow: hidden;
+          box-shadow: var(--shadow-sm);
+          display: flex;
+          flex-direction: column;
+          transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .quick-action-card:hover {
           transform: translateY(-4px);
           border-color: var(--accent-gold);
           box-shadow: var(--shadow-md);
         }
 
-        .sup-logo-badge {
-          width: 50px;
-          height: 50px;
-          border-radius: 50%;
-          background: var(--bg-primary);
-          border: 2px solid var(--accent-gold);
+        .quick-card-img-wrapper {
+          height: 200px;
+          overflow: hidden;
+          position: relative;
+          background-color: #111115;
+          display: grid;
+          grid-template-columns: 2fr 1fr 1fr;
+          gap: 2px;
+        }
+
+        .quick-card-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.4s ease;
+        }
+
+        .quick-action-card:hover .quick-card-img {
+          transform: scale(1.05);
+        }
+
+        .quick-card-content {
+          padding: 24px;
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+        }
+
+        .quick-card-title {
+          font-family: var(--font-heading);
+          font-size: 20px;
+          font-weight: 800;
+          color: var(--text-primary);
+          margin-bottom: 10px;
+        }
+
+        .quick-card-desc {
+          color: var(--text-secondary);
+          font-size: 14px;
+          line-height: 1.5;
+          margin-bottom: 24px;
+          flex: 1;
+        }
+
+        .quick-card-btn {
+          width: 100%;
+          padding: 12px 20px;
+          border-radius: var(--border-radius-md);
+          font-size: 14px;
+          font-weight: 700;
+          cursor: pointer;
+          transition: all 0.2s ease;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 22px;
-        }
-
-        .sup-header-info {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-        }
-
-        .sup-name-title {
-          font-size: 18px;
-          font-weight: 700;
-          color: var(--text-primary);
-          margin-bottom: 2px;
-          display: flex;
-          align-items: center;
           gap: 8px;
         }
 
-        .sup-location-text {
-          font-size: 12px;
-          color: var(--text-secondary);
+        /* Featured Categories */
+        .featured-categories-section {
+          margin-bottom: 48px;
         }
 
-        .sup-stats-grid {
+        .featured-categories-grid {
           display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 10px;
-          background: var(--bg-primary);
-          padding: 12px;
-          border-radius: 8px;
-          text-align: center;
-          font-size: 12px;
-          border: 1px solid var(--border-color);
+          grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+          gap: 20px;
         }
 
-        .sup-stats-grid strong {
-          display: block;
-          font-size: 14px;
-          color: var(--text-primary);
-          font-weight: 700;
-          margin-top: 2px;
-        }
-
-        .sup-products-tags {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 6px;
-        }
-
-        .sup-tag {
-          font-size: 11px;
-          background: var(--bg-tertiary);
-          border: 1px solid var(--border-color);
-          padding: 3px 10px;
-          border-radius: 12px;
-          color: var(--text-secondary);
-        }
-
-        /* Products Grid */
-        .supplier-products-grid-full {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-          gap: 24px;
-        }
-
-        .supplier-product-card {
+        .featured-category-card {
           background: var(--bg-secondary);
           border: 1px solid var(--border-color);
           border-radius: var(--border-radius-lg);
           overflow: hidden;
+          box-shadow: var(--shadow-sm);
           display: flex;
           flex-direction: column;
-          box-shadow: var(--shadow-sm);
-          transition: transform 0.2s ease, border-color 0.2s ease;
+          transition: transform 0.3s ease, border-color 0.3s ease;
         }
 
-        .supplier-product-card:hover {
+        .featured-category-card:hover {
+          transform: translateY(-4px);
+          border-color: var(--accent-gold);
+          box-shadow: var(--shadow-md);
+        }
+
+        .cat-card-img-box {
+          width: 100%;
+          height: 150px;
+          overflow: hidden;
+          background-color: #111115;
+        }
+
+        .cat-card-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.4s ease;
+        }
+
+        .featured-category-card:hover .cat-card-img {
+          transform: scale(1.06);
+        }
+
+        .cat-card-body {
+          padding: 16px;
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+        }
+
+        .cat-card-title {
+          font-family: var(--font-heading);
+          font-size: 16px;
+          font-weight: 700;
+          color: var(--text-primary);
+          margin-bottom: 6px;
+        }
+
+        .cat-card-desc {
+          font-size: 13px;
+          color: var(--text-secondary);
+          line-height: 1.4;
+          margin: 0;
+        }
+
+        /* Recent Orders */
+        .recent-orders-section {
+          margin-bottom: 48px;
+        }
+
+        .recent-orders-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          gap: 20px;
+        }
+
+        .recent-order-card {
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius-lg);
+          overflow: hidden;
+          box-shadow: var(--shadow-sm);
+          display: flex;
+          gap: 16px;
+          padding: 16px;
+          align-items: center;
+          transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .recent-order-card:hover {
+          transform: translateY(-3px);
+          border-color: var(--accent-gold);
+          box-shadow: var(--shadow-md);
+        }
+
+        .order-img-box {
+          width: 90px;
+          height: 90px;
+          border-radius: var(--border-radius-md);
+          overflow: hidden;
+          flex-shrink: 0;
+          background-color: #111115;
+        }
+
+        .order-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .order-info-box {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+          flex: 1;
+        }
+
+        .order-prod-title {
+          font-family: var(--font-heading);
+          font-size: 15px;
+          font-weight: 700;
+          color: var(--text-primary);
+          margin: 0;
+          line-height: 1.3;
+        }
+
+        .order-meta-text {
+          font-size: 13px;
+          color: var(--text-secondary);
+        }
+
+        .order-status-badge {
+          display: inline-block;
+          padding: 3px 10px;
+          border-radius: 12px;
+          font-size: 11px;
+          font-weight: 700;
+          width: fit-content;
+          margin-top: 4px;
+        }
+
+        .order-status-badge.Processing {
+          background: rgba(244, 162, 97, 0.2);
+          border: 1px solid #f4a261;
+          color: #f4a261;
+        }
+
+        .order-status-badge.Ready-to-Ship {
+          background: rgba(42, 157, 143, 0.2);
+          border: 1px solid #2a9d8f;
+          color: #2a9d8f;
+        }
+
+        .order-status-badge.Delivered {
+          background: rgba(58, 134, 255, 0.2);
+          border: 1px solid #3a86ff;
+          color: #3a86ff;
+        }
+
+        /* Inventory Alerts */
+        .inventory-alerts-section {
+          margin-bottom: 48px;
+        }
+
+        .inventory-alerts-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          gap: 20px;
+        }
+
+        .inventory-alert-card {
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius-lg);
+          padding: 16px;
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          box-shadow: var(--shadow-sm);
+          transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .inventory-alert-card.critical {
+          border-left: 4px solid #e63946;
+        }
+
+        .inventory-alert-card.warning {
+          border-left: 4px solid #f4a261;
+        }
+
+        .inventory-alert-card.out {
+          border-left: 4px solid #d62828;
+        }
+
+        .inventory-alert-card:hover {
+          transform: translateY(-3px);
+          box-shadow: var(--shadow-md);
+        }
+
+        .alert-img-box {
+          width: 80px;
+          height: 80px;
+          border-radius: var(--border-radius-md);
+          overflow: hidden;
+          flex-shrink: 0;
+          background-color: #111115;
+        }
+
+        .alert-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .alert-info-box {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+          flex: 1;
+        }
+
+        .alert-prod-name {
+          font-family: var(--font-heading);
+          font-size: 15px;
+          font-weight: 700;
+          color: var(--text-primary);
+          margin: 0;
+          line-height: 1.3;
+        }
+
+        .alert-qty-tag {
+          font-size: 13px;
+          font-weight: 700;
+          display: inline-block;
+          margin-top: 4px;
+        }
+
+        .alert-qty-tag.critical {
+          color: #e63946;
+        }
+
+        .alert-qty-tag.warning {
+          color: #f4a261;
+        }
+
+        .alert-qty-tag.out {
+          color: #d62828;
+        }
+
+        /* Supplier Quick Nav Section */
+        .supplier-nav-section {
+          margin-top: 55px;
+          margin-bottom: 40px;
+        }
+
+        .supplier-nav-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+          gap: 20px;
+        }
+
+        .supplier-nav-card {
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius-lg);
+          padding: 22px;
+          display: flex;
+          align-items: flex-start;
+          gap: 16px;
+          box-shadow: var(--shadow-sm);
+          transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+          cursor: pointer;
+        }
+
+        .supplier-nav-card:hover {
+          transform: translateY(-4px);
+          border-color: var(--accent-gold);
+          box-shadow: var(--shadow-md);
+        }
+
+        .nav-card-icon {
+          font-size: 28px;
+          width: 50px;
+          height: 50px;
+          border-radius: var(--border-radius-md);
+          background: var(--bg-primary);
+          border: 1px solid var(--border-color);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+
+        .nav-card-body {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+        }
+
+        .nav-card-title {
+          font-family: var(--font-heading);
+          font-size: 17px;
+          font-weight: 700;
+          color: var(--text-primary);
+          margin: 0;
+        }
+
+        .nav-card-desc {
+          font-size: 13px;
+          color: var(--text-secondary);
+          line-height: 1.4;
+          margin: 0;
+        }
+
+        .section-heading {
+          font-family: var(--font-heading);
+          font-size: 22px;
+          font-weight: 800;
+          margin-bottom: 20px;
+          color: var(--text-primary);
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .section-heading::before {
+          content: '';
+          display: inline-block;
+          width: 4px;
+          height: 22px;
+          background: var(--accent-gold);
+          border-radius: 4px;
+        }
+
+        .filter-tabs-bar {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-between;
+          align-items: center;
+          gap: 16px;
+          margin-bottom: 24px;
+        }
+
+        .category-tab-btn {
+          padding: 8px 18px;
+          border-radius: 20px;
+          border: 1px solid var(--border-color);
+          background: var(--bg-secondary);
+          color: var(--text-secondary);
+          font-size: 13px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .category-tab-btn.active {
+          background: var(--accent-gold);
+          color: #0A0F19;
+          border-color: var(--accent-gold);
+          font-weight: 700;
+        }
+
+        .search-box-input {
+          padding: 9px 16px;
+          border-radius: 20px;
+          border: 1px solid var(--border-color);
+          background: var(--bg-secondary);
+          color: var(--text-primary);
+          font-size: 13px;
+          outline: none;
+          min-width: 240px;
+        }
+
+        .search-box-input:focus {
+          border-color: var(--accent-gold);
+        }
+
+        .products-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+          gap: 24px;
+        }
+
+        .product-card {
+          background: var(--bg-secondary);
+          border: 1px solid var(--border-color);
+          border-radius: var(--border-radius-lg);
+          overflow: hidden;
+          box-shadow: var(--shadow-sm);
+          display: flex;
+          flex-direction: column;
+          transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .product-card:hover {
           transform: translateY(-4px);
           border-color: var(--accent-gold);
           box-shadow: var(--shadow-md);
@@ -580,31 +832,109 @@ export const SupplierDashboard: React.FC = () => {
         .prod-img-box {
           position: relative;
           width: 100%;
-          height: 200px;
+          height: 220px;
           overflow: hidden;
-          background: #111;
+          background-color: #111115;
         }
 
-        .prod-img {
+        .prod-img-box img {
           width: 100%;
           height: 100%;
           object-fit: cover;
+          transition: transform 0.4s ease;
         }
 
-        .prod-body-box {
-          padding: 18px;
+        .product-card:hover .prod-img-box img {
+          transform: scale(1.05);
+        }
+
+        .category-tag {
+          position: absolute;
+          top: 12px;
+          left: 12px;
+          background: rgba(10, 15, 25, 0.85);
+          border: 1px solid var(--accent-gold);
+          color: var(--accent-gold);
+          padding: 4px 10px;
+          border-radius: 12px;
+          font-size: 11px;
+          font-weight: 700;
+        }
+
+        .status-pill {
+          position: absolute;
+          top: 12px;
+          right: 12px;
+          padding: 4px 10px;
+          border-radius: 12px;
+          font-size: 11px;
+          font-weight: 700;
+        }
+
+        .status-pill.In-Stock {
+          background: rgba(42, 157, 143, 0.2);
+          border: 1px solid #2a9d8f;
+          color: #2a9d8f;
+        }
+
+        .status-pill.Low-Stock {
+          background: rgba(244, 162, 97, 0.2);
+          border: 1px solid #f4a261;
+          color: #f4a261;
+        }
+
+        .product-card-body {
+          padding: 20px;
           display: flex;
           flex-direction: column;
-          gap: 10px;
           flex: 1;
         }
 
-        /* Supplier Modal Profile */
-        .profile-modal-backdrop {
+        .prod-sub-cat {
+          font-size: 11px;
+          font-weight: 700;
+          color: var(--accent-gold);
+          text-transform: uppercase;
+          letter-spacing: 0.8px;
+          margin-bottom: 4px;
+        }
+
+        .prod-title {
+          font-family: var(--font-heading);
+          font-size: 17px;
+          font-weight: 700;
+          margin-bottom: 8px;
+          color: var(--text-primary);
+          line-height: 1.3;
+        }
+
+        .prod-desc {
+          font-size: 13px;
+          color: var(--text-secondary);
+          line-height: 1.4;
+          margin-bottom: 14px;
+        }
+
+        .prod-meta-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-top: auto;
+          padding-top: 12px;
+          border-top: 1px dashed var(--border-color);
+        }
+
+        .prod-price {
+          font-size: 18px;
+          font-weight: 800;
+          color: var(--text-primary);
+        }
+
+        .modal-overlay {
           position: fixed;
           top: 0; left: 0; width: 100vw; height: 100vh;
           background: rgba(0, 0, 0, 0.75);
-          backdrop-filter: blur(6px);
+          backdrop-filter: blur(4px);
           display: flex;
           justify-content: center;
           align-items: center;
@@ -612,209 +942,225 @@ export const SupplierDashboard: React.FC = () => {
           padding: 20px;
         }
 
-        .profile-modal-container {
+        .modal-content-card {
           background: var(--bg-secondary);
-          border: 1px solid var(--accent-gold);
+          border: 1px solid var(--border-color);
           border-radius: var(--border-radius-lg);
+          max-width: 520px;
           width: 100%;
-          max-width: 780px;
-          max-height: 90vh;
-          overflow-y: auto;
-          box-shadow: var(--shadow-lg);
-          position: relative;
-        }
-
-        .profile-banner-header {
-          position: relative;
-          width: 100%;
-          height: 220px;
           overflow: hidden;
-        }
-
-        .profile-banner-img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-
-        .profile-banner-overlay {
-          position: absolute;
-          top: 0; left: 0; width: 100%; height: 100%;
-          background: linear-gradient(to top, rgba(15, 20, 30, 0.9) 0%, transparent 60%);
-        }
-
-        .profile-body-padding {
-          padding: 28px;
-        }
-
-        @media (max-width: 768px) {
-          .supplier-hero-header { padding: 24px; }
-          .supplier-hero-title { font-size: 26px; }
-          .suppliers-marketplace-grid { grid-template-columns: 1fr; }
-          .filter-row-grid { grid-template-columns: 1fr 1fr; }
+          box-shadow: var(--shadow-md);
         }
       `}</style>
 
-      {/* Hero Header */}
-      <div className="supplier-hero-header">
-        <h1 className="supplier-hero-title">Handloom Raw Material Marketplace</h1>
-        <p className="supplier-hero-subtitle">
-          Connect directly with verified raw material suppliers for high-count cotton yarn, Mulberry silk, pure metallic zari, organic natural dyes, and weaving equipment.
+      <div className="dashboard-header-block">
+        <h2 className="dashboard-main-title">Supplier Workspace</h2>
+        <p className="dashboard-sub-text">
+          Welcome back, {user?.name || 'Valued Supplier'}. Manage your material inventory, fulfill artisan orders, and expand your B2B supplier reach.
         </p>
       </div>
 
-      {/* Control Panel / Search & Filters */}
-      <div className="marketplace-control-panel">
-        {/* Search */}
-        <div className="search-input-wrapper">
-          <input 
-            type="text" 
-            className="supplier-search-input" 
-            placeholder="Search by supplier name, yarn material, location or product..." 
+      <div className="summary-cards-grid">
+        <div className="summary-card">
+          <div className="summary-card-title">Total Products</div>
+          <div className="summary-card-value" style={{ color: 'var(--accent-gold)' }}>
+            {products.length}
+          </div>
+        </div>
+
+        <div className="summary-card">
+          <div className="summary-card-title">Active Orders</div>
+          <div className="summary-card-value" style={{ color: 'var(--accent-teal)' }}>
+            18
+          </div>
+        </div>
+
+        <div className="summary-card">
+          <div className="summary-card-title">Pending Deliveries</div>
+          <div className="summary-card-value" style={{ color: '#E65C00' }}>
+            5
+          </div>
+        </div>
+
+        <div className="summary-card">
+          <div className="summary-card-title">Supplier Rating</div>
+          <div className="summary-card-value" style={{ color: '#ffb703' }}>
+            4.9 ★
+          </div>
+        </div>
+      </div>
+
+      <div className="quick-actions-section">
+        <h3 className="section-heading">Quick Actions</h3>
+        <div className="quick-actions-grid">
+          <div className="quick-action-card">
+            <div className="quick-card-img-wrapper">
+              <img src={getImageSrc(beads1Img)} alt="Beads" className="quick-card-img" />
+              <img src={getImageSrc(lays1Img)} alt="Laces" className="quick-card-img" />
+              <img src={getImageSrc(beads2Img)} alt="Accessories" className="quick-card-img" />
+            </div>
+            <div className="quick-card-content">
+              <h4 className="quick-card-title">Manage Textile Materials</h4>
+              <p className="quick-card-desc">
+                Manage fabrics, beads, laces, linings, dress materials and accessories.
+              </p>
+              <button 
+                className="quick-card-btn btn-primary"
+                onClick={() => handleQuickAction('Textile Materials')}
+              >
+                View Products
+              </button>
+            </div>
+          </div>
+
+          <div className="quick-action-card">
+            <div className="quick-card-img-wrapper">
+              <img src={getImageSrc(threads1Img)} alt="Yarns" className="quick-card-img" />
+              <img src={getImageSrc(machinary1Img)} alt="Shuttle" className="quick-card-img" />
+              <img src={getImageSrc(machinary2Img)} alt="Machinery" className="quick-card-img" />
+            </div>
+            <div className="quick-card-content">
+              <h4 className="quick-card-title">Manage Handloom Materials</h4>
+              <p className="quick-card-desc">
+                Manage yarns, dyes, machine spare parts and weaving accessories.
+              </p>
+              <button 
+                className="quick-card-btn btn-primary"
+                onClick={() => handleQuickAction('Handloom Materials')}
+              >
+                View Products
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Featured Categories Section */}
+      <div className="featured-categories-section">
+        <h3 className="section-heading">Featured Categories</h3>
+        <div className="featured-categories-grid">
+          {featuredCategories.map((cat, idx) => (
+            <div key={idx} className="featured-category-card">
+              <div className="cat-card-img-box">
+                <img src={cat.image} alt={cat.name} className="cat-card-img" />
+              </div>
+              <div className="cat-card-body">
+                <h4 className="cat-card-title">{cat.name}</h4>
+                <p className="cat-card-desc">{cat.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Recent Orders Section */}
+      <div className="recent-orders-section">
+        <h3 className="section-heading">Recent Orders</h3>
+        <div className="recent-orders-grid">
+          {mockRecentOrders.map(order => (
+            <div key={order.id} className="recent-order-card">
+              <div className="order-img-box">
+                <img src={order.productImage} alt={order.productName} className="order-img" />
+              </div>
+              <div className="order-info-box">
+                <h4 className="order-prod-title">{order.productName}</h4>
+                <span className="order-meta-text">👤 <strong>Buyer:</strong> {order.buyerName}</span>
+                <span className="order-meta-text">📦 <strong>Qty:</strong> {order.quantity}</span>
+                <span className={`order-status-badge ${order.status.replace(/\s+/g, '-')}`}>
+                  {order.status}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Inventory Alerts Section */}
+      <div className="inventory-alerts-section">
+        <h3 className="section-heading">Inventory Alerts</h3>
+        <div className="inventory-alerts-grid">
+          {mockInventoryAlerts.map(alert => (
+            <div key={alert.id} className={`inventory-alert-card ${alert.badgeType}`}>
+              <div className="alert-img-box">
+                <img src={alert.image} alt={alert.name} className="alert-img" />
+              </div>
+              <div className="alert-info-box">
+                <h4 className="alert-prod-name">{alert.name}</h4>
+                <span className={`alert-qty-tag ${alert.badgeType}`}>
+                  ⚠️ {alert.quantityText}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div ref={productsSectionRef}>
+        <h3 className="section-heading">
+          Material Catalog ({filteredProducts.length})
+        </h3>
+
+        <div className="filter-tabs-bar">
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button
+              className={`category-tab-btn ${activeCategory === 'All' ? 'active' : ''}`}
+              onClick={() => setActiveCategory('All')}
+            >
+              All Materials
+            </button>
+            <button
+              className={`category-tab-btn ${activeCategory === 'Textile Materials' ? 'active' : ''}`}
+              onClick={() => setActiveCategory('Textile Materials')}
+            >
+              Textile Materials
+            </button>
+            <button
+              className={`category-tab-btn ${activeCategory === 'Handloom Materials' ? 'active' : ''}`}
+              onClick={() => setActiveCategory('Handloom Materials')}
+            >
+              Handloom Materials
+            </button>
+          </div>
+
+          <input
+            type="text"
+            className="search-box-input"
+            placeholder="Search products..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
 
-        {/* Category Chips */}
-        <div className="categories-chips-scroll">
-          {['All', 'Cotton Yarn', 'Silk Yarn', 'Premium Zari', 'Natural Dyes', 'Linen Roll', 'Handloom Accessories'].map(cat => (
-            <button 
-              key={cat} 
-              className={`category-chip ${selectedCategory === cat ? 'active' : ''}`}
-              onClick={() => setSelectedCategory(cat)}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-
-        {/* Filter Dropdowns */}
-        <div className="filter-row-grid">
-          <div className="filter-select-group">
-            <span className="filter-label">📍 State / Location</span>
-            <select className="filter-dropdown" value={selectedLocation} onChange={(e) => setSelectedLocation(e.target.value)}>
-              <option value="All">All Locations</option>
-              <option value="Andhra Pradesh">Andhra Pradesh</option>
-              <option value="Tamil Nadu">Tamil Nadu</option>
-              <option value="Telangana">Telangana</option>
-              <option value="Bihar">Bihar</option>
-            </select>
-          </div>
-
-          <div className="filter-select-group">
-            <span className="filter-label">🧶 Material Type</span>
-            <select className="filter-dropdown" value={selectedMaterialType} onChange={(e) => setSelectedMaterialType(e.target.value)}>
-              <option value="All">All Materials</option>
-              <option value="Cotton">Cotton</option>
-              <option value="Silk">Silk</option>
-              <option value="Zari">Zari</option>
-              <option value="Dyes">Natural Dyes</option>
-              <option value="Linen">Linen</option>
-            </select>
-          </div>
-
-          <div className="filter-select-group">
-            <span className="filter-label">💵 Price Range</span>
-            <select className="filter-dropdown" value={selectedPriceRange} onChange={(e) => setSelectedPriceRange(e.target.value)}>
-              <option value="All">All Prices</option>
-              <option value="Under ₹1000">Under ₹1,000</option>
-              <option value="₹1000 - ₹5000">₹1,000 - ₹5,000</option>
-              <option value="₹5000+">₹5,000+</option>
-            </select>
-          </div>
-
-          <div className="filter-select-group">
-            <span className="filter-label">⭐ Min Rating</span>
-            <select className="filter-dropdown" value={selectedRating} onChange={(e) => setSelectedRating(e.target.value)}>
-              <option value="All">All Ratings</option>
-              <option value="4.5+">4.5+ Rating</option>
-              <option value="4.8+">4.8+ Rating</option>
-            </select>
-          </div>
-
-          <div className="filter-select-group">
-            <span className="filter-label">🏛️ Experience</span>
-            <select className="filter-dropdown" value={selectedExperience} onChange={(e) => setSelectedExperience(e.target.value)}>
-              <option value="All">All Experience</option>
-              <option value="10+">10+ Years</option>
-              <option value="20+">20+ Years</option>
-            </select>
-          </div>
-
-          <div className="filter-select-group" style={{ flexDirection: 'row', alignItems: 'center', gap: '8px', paddingTop: '16px' }}>
-            <input 
-              type="checkbox" 
-              id="verified-checkbox" 
-              checked={verifiedOnly} 
-              onChange={(e) => setVerifiedOnly(e.target.checked)}
-              style={{ cursor: 'pointer', width: '16px', height: '16px' }}
-            />
-            <label htmlFor="verified-checkbox" style={{ fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
-              Verified Only ✓
-            </label>
-          </div>
-        </div>
-      </div>
-
-      {/* Featured Suppliers Section */}
-      <div style={{ marginBottom: '50px' }}>
-        <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '24px', fontWeight: 800, marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          🏛️ Verified Raw Material Suppliers ({filteredSuppliers.length})
-        </h2>
-
-        {filteredSuppliers.length === 0 ? (
+        {filteredProducts.length === 0 ? (
           <div style={{ background: 'var(--bg-secondary)', padding: '40px', borderRadius: '12px', textAlign: 'center', color: 'var(--text-secondary)' }}>
-            No suppliers match your current filter parameters.
+            No materials found matching your current search or filter.
           </div>
         ) : (
-          <div className="suppliers-marketplace-grid">
-            {filteredSuppliers.map(supplier => (
-              <div key={supplier.id} className="supplier-marketplace-card">
-                <div className="sup-header-info">
-                  <div className="sup-logo-badge">{supplier.logo}</div>
-                  <div>
-                    <div className="sup-name-title">
-                      {supplier.name}
-                      {supplier.verified && <span style={{ fontSize: '11px', color: '#2a9d8f', background: 'rgba(42, 157, 143, 0.15)', padding: '2px 6px', borderRadius: '10px' }}>✓ Verified</span>}
+          <div className="products-grid">
+            {filteredProducts.map(prod => (
+              <div key={prod.id} className="product-card">
+                <div className="prod-img-box">
+                  <img src={prod.image} alt={prod.name} />
+                  <span className="category-tag">{prod.category}</span>
+                  <span className={`status-pill ${prod.status.replace(/\s+/g, '-')}`}>{prod.status}</span>
+                </div>
+                <div className="product-card-body">
+                  <div className="prod-sub-cat">{prod.subCategory}</div>
+                  <h4 className="prod-title">{prod.name}</h4>
+                  <p className="prod-desc">{prod.description}</p>
+                  <div className="prod-meta-row">
+                    <div>
+                      <span className="prod-price">{prod.price}</span>
+                      <span style={{ display: 'block', fontSize: '11px', color: 'var(--text-muted)' }}>Stock: {prod.stock} units</span>
                     </div>
-                    <div className="sup-location-text">📍 {supplier.location}</div>
+                    <button 
+                      className="btn-secondary"
+                      style={{ padding: '8px 14px', fontSize: '12px' }}
+                      onClick={() => setViewingProduct(prod)}
+                    >
+                      View Details
+                    </button>
                   </div>
-                </div>
-
-                <div className="sup-stats-grid">
-                  <div>
-                    <span style={{ color: 'var(--text-muted)' }}>Experience</span>
-                    <strong>{supplier.experienceYears} Yrs</strong>
-                  </div>
-                  <div>
-                    <span style={{ color: 'var(--text-muted)' }}>Rating</span>
-                    <strong>★ {supplier.rating}</strong>
-                  </div>
-                  <div>
-                    <span style={{ color: 'var(--text-muted)' }}>Orders</span>
-                    <strong>{supplier.ordersDelivered}</strong>
-                  </div>
-                </div>
-
-                <div>
-                  <span style={{ fontSize: '11px', color: 'var(--text-muted)', display: 'block', marginBottom: '6px', fontWeight: 700 }}>
-                    SUPPLIED MATERIALS:
-                  </span>
-                  <div className="sup-products-tags">
-                    {supplier.products.map(p => (
-                      <span key={p} className="sup-tag">{p}</span>
-                    ))}
-                  </div>
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginTop: 'auto' }}>
-                  <button className="btn-secondary" style={{ padding: '9px', fontSize: '13px' }} onClick={() => setActiveSupplierProfile(supplier)}>
-                    View Products
-                  </button>
-                  <button className="btn-primary" style={{ padding: '9px', fontSize: '13px' }} onClick={() => handleContactSupplier(supplier.name)}>
-                    Contact Supplier
-                  </button>
                 </div>
               </div>
             ))}
@@ -822,157 +1168,66 @@ export const SupplierDashboard: React.FC = () => {
         )}
       </div>
 
-      {/* Supplier Products Grid Section */}
-      <div>
-        <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '24px', fontWeight: 800, marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          🧶 Raw Material Products Marketplace ({filteredProducts.length})
-        </h2>
-
-        <div className="supplier-products-grid-full">
-          {filteredProducts.map(prod => (
-            <div key={prod.id} className="supplier-product-card">
-              <div className="prod-img-box">
-                <img src={prod.image} alt={prod.name} className="prod-img" />
-              </div>
-
-              <div className="prod-body-box">
-                <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--accent-gold)' }}>{prod.supplierName}</div>
-                <h3 style={{ fontSize: '16px', fontWeight: 700, margin: 0, lineHeight: 1.3 }}>{prod.name}</h3>
-                <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.4 }}>{prod.description}</p>
-
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto', paddingTop: '8px' }}>
-                  <span style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)' }}>{prod.price}</span>
-                  <span style={{ fontSize: '12px', color: '#ffb703', fontWeight: 700 }}>⭐ {prod.rating}</span>
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginTop: '8px' }}>
-                  <button className="btn-secondary" style={{ padding: '7px', fontSize: '11px' }} onClick={() => handleAddToWishlist(prod.name)}>
-                    ♥ Wishlist
-                  </button>
-                  <button className="btn-primary" style={{ padding: '7px', fontSize: '11px' }} onClick={() => handleContactSupplier(prod.supplierName)}>
-                    Contact
-                  </button>
-                </div>
+      {/* Supplier Hub Navigation Cards */}
+      <div className="supplier-nav-section">
+        <h3 className="section-heading">Workspace Management</h3>
+        <div className="supplier-nav-grid">
+          {supplierNavCards.map((card, idx) => (
+            <div 
+              key={idx} 
+              className="supplier-nav-card"
+              onClick={() => showToast(`Opened ${card.title} Hub`, 'info')}
+            >
+              <div className="nav-card-icon">{card.icon}</div>
+              <div className="nav-card-body">
+                <h4 className="nav-card-title">{card.title}</h4>
+                <p className="nav-card-desc">{card.description}</p>
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Detailed Supplier Profile Modal */}
-      {activeSupplierProfile && (
-        <div className="profile-modal-backdrop" onClick={() => setActiveSupplierProfile(null)}>
-          <div className="profile-modal-container" onClick={(e) => e.stopPropagation()}>
-            <button 
-              onClick={() => setActiveSupplierProfile(null)}
-              style={{ position: 'absolute', top: '16px', right: '16px', background: 'rgba(0,0,0,0.6)', border: '1px solid #fff', borderRadius: '50%', width: '32px', height: '32px', color: '#fff', fontSize: '18px', cursor: 'pointer', zIndex: 20 }}
-            >
-              ✕
-            </button>
-
-            <div className="profile-banner-header">
-              <img src={activeSupplierProfile.banner} alt={activeSupplierProfile.name} className="profile-banner-img" />
-              <div className="profile-banner-overlay" />
-              <div style={{ position: 'absolute', bottom: '20px', left: '24px', display: 'flex', alignItems: 'center', gap: '14px', zIndex: 10 }}>
-                <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'var(--bg-primary)', border: '2px solid var(--accent-gold)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '28px' }}>
-                  {activeSupplierProfile.logo}
-                </div>
-                <div style={{ color: '#fff' }}>
-                  <h2 style={{ margin: 0, fontSize: '24px', fontFamily: 'var(--font-heading)' }}>
-                    {activeSupplierProfile.name} {activeSupplierProfile.verified && <span style={{ fontSize: '12px', color: '#2a9d8f', background: 'rgba(42, 157, 143, 0.25)', padding: '2px 8px', borderRadius: '10px' }}>✓ Verified Supplier</span>}
-                  </h2>
-                  <span style={{ fontSize: '13px', opacity: 0.9 }}>📍 {activeSupplierProfile.location} • Business Since {activeSupplierProfile.businessSince}</span>
-                </div>
-              </div>
+      {viewingProduct && (
+        <div className="modal-overlay" onClick={() => setViewingProduct(null)}>
+          <div className="modal-content-card" onClick={(e) => e.stopPropagation()}>
+            <div style={{ position: 'relative', height: '220px' }}>
+              <img src={viewingProduct.image} alt={viewingProduct.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <button 
+                onClick={() => setViewingProduct(null)}
+                style={{ position: 'absolute', top: '12px', right: '12px', background: 'rgba(0,0,0,0.6)', border: '1px solid #fff', borderRadius: '50%', width: '32px', height: '32px', color: '#fff', fontSize: '16px', cursor: 'pointer' }}
+              >
+                ✕
+              </button>
             </div>
-
-            <div className="profile-body-padding">
-              {/* About Supplier */}
-              <div style={{ marginBottom: '24px' }}>
-                <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '8px', color: 'var(--accent-gold)' }}>About Supplier</h3>
-                <p style={{ fontSize: '14px', color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>
-                  {activeSupplierProfile.about}
-                </p>
+            <div style={{ padding: '24px' }}>
+              <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--accent-gold)', marginBottom: '4px' }}>
+                {viewingProduct.category} • {viewingProduct.subCategory}
               </div>
-
-              {/* Stats & GSTIN */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', background: 'var(--bg-primary)', padding: '16px', borderRadius: '8px', marginBottom: '24px', border: '1px solid var(--border-color)' }}>
+              <h3 style={{ fontSize: '20px', fontWeight: 800, marginBottom: '10px' }}>{viewingProduct.name}</h3>
+              <p style={{ fontSize: '14px', color: 'var(--text-secondary)', lineHeight: 1.5, marginBottom: '20px' }}>
+                {viewingProduct.description}
+              </p>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--bg-primary)', padding: '14px', borderRadius: '8px', marginBottom: '20px', border: '1px solid var(--border-color)' }}>
                 <div>
-                  <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>GSTIN Registration</span>
-                  <strong style={{ display: 'block', fontSize: '13px' }}>{activeSupplierProfile.gstin}</strong>
+                  <span style={{ fontSize: '11px', color: 'var(--text-muted)', display: 'block' }}>Unit Price</span>
+                  <strong style={{ fontSize: '18px', color: 'var(--text-primary)' }}>{viewingProduct.price}</strong>
                 </div>
                 <div>
-                  <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Years of Experience</span>
-                  <strong style={{ display: 'block', fontSize: '13px' }}>{activeSupplierProfile.experienceYears} Years</strong>
+                  <span style={{ fontSize: '11px', color: 'var(--text-muted)', display: 'block' }}>Available Inventory</span>
+                  <strong style={{ fontSize: '16px' }}>{viewingProduct.stock} Units</strong>
                 </div>
                 <div>
-                  <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Orders Completed</span>
-                  <strong style={{ display: 'block', fontSize: '13px' }}>{activeSupplierProfile.ordersDelivered}</strong>
+                  <span style={{ fontSize: '11px', color: 'var(--text-muted)', display: 'block' }}>Rating</span>
+                  <strong style={{ fontSize: '16px', color: '#ffb703' }}>★ {viewingProduct.rating}</strong>
                 </div>
               </div>
-
-              {/* Products Offered */}
-              <div style={{ marginBottom: '24px' }}>
-                <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '10px', color: 'var(--text-primary)' }}>Products Offered</h3>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                  {activeSupplierProfile.products.map(p => (
-                    <span key={p} style={{ background: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', padding: '6px 14px', borderRadius: '16px', fontSize: '13px', fontWeight: 600 }}>
-                      🧶 {p}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Certifications */}
-              <div style={{ marginBottom: '24px' }}>
-                <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '10px', color: 'var(--text-primary)' }}>Certifications & Compliance</h3>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-                  {activeSupplierProfile.certifications.map(c => (
-                    <span key={c} style={{ background: 'rgba(42, 157, 143, 0.1)', border: '1px solid #2a9d8f', color: '#2a9d8f', padding: '6px 12px', borderRadius: '8px', fontSize: '12px', fontWeight: 700 }}>
-                      🛡️ {c}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Delivery Locations */}
-              <div style={{ marginBottom: '24px' }}>
-                <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '8px', color: 'var(--text-primary)' }}>Pan-India Delivery States</h3>
-                <p style={{ fontSize: '13px', color: 'var(--text-secondary)', margin: 0 }}>
-                  🚚 {activeSupplierProfile.deliveryLocations.join(', ')}
-                </p>
-              </div>
-
-              {/* Contact Information */}
-              <div style={{ background: 'var(--bg-primary)', padding: '18px', borderRadius: '10px', border: '1px solid var(--border-color)', marginBottom: '24px' }}>
-                <h3 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '10px', color: 'var(--accent-gold)' }}>B2B Contact Details</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '13px' }}>
-                  <div><strong>Email:</strong> {activeSupplierProfile.contactEmail}</div>
-                  <div><strong>Phone:</strong> {activeSupplierProfile.contactPhone}</div>
-                  <div style={{ gridColumn: 'span 2' }}><strong>Warehouse:</strong> {activeSupplierProfile.address}</div>
-                </div>
-              </div>
-
-              {/* Customer Reviews */}
-              <div style={{ marginBottom: '24px' }}>
-                <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '12px', color: 'var(--text-primary)' }}>Weaver Reviews & Ratings</h3>
-                {activeSupplierProfile.reviews.map((r, i) => (
-                  <div key={i} style={{ background: 'var(--bg-primary)', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', marginBottom: '8px', fontSize: '13px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                      <strong>{r.author}</strong>
-                      <span style={{ color: '#ffb703' }}>{'★'.repeat(r.rating)}</span>
-                    </div>
-                    <p style={{ margin: 0, color: 'var(--text-secondary)' }}>"{r.comment}"</p>
-                  </div>
-                ))}
-              </div>
-
               <div style={{ display: 'flex', gap: '12px' }}>
-                <button className="btn-secondary" style={{ flex: 1, padding: '12px' }} onClick={() => setActiveSupplierProfile(null)}>
-                  Close Profile
+                <button className="btn-secondary" style={{ flex: 1, padding: '10px' }} onClick={() => setViewingProduct(null)}>
+                  Close
                 </button>
-                <button className="btn-primary" style={{ flex: 1, padding: '12px' }} onClick={() => { setActiveSupplierProfile(null); handleContactSupplier(activeSupplierProfile.name); }}>
-                  Contact Supplier
+                <button className="btn-primary" style={{ flex: 1, padding: '10px' }} onClick={() => { setViewingProduct(null); showToast(`Updated inventory settings for ${viewingProduct.name}`, 'success'); }}>
+                  Update Stock
                 </button>
               </div>
             </div>

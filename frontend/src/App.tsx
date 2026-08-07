@@ -37,6 +37,8 @@ import WishlistPage from './pages/WishlistPage';
 import Cart from './pages/Cart';
 import CartPage from './pages/CartPage';
 import OrderTimeline from './pages/OrderTimeline';
+import Measurements from './pages/Measurements';
+import CustomerSettings from './pages/customer/Settings';
 import MessagesPage from './pages/MessagesPage';
 import NotificationsPage from './pages/NotificationsPage';
 import ProfilePage from './pages/ProfilePage';
@@ -204,6 +206,11 @@ const AppContent: React.FC = () => {
           <Route path="/cart" element={<Cart />} />
           <Route path="/customer/cart" element={<Cart />} />
           <Route path="/order-timeline" element={<OrderTimeline />} />
+          <Route path="/customer/orders" element={<OrderTimeline />} />
+          <Route path="/measurements" element={<Measurements />} />
+          <Route path="/customer/measurements" element={<Measurements />} />
+          <Route path="/settings" element={<CustomerSettings />} />
+          <Route path="/customer/settings" element={<CustomerSettings />} />
           <Route path="/messages" element={<MessagesPage />} />
           <Route path="/notifications" element={<NotificationsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
