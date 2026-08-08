@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Link, useOutletContext } from 'react-router-dom';
+import { Link, useOutletContext, useNavigate } from 'react-router-dom';
 
 interface OutletContextType {
   showToast?: (msg: string, type?: 'success' | 'error' | 'warning' | 'info') => void;
@@ -16,6 +16,7 @@ export interface CartItem {
 }
 
 export const Cart: React.FC = () => {
+  const navigate = useNavigate();
   const context = useOutletContext<OutletContextType | null>();
   const showToast = (msg: string, type: 'success' | 'error' | 'warning' | 'info' = 'info') => {
     if (context?.showToast) context.showToast(msg, type);
@@ -411,10 +412,10 @@ export const Cart: React.FC = () => {
         <div className="cart-items-list">
           {cartItems.map(item => (
             <div key={item.id} className="cart-item-card">
-              <img src={item.image} alt={item.name} className="cart-item-img" />
+              <img src={item.image} alt={item.name} className="cart-item-img" style={{ cursor: 'pointer' }} onClick={() => navigate('/product-details', { state: { product: item } })} />
               <div className="cart-item-content">
                 <span className="cart-cloth-badge">{item.clothType}</span>
-                <h3 className="cart-item-name">{item.name}</h3>
+                <h3 className="cart-item-name" style={{ cursor: 'pointer' }} onClick={() => navigate('/product-details', { state: { product: item } })}>{item.name}</h3>
                 <div className="cart-seller-info">
                   Seller: <strong>{item.sellerName}</strong>
                 </div>

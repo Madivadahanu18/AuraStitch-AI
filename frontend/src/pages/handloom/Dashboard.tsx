@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 // Import existing handloom images from relative handloomimages folder
@@ -116,6 +116,7 @@ const mockHandloomProducts: HandloomProduct[] = [
 ];
 
 export const HandloomDashboard: React.FC = () => {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const outletContext = useOutletContext<OutletContextType | null>();
 
@@ -561,7 +562,7 @@ export const HandloomDashboard: React.FC = () => {
         <div className="handloom-products-grid">
           {products.map(product => (
             <div key={product.id} className="artisan-prod-card">
-              <div className="artisan-img-box">
+              <div className="artisan-img-box" style={{ cursor: 'pointer' }} onClick={() => navigate('/product-details', { state: { product } })}>
                 <img src={getImageSrc(product.image)} alt={product.name} className="artisan-prod-img" />
                 <span className="state-tag">📍 {product.state}</span>
                 <span className={`status-badge ${product.status.replace(/\s+/g, '-')}`}>
@@ -571,7 +572,7 @@ export const HandloomDashboard: React.FC = () => {
 
               <div className="artisan-body">
                 <div className="artisan-type">{product.handloomType}</div>
-                <h4 className="artisan-title">{product.name}</h4>
+                <h4 className="artisan-title" style={{ cursor: 'pointer' }} onClick={() => navigate('/product-details', { state: { product } })}>{product.name}</h4>
 
                 <div className="metrics-row">
                   <span className="rating-box">
@@ -599,7 +600,7 @@ export const HandloomDashboard: React.FC = () => {
                   <button className="btn-secondary" style={{ padding: '8px', fontSize: '12px' }} onClick={() => openEditModal(product)}>
                     ✏️ Edit Product
                   </button>
-                  <button className="btn-primary" style={{ padding: '8px', fontSize: '12px' }} onClick={() => setViewingProduct(product)}>
+                  <button className="btn-primary" style={{ padding: '8px', fontSize: '12px' }} onClick={() => navigate('/product-details', { state: { product } })}>
                     👁️ View Details
                   </button>
                 </div>
@@ -617,7 +618,7 @@ export const HandloomDashboard: React.FC = () => {
           {[...products]
             .sort((a, b) => b.soldCount - a.soldCount)
             .map(item => (
-              <div key={item.id} className="best-selling-card">
+              <div key={item.id} className="best-selling-card" style={{ cursor: 'pointer' }} onClick={() => navigate('/product-details', { state: { product: item } })}>
                 <img src={getImageSrc(item.image)} alt={item.name} className="best-selling-img" />
                 <div className="best-selling-body">
                   <h5 style={{ margin: '0 0 6px', fontSize: '14px', fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>

@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { useOutletContext, Link } from 'react-router-dom';
+import { useOutletContext, Link, useNavigate } from 'react-router-dom';
 
 // Relative image import from customer images folder
 import kanchipuramSareeImg from './customer/images/kanchipuramsaree.jpg';
@@ -45,6 +45,7 @@ const preloadedWishlistItems: WishlistItem[] = [
 ];
 
 export const WishlistPage: React.FC = () => {
+  const navigate = useNavigate();
   const context = useOutletContext<OutletContextType | null>();
   const showToast = (msg: string, type: 'success' | 'error' | 'warning' | 'info' = 'info') => {
     if (context?.showToast) context.showToast(msg, type);
@@ -398,7 +399,7 @@ export const WishlistPage: React.FC = () => {
         <div className="wishlist-cards-grid">
           {filteredItems.map(item => (
             <div key={item.id} className="wishlist-prod-card">
-              <div className="wishlist-img-box">
+              <div className="wishlist-img-box" style={{ cursor: 'pointer' }} onClick={() => navigate('/product-details', { state: { product: item } })}>
                 <img src={item.image} alt={item.name} className="wishlist-card-img" />
                 <span className="badge-state">📍 {item.state}</span>
                 <span className="badge-availability">{item.availability}</span>
@@ -406,7 +407,7 @@ export const WishlistPage: React.FC = () => {
 
               <div className="wishlist-card-body">
                 <span className="wishlist-cloth-tag">{item.clothType}</span>
-                <h3 className="wishlist-prod-name">{item.name}</h3>
+                <h3 className="wishlist-prod-name" style={{ cursor: 'pointer' }} onClick={() => navigate('/product-details', { state: { product: item } })}>{item.name}</h3>
 
                 <div className="wishlist-weaver-line">
                   🧑‍🌾 Weaver: <strong>{item.weaverName}</strong>
@@ -428,7 +429,7 @@ export const WishlistPage: React.FC = () => {
                     🛒 Move to Cart
                   </button>
 
-                  <button className="btn-wish-action" onClick={() => setViewingProduct(item)}>
+                  <button className="btn-wish-action" onClick={() => navigate('/product-details', { state: { product: item } })}>
                     👁️ View Product
                   </button>
 

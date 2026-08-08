@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 // Import existing local supplier images
@@ -157,6 +157,7 @@ const initialCategories: SupplierCategory[] = [
 ];
 
 export const SupplierCategories: React.FC = () => {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const outletContext = useOutletContext<OutletContextType | null>();
 
@@ -550,7 +551,7 @@ export const SupplierCategories: React.FC = () => {
           ) : (
             <div className="categories-grid">
               {textileCategories.map(cat => (
-                <div key={cat.id} className="category-card">
+                <div key={cat.id} className="category-card" style={{ cursor: 'pointer' }} onClick={() => navigate('/product-details', { state: { product: { name: cat.name, category: cat.group, description: cat.description, image: cat.image, price: '₹450 / pack' } } })}>
                   <div className="cat-img-box">
                     <img src={cat.image} alt={cat.name} />
                     <span className="cat-badge-count">{cat.productCount} Products</span>
@@ -584,7 +585,7 @@ export const SupplierCategories: React.FC = () => {
           ) : (
             <div className="categories-grid">
               {handloomCategories.map(cat => (
-                <div key={cat.id} className="category-card">
+                <div key={cat.id} className="category-card" style={{ cursor: 'pointer' }} onClick={() => navigate('/product-details', { state: { product: { name: cat.name, category: cat.group, description: cat.description, image: cat.image, price: '₹450 / pack' } } })}>
                   <div className="cat-img-box">
                     <img src={cat.image} alt={cat.name} />
                     <span className="cat-badge-count">{cat.productCount} Products</span>

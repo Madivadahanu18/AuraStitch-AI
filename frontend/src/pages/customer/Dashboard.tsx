@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useOutletContext } from 'react-router-dom';
+import { Link, useOutletContext, useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
 
 // Relative image imports from ./images/
@@ -139,8 +139,10 @@ const customerFeedProducts: ProductItem[] = [
 ];
 
 export const CustomerDashboard: React.FC = () => {
-  const { theme, setTheme } = useTheme();
+  const navigate = useNavigate();
+  const context = useOutletContext<OutletContextType | null>();
   const { showToast } = useOutletContext<OutletContextType>();
+  const { theme, setTheme } = useTheme();
   const [showConfirm, setShowConfirm] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<ProductItem | null>(null);
 
@@ -391,7 +393,7 @@ export const CustomerDashboard: React.FC = () => {
       <div className="customer-feed-grid">
         {customerFeedProducts.map(prod => (
           <div key={prod.id} className="customer-prod-card fade-in">
-            <div className="cust-img-box">
+            <div className="cust-img-box" style={{ cursor: 'pointer' }} onClick={() => navigate('/product-details', { state: { product: prod } })}>
               <img src={prod.image} alt={prod.name} className="cust-img" />
               <span className="cust-state-badge">📍 {prod.state}</span>
               <span className="cust-discount-badge">{prod.discount}% OFF</span>
@@ -401,7 +403,7 @@ export const CustomerDashboard: React.FC = () => {
               <div style={{ fontSize: '10px', fontWeight: 700, color: 'var(--accent-gold)', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
                 {prod.handloomType}
               </div>
-              <h4 style={{ fontSize: '16px', fontWeight: 700, margin: '4px 0 6px', color: 'var(--text-primary)' }}>
+              <h4 style={{ fontSize: '16px', fontWeight: 700, margin: '4px 0 6px', color: 'var(--text-primary)', cursor: 'pointer' }} onClick={() => navigate('/product-details', { state: { product: prod } })}>
                 {prod.name}
               </h4>
               <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '8px' }}>

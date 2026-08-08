@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, useNavigate } from 'react-router-dom';
 
 // Relative image imports from handloomimages folder
 import cottonSareesImg from './handloomimages/cottonsarees.jpg';
@@ -177,6 +177,7 @@ const initialProducts: Product[] = [
 ];
 
 export const Products: React.FC = () => {
+  const navigate = useNavigate();
   const context = useOutletContext<OutletContextType | null>();
   const showToast = (msg: string, type: 'success' | 'error' | 'warning' | 'info' = 'success') => {
     if (context?.showToast) context.showToast(msg, type);
@@ -790,7 +791,7 @@ export const Products: React.FC = () => {
         <div className="products-card-grid">
           {filteredProducts.map(product => (
             <div key={product.id} className="product-item-card">
-              <div className="card-img-box">
+              <div className="card-img-box" style={{ cursor: 'pointer' }} onClick={() => navigate('/product-details', { state: { product } })}>
                 <img src={product.image} alt={product.name} className="card-img" />
                 <span className="badge-origin">📍 {product.stateOfOrigin}</span>
                 <span className={`badge-status ${product.availabilityStatus.replace(/\s+/g, '-')}`}>
@@ -800,7 +801,7 @@ export const Products: React.FC = () => {
 
               <div className="card-content-box">
                 <div className="card-type-tag">{product.clothType} • {product.category}</div>
-                <h3 className="card-title">{product.name}</h3>
+                <h3 className="card-title" style={{ cursor: 'pointer' }} onClick={() => navigate('/product-details', { state: { product } })}>{product.name}</h3>
 
                 <div className="card-spec-line">
                   🧵 <strong>Fabric:</strong> {product.fabricMaterial}<br />
@@ -841,7 +842,7 @@ export const Products: React.FC = () => {
                 </div>
 
                 <div className="card-actions-row">
-                  <button className="btn-card-action" onClick={() => setViewingProduct(product)}>
+                  <button className="btn-card-action" onClick={() => navigate('/product-details', { state: { product } })}>
                     👁️ Details
                   </button>
                   <button className="btn-card-action" onClick={() => setEditingProduct({ ...product })}>

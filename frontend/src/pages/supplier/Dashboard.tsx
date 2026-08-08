@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 import beads1Img from './images/Beads1.jpg';
@@ -343,6 +343,7 @@ const supplierNavCards = [
 ];
 
 export const SupplierDashboard: React.FC = () => {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const outletContext = useOutletContext<OutletContextType | null>();
 
@@ -371,7 +372,7 @@ export const SupplierDashboard: React.FC = () => {
 
   const filteredProducts = products.filter(prod => {
     const matchesCategory = activeCategory === 'All' || prod.category === activeCategory;
-    const matchesSearch = !searchQuery || 
+    const matchesSearch = !searchQuery ||
       prod.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       prod.subCategory.toLowerCase().includes(searchQuery.toLowerCase()) ||
       prod.description.toLowerCase().includes(searchQuery.toLowerCase());
@@ -1224,7 +1225,7 @@ export const SupplierDashboard: React.FC = () => {
               <p className="quick-card-desc">
                 Manage fabrics, beads, laces, linings, dress materials and accessories.
               </p>
-              <button 
+              <button
                 className="quick-card-btn btn-primary"
                 onClick={() => handleQuickAction('Textile Materials')}
               >
@@ -1244,7 +1245,7 @@ export const SupplierDashboard: React.FC = () => {
               <p className="quick-card-desc">
                 Manage yarns, dyes, machine spare parts and weaving accessories.
               </p>
-              <button 
+              <button
                 className="quick-card-btn btn-primary"
                 onClick={() => handleQuickAction('Handloom Materials')}
               >
@@ -1260,7 +1261,7 @@ export const SupplierDashboard: React.FC = () => {
         <h3 className="section-heading">Featured Textile Materials</h3>
         <div className="material-cards-grid">
           {featuredTextileMaterials.map((item) => (
-            <div key={item.id} className="material-item-card">
+            <div key={item.id} className="material-item-card" style={{ cursor: 'pointer' }} onClick={() => navigate('/product-details', { state: { product: item } })}>
               <div className="material-card-img-box">
                 <img src={item.image} alt={item.name} className="material-card-img" />
                 <span className={`material-status-badge ${item.status.replace(/\s+/g, '-')}`}>
@@ -1282,7 +1283,7 @@ export const SupplierDashboard: React.FC = () => {
         <h3 className="section-heading">Featured Handloom Materials</h3>
         <div className="material-cards-grid">
           {featuredHandloomMaterials.map((item) => (
-            <div key={item.id} className="material-item-card">
+            <div key={item.id} className="material-item-card" style={{ cursor: 'pointer' }} onClick={() => navigate('/product-details', { state: { product: item } })}>
               <div className="material-card-img-box">
                 <img src={item.image} alt={item.name} className="material-card-img" />
                 <span className={`material-status-badge ${item.status.replace(/\s+/g, '-')}`}>
@@ -1385,24 +1386,24 @@ export const SupplierDashboard: React.FC = () => {
           <div className="products-grid">
             {filteredProducts.map(prod => (
               <div key={prod.id} className="product-card">
-                <div className="prod-img-box">
+                <div className="prod-img-box" style={{ cursor: 'pointer' }} onClick={() => navigate('/product-details', { state: { product: prod } })}>
                   <img src={prod.image} alt={prod.name} />
                   <span className="category-tag">{prod.category}</span>
                   <span className={`status-pill ${prod.status.replace(/\s+/g, '-')}`}>{prod.status}</span>
                 </div>
                 <div className="product-card-body">
                   <div className="prod-sub-cat">{prod.subCategory}</div>
-                  <h4 className="prod-title">{prod.name}</h4>
+                  <h4 className="prod-title" style={{ cursor: 'pointer' }} onClick={() => navigate('/product-details', { state: { product: prod } })}>{prod.name}</h4>
                   <p className="prod-desc">{prod.description}</p>
                   <div className="prod-meta-row">
                     <div>
                       <span className="prod-price">{prod.price}</span>
                       <span style={{ display: 'block', fontSize: '11px', color: 'var(--text-muted)' }}>Stock: {prod.stock} units</span>
                     </div>
-                    <button 
+                    <button
                       className="btn-secondary"
                       style={{ padding: '8px 14px', fontSize: '12px' }}
-                      onClick={() => setViewingProduct(prod)}
+                      onClick={() => navigate('/product-details', { state: { product: prod } })}
                     >
                       View Details
                     </button>
@@ -1419,8 +1420,8 @@ export const SupplierDashboard: React.FC = () => {
         <h3 className="section-heading">Workspace Management</h3>
         <div className="supplier-nav-grid">
           {supplierNavCards.map((card, idx) => (
-            <div 
-              key={idx} 
+            <div
+              key={idx}
               className="supplier-nav-card"
               onClick={() => showToast(`Opened ${card.title} Hub`, 'info')}
             >
@@ -1439,7 +1440,7 @@ export const SupplierDashboard: React.FC = () => {
           <div className="modal-content-card" onClick={(e) => e.stopPropagation()}>
             <div style={{ position: 'relative', height: '220px' }}>
               <img src={viewingProduct.image} alt={viewingProduct.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              <button 
+              <button
                 onClick={() => setViewingProduct(null)}
                 style={{ position: 'absolute', top: '12px', right: '12px', background: 'rgba(0,0,0,0.6)', border: '1px solid #fff', borderRadius: '50%', width: '32px', height: '32px', color: '#fff', fontSize: '16px', cursor: 'pointer' }}
               >

@@ -43,6 +43,7 @@ import Cart from './pages/Cart';
 import CartPage from './pages/CartPage';
 import OrderTimeline from './pages/OrderTimeline';
 import Measurements from './pages/Measurements';
+import ProductDetailsPage from './pages/ProductDetailsPage';
 import CustomerSettings from './pages/customer/Settings';
 import MessagesPage from './pages/MessagesPage';
 import NotificationsPage from './pages/NotificationsPage';
@@ -163,6 +164,8 @@ const AppContent: React.FC = () => {
         {/* Landing Page */}
         <Route element={<LandingLayout />}>
           <Route path="/" element={<LandingPage />} />
+          <Route path="/product-details" element={<ProductDetailsPage />} />
+          <Route path="/product/:id" element={<ProductDetailsPage />} />
         </Route>
 
         {/* Public auth pages */}
@@ -224,6 +227,8 @@ const AppContent: React.FC = () => {
           <Route path="/messages" element={<MessagesPage />} />
           <Route path="/notifications" element={<NotificationsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/product-details" element={<ProductDetailsPage />} />
+          <Route path="/product/:id" element={<ProductDetailsPage />} />
         </Route>
 
         {/* Catch-all fallback redirect */}

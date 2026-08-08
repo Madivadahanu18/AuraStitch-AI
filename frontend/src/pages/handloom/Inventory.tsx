@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, useNavigate } from 'react-router-dom';
 
 // Relative image imports from handloomimages folder
 import cottonSareesImg from './handloomimages/cottonsarees.jpg';
@@ -142,6 +142,7 @@ const initialInventory: InventoryItem[] = [
 ];
 
 export const Inventory: React.FC = () => {
+  const navigate = useNavigate();
   const context = useOutletContext<OutletContextType | null>();
   const showToast = (msg: string, type: 'success' | 'error' | 'warning' | 'info' = 'success') => {
     if (context?.showToast) context.showToast(msg, type);
@@ -705,10 +706,10 @@ export const Inventory: React.FC = () => {
                 filteredInventory.map(item => (
                   <tr key={item.id}>
                     <td>
-                      <img src={item.image} alt={item.name} className="inv-img-thumb" />
+                      <img src={item.image} alt={item.name} className="inv-img-thumb" style={{ cursor: 'pointer' }} onClick={() => navigate('/product-details', { state: { product: item } })} />
                     </td>
                     <td>
-                      <strong style={{ fontSize: '14px', color: 'var(--text-primary)' }}>{item.name}</strong>
+                      <strong style={{ fontSize: '14px', color: 'var(--text-primary)', cursor: 'pointer' }} onClick={() => navigate('/product-details', { state: { product: item } })}>{item.name}</strong>
                     </td>
                     <td style={{ color: 'var(--text-secondary)' }}>{item.clothType}</td>
                     <td>
@@ -734,7 +735,7 @@ export const Inventory: React.FC = () => {
                     <td style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{item.lastUpdated}</td>
                     <td>
                       <div className="row-actions-flex">
-                        <button className="btn-row-action" onClick={() => setViewingItem(item)}>
+                        <button className="btn-row-action" onClick={() => navigate('/product-details', { state: { product: item } })}>
                           👁️ View
                         </button>
                         <button className="btn-row-action" onClick={() => setUpdatingItem({ ...item })}>

@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 // Import local supplier images
@@ -117,6 +117,7 @@ const initialProducts: MaterialProduct[] = [
 ];
 
 export const SupplierMaterialProducts: React.FC = () => {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const outletContext = useOutletContext<OutletContextType | null>();
 
@@ -728,7 +729,7 @@ export const SupplierMaterialProducts: React.FC = () => {
         <div className="material-products-grid">
           {filteredProducts.map(prod => (
             <div key={prod.id} className="material-product-card">
-              <div className="card-img-box">
+              <div className="card-img-box" style={{ cursor: 'pointer' }} onClick={() => navigate('/product-details', { state: { product: prod } })}>
                 <img src={prod.image} alt={prod.name} />
                 <span className="card-category-badge">{prod.category}</span>
                 <span className={`card-status-badge ${prod.supplierStatus.replace(/\s+/g, '-')}`}>
@@ -738,7 +739,7 @@ export const SupplierMaterialProducts: React.FC = () => {
 
               <div className="card-body-content">
                 <div className="card-material-type">{prod.materialType}</div>
-                <h3 className="card-prod-title">{prod.name}</h3>
+                <h3 className="card-prod-title" style={{ cursor: 'pointer' }} onClick={() => navigate('/product-details', { state: { product: prod } })}>{prod.name}</h3>
                 <p className="card-prod-desc">{prod.description}</p>
 
                 <div className="card-meta-details">
@@ -763,7 +764,7 @@ export const SupplierMaterialProducts: React.FC = () => {
                 </div>
 
                 <div className="card-actions-row">
-                  <button className="btn-secondary" style={{ padding: '8px', fontSize: '12px' }} onClick={() => setViewingProduct(prod)}>
+                  <button className="btn-secondary" style={{ padding: '8px', fontSize: '12px' }} onClick={() => navigate('/product-details', { state: { product: prod } })}>
                     View
                   </button>
                   <button className="btn-secondary" style={{ padding: '8px', fontSize: '12px' }} onClick={() => handleOpenEditModal(prod)}>

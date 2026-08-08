@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Link, useOutletContext } from 'react-router-dom';
+import { Link, useOutletContext, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 // Relative imports for handloom images
@@ -414,6 +414,7 @@ const popularMaterialCategories = [
 ];
 
 export const DiscoverPage: React.FC = () => {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const context = useOutletContext<OutletContextType | null>();
   const showToast = (msg: string, type: 'success' | 'error' | 'warning' | 'info' = 'info') => {
@@ -1181,12 +1182,12 @@ export const DiscoverPage: React.FC = () => {
         <div className="cards-scroll-grid">
           {filteredProducts.map(product => (
             <div key={product.id} className="disc-prod-card">
-              <div className="disc-img-box">
+              <div className="disc-img-box" style={{ cursor: 'pointer' }} onClick={() => navigate('/product-details', { state: { product } })}>
                 <img src={product.image} alt={product.name} className="disc-prod-img" />
               </div>
               <div className="disc-prod-body">
                 <span className="disc-cloth-type">{product.clothType}</span>
-                <h3 className="disc-prod-title">{product.name}</h3>
+                <h3 className="disc-prod-title" style={{ cursor: 'pointer' }} onClick={() => navigate('/product-details', { state: { product } })}>{product.name}</h3>
                 <div className="disc-price-row">
                   <span className="disc-price-text">₹{product.price.toLocaleString()}</span>
                   <span className="disc-rating-text">⭐ {product.rating}</span>

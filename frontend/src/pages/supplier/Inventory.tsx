@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 // Import local supplier images
@@ -110,6 +110,7 @@ const initialInventory: InventoryItem[] = [
 ];
 
 export const SupplierInventory: React.FC = () => {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const outletContext = useOutletContext<OutletContextType | null>();
 
@@ -570,7 +571,7 @@ export const SupplierInventory: React.FC = () => {
               {filteredInventory.map(item => (
                 <tr key={item.id}>
                   <td>
-                    <div className="table-prod-box">
+                    <div className="table-prod-box" style={{ cursor: 'pointer' }} onClick={() => navigate('/product-details', { state: { product: { name: item.productName, category: item.category, availability: item.status, image: item.image, price: '₹450 / pack' } } })}>
                       <img src={item.image} alt={item.productName} className="table-prod-img" />
                       <span className="table-prod-name">{item.productName}</span>
                     </div>
@@ -608,7 +609,7 @@ export const SupplierInventory: React.FC = () => {
                       <button className="btn-primary" style={{ padding: '6px 12px', fontSize: '12px' }} onClick={() => handleOpenRestockModal(item)}>
                         Restock
                       </button>
-                      <button className="btn-secondary" style={{ padding: '6px 10px', fontSize: '12px' }} onClick={() => setViewingItem(item)}>
+                      <button className="btn-secondary" style={{ padding: '6px 10px', fontSize: '12px' }} onClick={() => navigate('/product-details', { state: { product: { name: item.productName, category: item.category, availability: item.status, image: item.image, price: '₹450 / pack' } } })}>
                         View Details
                       </button>
                     </div>

@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, useNavigate } from 'react-router-dom';
 
 // Relative image imports from handloomimages folder
 import cottonSareesImg from './handloomimages/cottonsarees.jpg';
@@ -159,6 +159,7 @@ const initialCollections: Collection[] = [
 ];
 
 export const Collections: React.FC = () => {
+  const navigate = useNavigate();
   const context = useOutletContext<OutletContextType | null>();
   const showToast = (msg: string, type: 'success' | 'error' | 'warning' | 'info' = 'success') => {
     if (context?.showToast) context.showToast(msg, type);
@@ -638,13 +639,13 @@ export const Collections: React.FC = () => {
         <div className="collections-grid">
           {filteredCollections.map(collection => (
             <div key={collection.id} className="collection-card">
-              <div className="col-cover-box">
+              <div className="col-cover-box" style={{ cursor: 'pointer' }} onClick={() => navigate('/product-details', { state: { product: { name: collection.name, description: collection.description, image: collection.coverImage, category: collection.type, price: '₹4,850' } } })}>
                 <img src={collection.coverImage} alt={collection.name} className="col-cover-img" />
                 <span className="col-type-tag">✦ {collection.type}</span>
               </div>
 
               <div className="col-card-body">
-                <h3 className="col-card-title">{collection.name}</h3>
+                <h3 className="col-card-title" style={{ cursor: 'pointer' }} onClick={() => navigate('/product-details', { state: { product: { name: collection.name, description: collection.description, image: collection.coverImage, category: collection.type, price: '₹4,850' } } })}>{collection.name}</h3>
                 <p className="col-card-desc">{collection.description}</p>
 
                 <div className="col-stats-row">
@@ -663,7 +664,7 @@ export const Collections: React.FC = () => {
                 </div>
 
                 <div className="col-actions-bar">
-                  <button className="btn-col-action" onClick={() => setActiveViewingCollection(collection)}>
+                  <button className="btn-col-action" onClick={() => navigate('/product-details', { state: { product: { name: collection.name, description: collection.description, image: collection.coverImage, category: collection.type, price: '₹4,850' } } })}>
                     👁️ View
                   </button>
                   <button className="btn-col-action" onClick={() => setEditingCollection({ ...collection })}>
@@ -704,7 +705,7 @@ export const Collections: React.FC = () => {
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
                 {activeViewingCollection.productsList.map(prod => (
-                  <div key={prod.id} style={{ display: 'flex', gap: '14px', background: 'var(--bg-primary)', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', alignItems: 'center' }}>
+                  <div key={prod.id} style={{ display: 'flex', gap: '14px', background: 'var(--bg-primary)', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)', alignItems: 'center', cursor: 'pointer' }} onClick={() => { setActiveViewingCollection(null); navigate('/product-details', { state: { product: prod } }); }}>
                     <img src={prod.image} alt={prod.name} style={{ width: '60px', height: '60px', borderRadius: '6px', objectFit: 'cover' }} />
                     <div style={{ flex: 1 }}>
                       <h4 style={{ margin: '0 0 4px', fontSize: '15px', fontWeight: 700 }}>{prod.name}</h4>

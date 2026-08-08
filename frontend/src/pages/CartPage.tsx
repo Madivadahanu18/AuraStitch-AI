@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { useOutletContext, Link } from 'react-router-dom';
+import { useOutletContext, Link, useNavigate } from 'react-router-dom';
 
 // Relative image imports from customer images folder
 import kanchipuramSareeImg from './customer/images/kanchipuramsaree.jpg';
@@ -79,6 +79,7 @@ const mockRecommendations: RecommendedProduct[] = [
 ];
 
 export const CartPage: React.FC = () => {
+  const navigate = useNavigate();
   const context = useOutletContext<OutletContextType | null>();
   const showToast = (msg: string, type: 'success' | 'error' | 'warning' | 'info' = 'info') => {
     if (context?.showToast) context.showToast(msg, type);
@@ -611,7 +612,7 @@ export const CartPage: React.FC = () => {
             cartItems.map(item => (
               <div key={item.id} className="cart-item-card" style={{ display: 'flex', flexDirection: 'column', padding: 0, borderRadius: '20px', overflow: 'hidden', border: '1px solid var(--accent-gold)', background: 'var(--bg-secondary)' }}>
                 {/* Top Image Banner with Badges */}
-                <div style={{ position: 'relative', width: '100%', height: '240px', overflow: 'hidden', background: '#111' }}>
+                <div style={{ position: 'relative', width: '100%', height: '240px', overflow: 'hidden', background: '#111', cursor: 'pointer' }} onClick={() => navigate('/product-details', { state: { product: item } })}>
                   <img src={getImageSrc(dhotiImg)} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   <span style={{ position: 'absolute', top: '14px', left: '14px', background: 'rgba(10, 15, 25, 0.85)', border: '1px solid var(--accent-gold)', color: 'var(--accent-gold)', padding: '5px 12px', borderRadius: '16px', fontSize: '11px', fontWeight: 700, backdropFilter: 'blur(4px)' }}>
                     📍 Tamil Nadu
@@ -627,7 +628,7 @@ export const CartPage: React.FC = () => {
                     {item.clothType}
                   </span>
 
-                  <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '22px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', lineHeight: 1.3 }}>
+                  <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '22px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', lineHeight: 1.3, cursor: 'pointer' }} onClick={() => navigate('/product-details', { state: { product: item } })}>
                     {item.name}
                   </h3>
 
@@ -668,7 +669,7 @@ export const CartPage: React.FC = () => {
 
                     {/* 2-column secondary buttons */}
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                      <button className="btn-action-sm" style={{ padding: '10px', textAlign: 'center', borderRadius: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '6px' }} onClick={() => showToast(`Viewing ${item.name}`, 'info')}>
+                      <button className="btn-action-sm" style={{ padding: '10px', textAlign: 'center', borderRadius: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '6px' }} onClick={() => navigate('/product-details', { state: { product: item } })}>
                         👁️ View Product
                       </button>
                       <Link to="/messages" className="btn-action-sm" style={{ padding: '10px', textAlign: 'center', textDecoration: 'none', borderRadius: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '6px' }}>
