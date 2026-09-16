@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useOutletContext } from 'react-router-dom';
+import OrderAgreementModal from '../../components/OrderAgreementModal';
 
 // Relative image imports from handloomimages folder
 import cottonSareesImg from './handloomimages/cottonsarees.jpg';
@@ -209,6 +210,7 @@ export const RawMaterialsMarketplace: React.FC = () => {
   const [viewingMaterial, setViewingMaterial] = useState<MaterialProduct | null>(null);
   const [contactingSupplier, setContactingSupplier] = useState<MaterialProduct | null>(null);
   const [buyingMaterial, setBuyingMaterial] = useState<MaterialProduct | null>(null);
+  const [showAgreementModal, setShowAgreementModal] = useState(false);
 
   // Inquiry Form State
   const [inquiryMsg, setInquiryMsg] = useState('');
@@ -271,9 +273,14 @@ export const RawMaterialsMarketplace: React.FC = () => {
   const handleConfirmPurchase = (e: React.FormEvent) => {
     e.preventDefault();
     if (!buyingMaterial) return;
+    setShowAgreementModal(true);
+  };
 
+  const handleAgreementNext = () => {
+    if (!buyingMaterial) return;
     showToast(`Purchase order placed with ${buyingMaterial.supplierName}! Delivery expected in ${buyingMaterial.deliveryTime}.`, 'success');
     setBuyingMaterial(null);
+    setShowAgreementModal(false);
   };
 
   return (
@@ -862,6 +869,18 @@ export const RawMaterialsMarketplace: React.FC = () => {
             </form>
           </div>
         </div>
+      )}
+
+      {/* Order Agreement Modal */}
+      {buyingMaterial && (
+        <OrderAgreementModal
+          isOpen={showAgreementModal}
+          onClose={() => setShowAgreementModal(false)}
+          onNext={handleAgreementNext}
+          orderTitle={`${buyingMaterial.name} (MOQ: ${buyingMaterial.moq})`}
+          orderPrice={buyingMaterial.price}
+          roleType="weaver"
+        />
       )}
     </div>
   );

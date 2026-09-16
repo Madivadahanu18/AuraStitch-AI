@@ -40,7 +40,6 @@ import DiscoverPage from './pages/DiscoverPage';
 import ReelsPage from './pages/ReelsPage';
 import WishlistPage from './pages/WishlistPage';
 import Cart from './pages/Cart';
-import CartPage from './pages/CartPage';
 import OrderTimeline from './pages/OrderTimeline';
 import Measurements from './pages/Measurements';
 import ProductDetailsPage from './pages/ProductDetailsPage';

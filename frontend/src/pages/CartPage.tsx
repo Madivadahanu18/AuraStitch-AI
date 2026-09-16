@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { useOutletContext, Link, useNavigate } from 'react-router-dom';
+import OrderAgreementModal from '../components/OrderAgreementModal';
 
 // Relative image imports from customer images folder
-import kanchipuramSareeImg from './customer/images/kanchipuramsaree.jpg';
 import pochampallyDressImg from './customer/images/pochampallydress.jpg';
 import mangalagiriDressImg from './customer/images/Mangalagiridress.jpg';
 import dhotiImg from './customer/images/dothi.jpg';
@@ -86,6 +86,7 @@ export const CartPage: React.FC = () => {
     else alert(msg);
   };
 
+  const [showAgreementModal, setShowAgreementModal] = useState(false);
   const [cartItems, setCartItems] = useState<CartItem[]>(preloadedCartItems);
   const [savedItems, setSavedItems] = useState<CartItem[]>([]);
 
@@ -744,7 +745,7 @@ export const CartPage: React.FC = () => {
             <span style={{ color: 'var(--accent-gold-dark)' }}>₹{grandTotal.toLocaleString()}</span>
           </div>
 
-          <button className="btn-checkout-primary" onClick={() => showToast(`Order placed for ₹${grandTotal.toLocaleString()}!`, 'success')}>
+          <button className="btn-checkout-primary" onClick={() => setShowAgreementModal(true)}>
             Proceed to Checkout
           </button>
 
@@ -774,6 +775,20 @@ export const CartPage: React.FC = () => {
           ))}
         </div>
       </div>
+
+      {/* Order Agreement Modal */}
+      <OrderAgreementModal
+        isOpen={showAgreementModal}
+        onClose={() => setShowAgreementModal(false)}
+        onNext={() => {
+          setShowAgreementModal(false);
+          showToast(`Order confirmed for ₹${grandTotal.toLocaleString()}! Tracking timeline generated.`, 'success');
+          navigate('/order-timeline');
+        }}
+        itemCount={totalItemsCount}
+        orderPrice={grandTotal}
+        orderTitle="Shopping Cart Checkout"
+      />
     </div>
   );
 };

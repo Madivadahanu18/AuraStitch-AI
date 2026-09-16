@@ -181,6 +181,182 @@ window.AuraModals = {
       close();
       if (onConfirm) onConfirm();
     };
+  },
+
+  showOrderAgreement: function({ title = "Order Agreement & Terms", orderName = "", orderPrice = "", onNext, onCancel }) {
+    const backdrop = document.createElement('div');
+    backdrop.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.72);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 10000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+      box-sizing: border-box;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    `;
+
+    const card = document.createElement('div');
+    card.className = 'glass-panel';
+    card.style.cssText = `
+      width: 100%;
+      max-width: 640px;
+      max-height: 88vh;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--accent-gold);
+      border-radius: var(--border-radius-lg, 16px);
+      padding: 0;
+      overflow: hidden;
+      transform: scale(0.92);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: var(--shadow-lg, 0 20px 50px rgba(0,0,0,0.6));
+    `;
+
+    card.innerHTML = `
+      <div style="padding:20px 24px 16px; border-bottom:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:flex-start; background:linear-gradient(180deg, rgba(197,160,89,0.08) 0%, transparent 100%);">
+        <div>
+          <h3 style="margin:0 0 4px; font-size:20px; font-family:var(--font-heading); color:var(--text-primary); display:flex; align-items:center; gap:8px;">
+            <span>📜</span> ${title}
+          </h3>
+          <p style="margin:0; font-size:12.5px; color:var(--text-secondary);">
+            Please review the AuraStitch transaction terms before confirming your order.
+          </p>
+        </div>
+        <button id="agreement-close-x" style="background:transparent; border:none; color:var(--text-secondary); font-size:20px; cursor:pointer; padding:4px;">✕</button>
+      </div>
+
+      <div style="padding:20px 24px; overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:16px;">
+        ${orderName ? `
+          <div style="background:var(--bg-tertiary); border:1px solid var(--border-color); border-radius:8px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; font-size:13px;">
+            <span><strong>${orderName}</strong></span>
+            ${orderPrice ? `<span style="color:var(--accent-gold-dark); font-weight:800;">${orderPrice}</span>` : ''}
+          </div>
+        ` : ''}
+
+        <div style="background:rgba(0,0,0,0.2); border:1px solid var(--border-color); border-radius:10px; padding:16px; display:flex; flex-direction:column; gap:16px; max-height:300px; overflow-y:auto;">
+          <div style="display:flex; gap:12px;">
+            <div style="font-size:18px;">📋</div>
+            <div>
+              <h5 style="margin:0 0 4px; font-size:14px; font-weight:700;">1. Order Confirmation</h5>
+              <p style="margin:0; font-size:12px; color:var(--text-secondary); line-height:1.5;">
+                Placing this order confirms your purchase of authentic handcrafted textiles or custom tailoring. Sizing, fabric weave, and submitted measurements are verified upon confirmation. A tracking timeline and digital invoice will be generated.
+              </p>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:12px;">
+            <div style="font-size:18px;">💳</div>
+            <div>
+              <h5 style="margin:0 0 4px; font-size:14px; font-weight:700;">2. Payment & Escrow Protection</h5>
+              <p style="margin:0; font-size:12px; color:var(--text-secondary); line-height:1.5;">
+                All payments are securely handled with platform escrow and released to verified artisans, tailors, and suppliers based on completed production milestones and certified delivery.
+              </p>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:12px;">
+            <div style="font-size:18px;">🔄</div>
+            <div>
+              <h5 style="margin:0 0 4px; font-size:14px; font-weight:700;">3. Cancellation & Returns</h5>
+              <p style="margin:0; font-size:12px; color:var(--text-secondary); line-height:1.5;">
+                Standard orders may be cancelled within 24 hours of placement. 7-day hassle-free returns on unused items with craft tags intact. Custom-tailored items include free fitting adjustments if sizing deviates.
+              </p>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:12px;">
+            <div style="font-size:18px;">🚚</div>
+            <div>
+              <h5 style="margin:0 0 4px; font-size:14px; font-weight:700;">4. Delivery Timelines</h5>
+              <p style="margin:0; font-size:12px; color:var(--text-secondary); line-height:1.5;">
+                Standard deliveries dispatch in 3–5 business days; bespoke handloom and custom tailoring deliver in 7–12 days. GPS milestone tracking is active throughout transit.
+              </p>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:12px;">
+            <div style="font-size:18px;">🤝</div>
+            <div>
+              <h5 style="margin:0 0 4px; font-size:14px; font-weight:700;">5. Customer & Seller Responsibilities</h5>
+              <p style="margin:0; font-size:12px; color:var(--text-secondary); line-height:1.5;">
+                Customer: Providing accurate measurements and delivery address. Seller: Handcrafting genuine certified weaves, maintaining quality assurance, and honoring delivery dates.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <label style="display:flex; align-items:center; gap:10px; padding:12px 14px; background:rgba(197,160,89,0.08); border:1px solid rgba(197,160,89,0.25); border-radius:8px; cursor:pointer;" for="agreement-chk">
+          <input type="checkbox" id="agreement-chk" style="width:18px; height:18px; cursor:pointer;" />
+          <span style="font-size:13px; font-weight:600; color:var(--text-primary); cursor:pointer;">
+            I have read and agree to the terms and conditions.
+          </span>
+        </label>
+      </div>
+
+      <div style="padding:14px 24px; border-top:1px solid var(--border-color); display:flex; justify-content:flex-end; gap:12px; background:var(--bg-secondary);">
+        <button id="agreement-cancel-btn" class="btn-secondary" style="padding:9px 20px; font-size:13px;">Cancel</button>
+        <button id="agreement-next-btn" class="btn-primary" style="padding:9px 28px; font-size:13px; opacity:0.45; cursor:not-allowed;" disabled>
+          Next →
+        </button>
+      </div>
+    `;
+
+    backdrop.appendChild(card);
+    document.body.appendChild(backdrop);
+
+    setTimeout(() => {
+      backdrop.style.opacity = '1';
+      card.style.transform = 'scale(1)';
+    }, 10);
+
+    const close = () => {
+      backdrop.style.opacity = '0';
+      card.style.transform = 'scale(0.92)';
+      setTimeout(() => backdrop.remove(), 200);
+    };
+
+    const chk = card.querySelector('#agreement-chk');
+    const nextBtn = card.querySelector('#agreement-next-btn');
+    const cancelBtn = card.querySelector('#agreement-cancel-btn');
+    const closeX = card.querySelector('#agreement-close-x');
+
+    chk.onchange = () => {
+      if (chk.checked) {
+        nextBtn.removeAttribute('disabled');
+        nextBtn.style.opacity = '1';
+        nextBtn.style.cursor = 'pointer';
+      } else {
+        nextBtn.setAttribute('disabled', 'true');
+        nextBtn.style.opacity = '0.45';
+        nextBtn.style.cursor = 'not-allowed';
+      }
+    };
+
+    cancelBtn.onclick = () => {
+      close();
+      if (onCancel) onCancel();
+    };
+
+    closeX.onclick = () => {
+      close();
+      if (onCancel) onCancel();
+    };
+
+    nextBtn.onclick = () => {
+      if (chk.checked) {
+        close();
+        if (onNext) onNext();
+      }
+    };
   }
 };
 

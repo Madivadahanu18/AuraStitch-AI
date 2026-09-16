@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
+import OrderAgreementModal from './OrderAgreementModal';
 
 // Import local fallback image assets
 import kanchipuramSareeImg from '../pages/customer/images/kanchipuramsaree.jpg';
@@ -7,11 +8,7 @@ import pochampallyDressImg from '../pages/customer/images/pochampallydress.jpg';
 import mangalagiriDressImg from '../pages/customer/images/Mangalagiridress.jpg';
 import dhotiImg from '../pages/customer/images/dothi.jpg';
 
-import beads1Img from '../pages/supplier/images/Beads1.jpg';
-import beads2Img from '../pages/supplier/images/Beads2.jpg';
 import lays1Img from '../pages/supplier/images/Lays1.jpg';
-import machinary1Img from '../pages/supplier/images/Machinary1.jpg';
-import machinary2Img from '../pages/supplier/images/Machinary2.jpg';
 import threads1Img from '../pages/supplier/images/Threads1.jpg';
 
 interface OutletContextType {
@@ -172,6 +169,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({ product = sample
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [activeTab, setActiveTab] = useState<'description' | 'specifications' | 'reviews' | 'similar'>('description');
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const [showAgreementModal, setShowAgreementModal] = useState(false);
   const [zoomStyle, setZoomStyle] = useState<{ display: string; transformOrigin: string }>({
     display: 'none',
     transformOrigin: '50% 50%'
@@ -260,8 +258,14 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({ product = sample
   };
 
   const handleBuyNow = () => {
+    setShowAgreementModal(true);
+  };
+
+  const handleAgreementNext = () => {
+    setShowAgreementModal(false);
     handleAddToCart();
-    navigate('/cart');
+    showToast(`Order confirmed for "${product.name}"! Tracking timeline generated.`, 'success');
+    navigate('/order-timeline');
   };
 
   const handleToggleWishlist = () => {
@@ -1103,6 +1107,16 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({ product = sample
           </div>
         </div>
       )}
+
+      {/* Order Agreement Modal */}
+      <OrderAgreementModal
+        isOpen={showAgreementModal}
+        onClose={() => setShowAgreementModal(false)}
+        onNext={handleAgreementNext}
+        orderTitle={product.name}
+        orderPrice={product.price}
+        roleType="customer"
+      />
     </div>
   );
 };

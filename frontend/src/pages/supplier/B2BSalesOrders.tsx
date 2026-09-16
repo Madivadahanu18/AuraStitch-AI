@@ -1,13 +1,12 @@
 import React, { useState, useMemo } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import OrderAgreementModal from '../../components/OrderAgreementModal';
 
 // Import local supplier images
 import beads1Img from './images/Beads1.jpg';
 import beads2Img from './images/Beads2.jpg';
 import lays1Img from './images/Lays1.jpg';
 import machinary1Img from './images/Machinary1.jpg';
-import machinary2Img from './images/Machinary2.jpg';
 import threads1Img from './images/Threads1.jpg';
 
 const getImageSrc = (img: any): string => {
@@ -159,7 +158,6 @@ const mockTopSellingProducts: TopSellingProduct[] = [
 ];
 
 export const SupplierB2BSalesOrders: React.FC = () => {
-  const { user } = useAuth();
   const outletContext = useOutletContext<OutletContextType | null>();
 
   const showToast = (msg: string, type: 'success' | 'error' | 'warning' | 'info' = 'success') => {
@@ -179,6 +177,7 @@ export const SupplierB2BSalesOrders: React.FC = () => {
   const [viewingOrder, setViewingOrder] = useState<B2BOrder | null>(null);
   const [contactingOrder, setContactingOrder] = useState<B2BOrder | null>(null);
   const [contactMessage, setContactMessage] = useState('');
+  const [agreementOrder, setAgreementOrder] = useState<B2BOrder | null>(null);
 
   // Statistics
   const totalOrders = orders.length;
@@ -206,14 +205,20 @@ export const SupplierB2BSalesOrders: React.FC = () => {
   }, [orders, searchQuery, statusFilter, businessFilter]);
 
   // Actions
-  const handleAcceptOrder = (orderId: string, buyerName: string) => {
+  const handleAcceptOrder = (order: B2BOrder) => {
+    setAgreementOrder(order);
+  };
+
+  const handleAgreementNext = () => {
+    if (!agreementOrder) return;
     setOrders(prev => prev.map(o => {
-      if (o.id === orderId) {
+      if (o.id === agreementOrder.id) {
         return { ...o, status: 'Processing' };
       }
       return o;
     }));
-    showToast(`Accepted wholesale order from ${buyerName}!`, 'success');
+    showToast(`Order agreement accepted! Wholesale order from ${agreementOrder.buyerName} is now Processing.`, 'success');
+    setAgreementOrder(null);
   };
 
   const handleRejectOrder = (orderId: string, buyerName: string) => {
@@ -804,7 +809,7 @@ export const SupplierB2BSalesOrders: React.FC = () => {
                     <button
                       className="btn-primary"
                       style={{ padding: '8px', fontSize: '12px' }}
-                      onClick={() => handleAcceptOrder(order.id, order.buyerName)}
+                      onClick={() => handleAcceptOrder(order)}
                     >
                       Accept
                     </button>
@@ -933,6 +938,18 @@ export const SupplierB2BSalesOrders: React.FC = () => {
             </form>
           </div>
         </div>
+      )}
+
+      {/* B2B Order Agreement Modal */}
+      {agreementOrder && (
+        <OrderAgreementModal
+          isOpen={!!agreementOrder}
+          onClose={() => setAgreementOrder(null)}
+          onNext={handleAgreementNext}
+          orderTitle={`Wholesale B2B Order #${agreementOrder.id} - ${agreementOrder.productName} (${agreementOrder.quantity})`}
+          orderPrice={agreementOrder.orderValue}
+          roleType="supplier"
+        />
       )}
     </div>
   );

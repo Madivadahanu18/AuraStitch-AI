@@ -272,11 +272,18 @@
     });
 
     const triggerOrderTimeline = () => {
-      window.AuraModals.showConfirm({
-        title: "Confirm Booking",
-        text: "Would you like to book Priya Sharma for custom stitching this blouse design? Standard measurements profile will be shared.",
-        onConfirm: () => {
-          window.AuraToasts.show("Order placed successfully! Tracking timeline generated.", "success");
+      window.AuraModals.showOrderAgreement({
+        title: "Order Agreement - Custom Stitching",
+        orderName: "Embroidered Zardozi Blouse (Tailor: Priya Sharma)",
+        orderPrice: "₹3,500 Stitching",
+        onNext: () => {
+          window.AuraModals.showConfirm({
+            title: "Confirm Booking",
+            text: "Would you like to book Priya Sharma for custom stitching this blouse design? Standard measurements profile will be shared.",
+            onConfirm: () => {
+              window.AuraToasts.show("Order placed successfully! Tracking timeline generated.", "success");
+            }
+          });
         }
       });
     };

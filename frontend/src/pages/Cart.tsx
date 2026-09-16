@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useOutletContext, useNavigate } from 'react-router-dom';
+import OrderAgreementModal from '../components/OrderAgreementModal';
 
 interface OutletContextType {
   showToast?: (msg: string, type?: 'success' | 'error' | 'warning' | 'info') => void;
@@ -23,6 +24,7 @@ export const Cart: React.FC = () => {
     else alert(msg);
   };
 
+  const [showAgreementModal, setShowAgreementModal] = useState(false);
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
     try {
       const saved = localStorage.getItem('aurastitch_cart');
@@ -87,7 +89,13 @@ export const Cart: React.FC = () => {
   };
 
   const handleCheckout = () => {
-    showToast(`Proceeding to Checkout with ${totalItemsCount} item(s)!`, 'success');
+    setShowAgreementModal(true);
+  };
+
+  const handleConfirmOrder = () => {
+    setShowAgreementModal(false);
+    showToast(`Order confirmed for ${totalItemsCount} item(s)! Tracking timeline generated.`, 'success');
+    navigate('/order-timeline');
   };
 
   // Order Summary Calculations
@@ -474,6 +482,16 @@ export const Cart: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {/* Order Agreement Modal */}
+      <OrderAgreementModal
+        isOpen={showAgreementModal}
+        onClose={() => setShowAgreementModal(false)}
+        onNext={handleConfirmOrder}
+        itemCount={totalItemsCount}
+        orderPrice={grandTotal}
+        orderTitle="Shopping Cart Checkout"
+      />
     </div>
   );
 };

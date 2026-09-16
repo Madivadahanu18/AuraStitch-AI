@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Link, useOutletContext, useNavigate } from 'react-router-dom';
+import { useOutletContext, useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
+import OrderAgreementModal from '../../components/OrderAgreementModal';
 
 // Relative image imports from ./images/
 import dothiImg from './images/dothi.jpg';
@@ -140,9 +141,9 @@ const customerFeedProducts: ProductItem[] = [
 
 export const CustomerDashboard: React.FC = () => {
   const navigate = useNavigate();
-  const context = useOutletContext<OutletContextType | null>();
   const { showToast } = useOutletContext<OutletContextType>();
   const { theme, setTheme } = useTheme();
+  const [showAgreementModal, setShowAgreementModal] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<ProductItem | null>(null);
 
@@ -157,6 +158,11 @@ export const CustomerDashboard: React.FC = () => {
 
   const handleBuyNow = (prod: ProductItem) => {
     setSelectedProduct(prod);
+    setShowAgreementModal(true);
+  };
+
+  const handleAgreementNext = () => {
+    setShowAgreementModal(false);
     setShowConfirm(true);
   };
 
@@ -455,6 +461,18 @@ export const CustomerDashboard: React.FC = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Order Agreement Modal */}
+      {selectedProduct && (
+        <OrderAgreementModal
+          isOpen={showAgreementModal}
+          onClose={() => setShowAgreementModal(false)}
+          onNext={handleAgreementNext}
+          orderTitle={selectedProduct.name}
+          orderPrice={selectedProduct.price}
+          roleType="customer"
+        />
       )}
     </div>
   );
