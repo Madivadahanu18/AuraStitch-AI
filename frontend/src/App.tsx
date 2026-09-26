@@ -19,7 +19,9 @@ import OnboardingPage from './pages/OnboardingPage';
 import PendingVerificationPage from './pages/PendingVerificationPage';
 import CustomerDashboard from './pages/customer/Dashboard';
 import DesignLab from './pages/customer/DesignLab';
+import AIDressDesigner from './pages/customer/AIDressDesigner';
 import TailorDashboard from './pages/tailor/Dashboard';
+import TailorAIDesigner from './pages/tailor/TailorAIDesigner';
 import HandloomDashboard from './pages/handloom/Dashboard';
 import AIHandloomStudio from './pages/handloom/AIHandloomStudio';
 import HandloomProducts from './pages/handloom/Products';
@@ -184,9 +186,11 @@ const AppContent: React.FC = () => {
           {/* Customer */}
           <Route path="/customer" element={<RoleRoute allowedRoles={['customer']}><CustomerDashboard /></RoleRoute>} />
           <Route path="/customer/design-lab" element={<RoleRoute allowedRoles={['customer']}><DesignLab /></RoleRoute>} />
+          <Route path="/customer/ai-designer" element={<RoleRoute allowedRoles={['customer']}><AIDressDesigner /></RoleRoute>} />
           
           {/* Tailor */}
           <Route path="/tailor" element={<RoleRoute allowedRoles={['tailor']}><TailorDashboard /></RoleRoute>} />
+          <Route path="/tailor/ai-designer" element={<RoleRoute allowedRoles={['tailor']}><TailorAIDesigner /></RoleRoute>} />
           
           {/* Weaver */}
           <Route path="/handloom" element={<RoleRoute allowedRoles={['weaver']}><HandloomDashboard /></RoleRoute>} />

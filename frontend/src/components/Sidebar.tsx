@@ -25,6 +25,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed, showT
     customer: [
       { path: '/customer', label: 'Feed & Discover', icon: '📱' },
       { path: '/customer/design-lab', label: 'AI Design Lab', icon: '🎨' },
+      { path: '/customer/ai-designer', label: 'AI Dress Designer', icon: '✨' },
       { path: '/ai', label: 'AI Recommendation', icon: '🤖' },
       { path: '/cart', label: 'Cart', icon: '🛒' },
       { path: '/customer/orders', label: 'Order Timeline', icon: '📦' },
@@ -34,6 +35,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed, showT
     ],
     tailor: [
       { path: '/tailor', label: 'Dashboard', icon: '📈' },
+      { path: '/tailor/ai-designer', label: 'AI Design Studio', icon: '✂' },
       { path: '/tailor/orders', label: 'Orders List', icon: '🧵' },
       { path: '/tailor/portfolio', label: 'Portfolio', icon: '👗' },
       { path: '/tailor/services', label: 'Services list', icon: '✂' },

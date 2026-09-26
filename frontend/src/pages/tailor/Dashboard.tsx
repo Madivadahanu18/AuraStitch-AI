@@ -261,6 +261,13 @@ export const TailorDashboard: React.FC = () => {
           <div style={{ display: 'flex', gap: '12px' }}>
             <button 
               className="btn-primary" 
+              style={{ padding: '10px 20px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '8px', background: 'linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark))' }}
+              onClick={() => navigate('/tailor/ai-designer')}
+            >
+              ✂ AI Design Studio
+            </button>
+            <button 
+              className="btn-outline" 
               style={{ padding: '10px 20px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '8px' }}
               onClick={() => showToast('Syncing customer body measurements with CAD patterns...', 'info')}
             >
@@ -288,6 +295,46 @@ export const TailorDashboard: React.FC = () => {
           <h4 style={{ fontSize: '13px', color: 'var(--text-secondary)', margin: '0 0 8px' }}>Monthly Boutique Earnings</h4>
           <p style={{ fontSize: '32px', fontWeight: 800, color: '#e76f51', margin: 0 }}>₹42,500</p>
         </div>
+      </div>
+
+      {/* Tailor AI Assistant Callout */}
+      <div 
+        className="glass-panel" 
+        style={{ 
+          padding: '20px 24px', 
+          marginBottom: '32px', 
+          borderRadius: 'var(--border-radius-lg)', 
+          background: 'linear-gradient(135deg, rgba(200, 155, 60, 0.16), rgba(46, 111, 87, 0.1), rgba(255, 255, 255, 0.9))', 
+          border: '1px solid var(--accent-gold)', 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center', 
+          flexWrap: 'wrap', 
+          gap: '16px' 
+        }}
+      >
+        <div style={{ maxWidth: '680px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+            <span style={{ fontSize: '20px' }}>✂</span>
+            <h3 style={{ margin: 0, fontSize: '18px', fontFamily: 'var(--font-heading)', color: 'var(--text-primary)' }}>
+              Tailor AI Garment & Material Assistant
+            </h3>
+            <span className="badge" style={{ backgroundColor: 'var(--accent-gold)', color: '#000', fontSize: '10px', fontWeight: 800, padding: '2px 8px', borderRadius: '10px' }}>
+              MASTER ATELIER
+            </span>
+          </div>
+          <p style={{ margin: 0, fontSize: '13px', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
+            Generate bespoke garment construction ideas, material combinations, seam architectures, pattern cutting layouts, and fabric yardage calculations tailored for boutique stitching masters.
+          </p>
+        </div>
+
+        <button 
+          className="btn-primary" 
+          style={{ padding: '10px 20px', fontSize: '14px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}
+          onClick={() => navigate('/tailor/ai-designer')}
+        >
+          ✂ Launch AI Design Studio →
+        </button>
       </div>
 
       {/* Tab Navigation & Search */}

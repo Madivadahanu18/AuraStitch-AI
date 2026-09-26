@@ -350,6 +350,46 @@ export const CustomerDashboard: React.FC = () => {
         </div>
       </div>
       
+      {/* AI Dress Designer Hero Feature */}
+      <div 
+        className="glass-panel" 
+        style={{ 
+          padding: '20px 24px', 
+          marginBottom: '28px', 
+          borderRadius: 'var(--border-radius-lg)', 
+          background: 'linear-gradient(135deg, rgba(212, 163, 115, 0.2), rgba(192, 108, 132, 0.12), rgba(255, 255, 255, 0.8))', 
+          border: '1px solid var(--accent-gold)', 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center', 
+          flexWrap: 'wrap', 
+          gap: '16px' 
+        }}
+      >
+        <div style={{ maxWidth: '640px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+            <span style={{ fontSize: '20px' }}>✨</span>
+            <h3 style={{ margin: 0, fontSize: '18px', fontFamily: 'var(--font-heading)', color: 'var(--text-primary)' }}>
+              Gemini AI Dress Designer
+            </h3>
+            <span className="badge" style={{ backgroundColor: 'var(--accent-gold)', color: '#000', fontSize: '10px', fontWeight: 800, padding: '2px 8px', borderRadius: '10px' }}>
+              NEW FEATURE
+            </span>
+          </div>
+          <p style={{ margin: 0, fontSize: '13px', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
+            Enter your dress silhouette, occasion, fabric, and colors to generate bespoke haute couture concepts powered by Gemini. Focuses purely on standalone garment craftsmanship without avatars.
+          </p>
+        </div>
+
+        <button 
+          className="btn-primary" 
+          style={{ padding: '10px 20px', fontSize: '14px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px' }}
+          onClick={() => navigate('/customer/ai-designer')}
+        >
+          ✨ Design Your Dress Concept
+        </button>
+      </div>
+
       {/* Preloaded Cart Section */}
       <div className="glass-panel" style={{ padding: '20px', marginBottom: '28px', borderLeft: '4px solid var(--accent-gold)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>

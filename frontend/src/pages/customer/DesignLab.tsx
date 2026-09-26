@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, useNavigate } from 'react-router-dom';
 
 interface OutletContextType {
   showToast: (msg: string, type?: 'success' | 'error' | 'warning' | 'info') => void;
@@ -124,6 +124,7 @@ const neckOptions = {
 
 export const DesignLab: React.FC = () => {
   const { showToast } = useOutletContext<OutletContextType>();
+  const navigate = useNavigate();
   
   // Custom user photo states
   const [userPhoto, setUserPhoto] = useState<string | null>(null);
@@ -542,6 +543,33 @@ export const DesignLab: React.FC = () => {
 
       <div className="studio-container">
         
+        {/* Banner linking to Gemini AI Dress Designer */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: '12px 20px',
+          background: 'linear-gradient(90deg, rgba(212, 163, 115, 0.15), rgba(192, 108, 132, 0.15))',
+          border: '1px solid var(--accent-gold)',
+          borderRadius: 'var(--border-radius-md)',
+          flexShrink: 0
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <span style={{ fontSize: '18px' }}>✨</span>
+            <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)' }}>
+              Looking for full generative couture dress concepts without avatars?
+            </span>
+          </div>
+          <button 
+            type="button"
+            className="btn-primary" 
+            style={{ fontSize: '12px', padding: '6px 16px' }}
+            onClick={() => navigate('/customer/ai-designer')}
+          >
+            Open AI Dress Designer →
+          </button>
+        </div>
+
         {/* Top Content Row */}
         <div className="studio-top-row">
           

@@ -1,6 +1,44 @@
 const express = require('express');
 const router = express.Router();
 const { chatWithCustomer } = require('../ai/customerAI');
+const { generateDressDesign } = require('../ai/geminiDressDesigner');
+const { generateTailorDesign } = require('../ai/geminiTailorAI');
+
+/**
+ * @route   POST /customer/generate-dress
+ * @desc    Generates a visual concept of a dress using Gemini (standalone garment, no avatars)
+ * @access  Public
+ */
+router.post('/customer/generate-dress', async (req, res) => {
+  try {
+    const {
+      dressType,
+      occasion,
+      style,
+      fabric,
+      colors,
+      pattern,
+      additionalRequirements,
+      apiKey
+    } = req.body;
+
+    const designResult = await generateDressDesign({
+      dressType: dressType || 'Lehenga',
+      occasion: occasion || 'Wedding Ceremony',
+      style: style || 'Royal Heritage',
+      fabric: fabric || 'Banarasi Silk',
+      colors: colors || 'Crimson Red & Antique Gold',
+      pattern: pattern || 'Intricate Zardozi Work',
+      additionalRequirements: additionalRequirements || '',
+      apiKey
+    });
+
+    return res.status(200).json(designResult);
+  } catch (error) {
+    console.error('Error in POST /customer/generate-dress:', error);
+    return res.status(500).json({ message: error.message || 'Error generating dress design.' });
+  }
+});
 
 /**
  * @route   POST /customer/chat
@@ -21,6 +59,42 @@ router.post('/customer/chat', async (req, res) => {
   } catch (error) {
     console.error('Error in POST /customer/chat endpoint:', error);
     return res.status(500).json({ message: error.message || 'Internal server error.' });
+  }
+});
+
+/**
+ * @route   POST /tailor/generate-design
+ * @desc    Generates a bespoke tailor garment and material design concept with pattern cutting specs
+ * @access  Public
+ */
+router.post('/tailor/generate-design', async (req, res) => {
+  try {
+    const {
+      garmentType,
+      fabric,
+      color,
+      style,
+      occasion,
+      embroidery,
+      additionalDescription,
+      apiKey
+    } = req.body;
+
+    const designResult = await generateTailorDesign({
+      garmentType: garmentType || 'Bridal Blouse',
+      fabric: fabric || 'Raw Silk',
+      color: color || 'Royal Navy & Gold',
+      style: style || 'Princess Cut with Sweetheart Neck',
+      occasion: occasion || 'Wedding Reception',
+      embroidery: embroidery || 'Zardozi Threadwork & Piping',
+      additionalDescription: additionalDescription || '',
+      apiKey
+    });
+
+    return res.status(200).json(designResult);
+  } catch (error) {
+    console.error('Error in POST /tailor/generate-design:', error);
+    return res.status(500).json({ message: error.message || 'Error generating tailor design concept.' });
   }
 });
 
