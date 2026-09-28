@@ -90,7 +90,7 @@ async function generateTailorDesign(params) {
     apiKey: clientApiKey
   } = params;
 
-  const activeApiKey = clientApiKey || process.env.GEMINI_API_KEY;
+  const activeApiKey = (process.env.GEMINI_API_KEY || clientApiKey || '').trim();
   const prompt = buildTailorPrompt(params);
 
   let imageUrl = null;

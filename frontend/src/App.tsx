@@ -35,6 +35,7 @@ import SupplierCategories from './pages/supplier/Categories';
 import SupplierInventory from './pages/supplier/Inventory';
 import SupplierB2BSalesOrders from './pages/supplier/B2BSalesOrders';
 import SupplierSettings from './pages/supplier/Settings';
+import SupplierAIMaterialStudio from './pages/supplier/SupplierAIMaterialStudio';
 import AdminDashboard from './pages/admin/Dashboard';
 import AIDashboard from './pages/ai/Dashboard';
 
@@ -203,6 +204,7 @@ const AppContent: React.FC = () => {
 
           {/* Supplier */}
           <Route path="/supplier" element={<RoleRoute allowedRoles={['supplier']}><SupplierDashboard /></RoleRoute>} />
+          <Route path="/supplier/ai-material-studio" element={<RoleRoute allowedRoles={['supplier']}><SupplierAIMaterialStudio /></RoleRoute>} />
           <Route path="/supplier/materials" element={<RoleRoute allowedRoles={['supplier']}><SupplierMaterialProducts /></RoleRoute>} />
           <Route path="/supplier/categories" element={<RoleRoute allowedRoles={['supplier']}><SupplierCategories /></RoleRoute>} />
           <Route path="/supplier/inventory" element={<RoleRoute allowedRoles={['supplier']}><SupplierInventory /></RoleRoute>} />

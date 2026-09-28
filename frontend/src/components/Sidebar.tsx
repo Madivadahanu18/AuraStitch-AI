@@ -56,6 +56,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed, showT
     ],
     supplier: [
       { path: '/supplier', label: 'Market Dashboard', icon: '🏬' },
+      { path: '/supplier/ai-material-studio', label: 'AI Material Studio', icon: '💡' },
       { path: '/supplier/materials', label: 'Material Products', icon: '🧶' },
       { path: '/supplier/categories', label: 'Categories list', icon: '📁' },
       { path: '/supplier/inventory', label: 'Inventory Control', icon: '🗃' },

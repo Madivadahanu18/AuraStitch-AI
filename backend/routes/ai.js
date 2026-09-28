@@ -3,6 +3,8 @@ const router = express.Router();
 const { chatWithCustomer } = require('../ai/customerAI');
 const { generateDressDesign } = require('../ai/geminiDressDesigner');
 const { generateTailorDesign } = require('../ai/geminiTailorAI');
+const { generateHandloomDesign } = require('../ai/geminiHandloomAI');
+const { generateSupplierProductIdea } = require('../ai/geminiSupplierAI');
 
 /**
  * @route   POST /customer/generate-dress
@@ -14,29 +16,39 @@ router.post('/customer/generate-dress', async (req, res) => {
     const {
       dressType,
       occasion,
-      style,
       fabric,
       colors,
+      neckStyle,
+      neckline,
+      sleeveStyle,
+      sleeve,
+      embellishment,
       pattern,
+      customRequirements,
       additionalRequirements,
+      style,
       apiKey
     } = req.body;
 
     const designResult = await generateDressDesign({
-      dressType: dressType || 'Lehenga',
-      occasion: occasion || 'Wedding Ceremony',
-      style: style || 'Royal Heritage',
+      dressType: dressType || 'Bridal Lehenga',
+      occasion: occasion || 'Wedding',
       fabric: fabric || 'Banarasi Silk',
-      colors: colors || 'Crimson Red & Antique Gold',
-      pattern: pattern || 'Intricate Zardozi Work',
-      additionalRequirements: additionalRequirements || '',
+      colors: colors || 'Maroon + Antique Gold',
+      neckStyle: neckStyle || neckline || 'Sweetheart Royal',
+      sleeveStyle: sleeveStyle || sleeve || 'Elbow Length',
+      embellishment: embellishment || pattern || 'Intricate Zardozi & Dabka Needlework',
+      customRequirements: typeof customRequirements === 'string' ? customRequirements : (additionalRequirements || ''),
+      style: style || 'Haute Couture Bespoke',
+      prompt: req.body.prompt,
       apiKey
     });
 
     return res.status(200).json(designResult);
   } catch (error) {
     console.error('Error in POST /customer/generate-dress:', error);
-    return res.status(500).json({ message: error.message || 'Error generating dress design.' });
+    const statusCode = error.statusCode || error.status || 500;
+    return res.status(statusCode).json({ message: error.message || 'Error generating dress design.' });
   }
 });
 
@@ -108,12 +120,118 @@ router.post('/tailor/chat', (req, res) => {
 });
 
 /**
+ * @route   POST /handloom/generate-textile
+ * @desc    Generates authentic handloom textile & print design concepts with loom specs (no avatars)
+ * @access  Public
+ */
+router.post('/handloom/generate-textile', async (req, res) => {
+  try {
+    const {
+      textileType,
+      weavingPrintingStyle,
+      motif,
+      pattern,
+      colors,
+      styleType,
+      targetProduct,
+      additionalDescription,
+      apiKey
+    } = req.body;
+
+    const textileResult = await generateHandloomDesign({
+      textileType: textileType || 'Pure Mulberry Katan Silk',
+      weavingPrintingStyle: weavingPrintingStyle || 'Banarasi Kadwa Brocade Weave',
+      motif: motif || 'Kalka (Paisley Pine) & Lotus Medallion',
+      pattern: pattern || 'Allover Continuous Jaal Lattice',
+      colors: colors || 'Turmeric Ochre, Deep Indigo & Antique Gold Zari',
+      styleType: styleType || 'Traditional Heritage',
+      targetProduct: targetProduct || 'Saree Fabric with Border & Pallu',
+      additionalDescription: additionalDescription || '',
+      apiKey
+    });
+
+    return res.status(200).json(textileResult);
+  } catch (error) {
+    console.error('Error in POST /handloom/generate-textile:', error);
+    return res.status(500).json({ message: error.message || 'Error generating handloom textile design.' });
+  }
+});
+
+/**
+ * @route   POST /weaver/generate-textile
+ * @desc    Alias route for Handloom / Weaver textile generator
+ * @access  Public
+ */
+router.post('/weaver/generate-textile', async (req, res) => {
+  try {
+    const textileResult = await generateHandloomDesign(req.body);
+    return res.status(200).json(textileResult);
+  } catch (error) {
+    console.error('Error in POST /weaver/generate-textile:', error);
+    return res.status(500).json({ message: error.message || 'Error generating weaver textile design.' });
+  }
+});
+
+/**
  * @route   POST /weaver/chat
  * @desc    Placeholder for Weaver AI chat features
  * @access  Public
  */
 router.post('/weaver/chat', (req, res) => {
   return res.status(200).json({ message: 'Weaver AI features are currently under development.' });
+});
+
+/**
+ * @route   POST /supplier/generate-product
+ * @desc    Generates B2B product and material concepts for suppliers with commercial wholesale specs
+ * @access  Public
+ */
+router.post('/supplier/generate-product', async (req, res) => {
+  try {
+    const {
+      productCategory,
+      material,
+      fabricType,
+      targetCustomer,
+      targetTailorBusiness,
+      colorStyle,
+      seasonalRequirement,
+      additionalDescription,
+      apiKey
+    } = req.body;
+
+    const productResult = await generateSupplierProductIdea({
+      productCategory: productCategory || 'Raw Fabric Yardage & Bolt Rolls',
+      material: material || '100% Pure Mulberry Silk',
+      fabricType: fabricType || 'Crisp Heavy Katan Weave (118 GSM)',
+      targetCustomer: targetCustomer || 'Luxury Bridal & Occasionwear Clients',
+      targetTailorBusiness: targetTailorBusiness || 'Haute Couture Bridal Ateliers & Boutiques',
+      colorStyle: colorStyle || 'Royal Emerald & Burnished Gold',
+      seasonalRequirement: seasonalRequirement || 'Festive / Wedding Season Q3-Q4',
+      additionalDescription: additionalDescription || '',
+      apiKey
+    });
+
+    return res.status(200).json(productResult);
+  } catch (error) {
+    console.error('Error in POST /supplier/generate-product:', error);
+    return res.status(500).json({ message: error.message || 'Error generating supplier product idea.' });
+  }
+});
+
+/**
+ * @route   POST /supplier/generate-material
+ * @desc    Alias route for supplier product & material generator
+ * @access  Public
+ */
+router.post('/supplier/generate-material', async (req, res) => {
+  try {
+    const productResult = await generateSupplierProductIdea(req.body);
+    return res.status(200).json(productResult);
+  } catch (error) {
+    console.error('Error in POST /supplier/generate-material:', error);
+    return res.status(500).json({ message: error.message || 'Error generating supplier material idea.' });
+  }
 });
 
 /**

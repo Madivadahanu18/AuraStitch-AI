@@ -1,179 +1,261 @@
 const { GoogleGenAI } = require('@google/genai');
 
+
+
 /**
- * Curated high-resolution couture concepts for standalone dresses (no faces/avatars)
- * Used as reliable fallbacks when API key is missing or quota is exhausted.
+ * Builds a prompt strictly focused on dress couture without human avatars/faces,
+ * explicitly describing all 8 form selections as ONE detailed image-generation prompt.
  */
-const curatedCoutureGallery = {
-  lehenga: [
-    {
-      url: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=800&q=85',
-      name: 'Royal Zardozi Crimson Velvet Bridal Lehenga',
-      colors: 'Crimson Red & Antique Gold'
-    },
-    {
-      url: 'https://images.unsplash.com/photo-1610030469668-93535c17b6b3?auto=format&fit=crop&w=800&q=85',
-      name: 'Pastel Blush Rose Organza Embroidered Lehenga',
-      colors: 'Blush Pink & Rose Gold'
-    },
-    {
-      url: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=800&q=85',
-      name: 'Heritage Marigold & Emerald Hand-Embroidered Lehenga',
-      colors: 'Marigold & Emerald'
-    }
-  ],
-  saree: [
-    {
-      url: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=85',
-      name: 'Pure Kanchipuram Brocade Gold Weave Saree',
-      colors: 'Crimson Red & Pure Gold'
-    },
-    {
-      url: 'https://images.unsplash.com/photo-1608748010899-18f300247112?auto=format&fit=crop&w=800&q=85',
-      name: 'Pochampally Double Ikat Handloom Saree',
-      colors: 'Royal Indigo & Ivory'
-    }
-  ],
-  anarkali: [
-    {
-      url: 'https://images.unsplash.com/photo-1631857455684-a54a2f03665f?auto=format&fit=crop&w=800&q=85',
-      name: 'Imperial Teal & Gold Flared Silk Anarkali Gown',
-      colors: 'Teal Blue & Gold'
-    }
-  ],
-  gown: [
-    {
-      url: 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=800&q=85',
-      name: 'Couture Silk Georgette Evening Cape Gown',
-      colors: 'Midnight Navy & Silver'
-    }
-  ],
-  kurti: [
-    {
-      url: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=800&q=85',
-      name: 'Chanderi Silk Flared Kurti with Zari Border',
-      colors: 'Sage Green & Champagne'
-    }
-  ],
-  fusion: [
-    {
-      url: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=85',
-      name: 'Contemporary Indo-Western Brocade Drape Dress',
-      colors: 'Ivory & Gold'
-    }
-  ]
-};
+function buildDressPrompt({
+  dressType,
+  occasion,
+  fabric,
+  colors,
+  neckStyle,
+  sleeveStyle,
+  embellishment,
+  customRequirements,
+  neckline,
+  sleeve,
+  pattern,
+  additionalRequirements
+}) {
+  const finalDress = (dressType || 'Bridal Lehenga').replace(/^[^\w\s]+\s*/, '').trim();
+  const finalOccasion = (occasion || 'Wedding Ceremony').replace(/^[^\w\s]+\s*/, '').trim();
+  const finalFabric = (fabric || 'Banarasi Silk').trim();
+  const finalColors = (colors || 'Maroon + Antique Gold').trim();
+  const finalNeck = (neckStyle || neckline || 'Sweetheart Royal').trim();
+  const finalSleeves = (sleeveStyle || sleeve || 'Elbow Length').trim();
+  const finalEmbellishment = (embellishment || pattern || 'Intricate Zardozi & Dabka Needlework').trim();
+  const finalCustomReq = (
+    (typeof customRequirements === 'string' && customRequirements.trim() !== '')
+      ? customRequirements.trim()
+      : ((typeof additionalRequirements === 'string' && additionalRequirements.trim() !== '')
+          ? additionalRequirements.trim()
+          : 'Bespoke precision couture finishing conforming to selected silhouette')
+  );
 
-function getCuratedConcept(dressType, colors) {
-  const typeKey = (dressType || '').toLowerCase();
-  let list = curatedCoutureGallery.lehenga;
+  return `Haute couture fashion studio photograph of a standalone bespoke dress.
 
-  if (typeKey.includes('saree')) list = curatedCoutureGallery.saree;
-  else if (typeKey.includes('anarkali') || typeKey.includes('suit')) list = curatedCoutureGallery.anarkali;
-  else if (typeKey.includes('gown') || typeKey.includes('maxi')) list = curatedCoutureGallery.gown;
-  else if (typeKey.includes('kurti') || typeKey.includes('shirt')) list = curatedCoutureGallery.kurti;
-  else if (typeKey.includes('fusion') || typeKey.includes('blouse')) list = curatedCoutureGallery.fusion;
+Dress:
+${finalDress}
 
-  return list[Math.floor(Math.random() * list.length)];
+Occasion:
+${finalOccasion}
+
+Fabric:
+${finalFabric}
+
+Colors:
+${finalColors}
+
+Neck:
+${finalNeck}
+
+Sleeves:
+${finalSleeves}
+
+Artisan embellishment:
+${finalEmbellishment}
+
+Custom requirement:
+${finalCustomReq}
+
+Styling & Staging Instructions:
+- Display: Standalone luxury outfit draped on an elegant ivory linen dressmaker mannequin bust form against a minimalist fashion studio backdrop.
+- Textile & Drape: Authentic handloom texture capturing the exact light luster, weave threads, fabric weight, and natural draping folds of ${finalFabric}.
+- Color Palette: Rich, saturated hues of ${finalColors} with tone-on-tone depth.
+- Silhouette & Tailoring: Impeccably cut ${finalNeck} neckline and structured ${finalSleeves} sleeves.
+- Craftsmanship: Intricate ${finalEmbellishment} detailing, precision artisan stitching, and customized finishes conforming to: ${finalCustomReq}.
+- Studio Photography: Soft directional spotlighting, macro focus on fabric weave, rich shadows, 8K ultra-sharp fashion editorial resolution.
+- Strictly NO human face, NO human head, NO human body or avatar, NO limbs. Pure standalone garment construction.`;
 }
 
 /**
- * Builds a prompt strictly focused on dress couture without human avatars/faces
+ * Performs real Gemini image generation using Google's currently supported Gemini image-generation API:
+ * POST https://generativelanguage.googleapis.com/v1beta/interactions
+ * Model: gemini-3.1-flash-image
  */
-function buildDressPrompt({ dressType, occasion, style, fabric, colors, pattern, additionalRequirements }) {
-  return `Haute couture studio product concept photograph of a standalone ${dressType || 'Couture Garment'}.
-Occasion: ${occasion || 'Celebration'}.
-Style & Silhouette: ${style || 'Contemporary Royal'}.
-Fabric & Material: ${fabric || 'Pure Silk'}, showcasing authentic weave texture, realistic light sheen, and graceful drape.
-Color Palette: ${colors || 'Royal Gold & Crimson'}.
-Patterns & Embellishments: ${pattern || 'Handcrafted Zari embroidery'}.
-Specific Tailoring Details: ${additionalRequirements || 'Fine boutique stitching, reinforced seams, elegant finished borders'}.
-Staged exclusively as a solo garment draped on an ivory linen dressmaker mannequin bust form against a minimalist studio background with warm soft directional spotlighting.
-Strictly NO human head, NO human face, NO human body or avatar, NO limbs. Pure focus on dress silhouette, garment construction, fabric folds, and textile embroidery craftsmanship. Ultra-detailed 8k fashion photography.`;
+async function requestGeminiNativeImage({ prompt, apiKey }) {
+  const url = 'https://generativelanguage.googleapis.com/v1beta/interactions';
+  const payload = {
+    model: 'gemini-3.1-flash-image',
+    input: prompt,
+    response_format: {
+      type: 'image',
+      aspect_ratio: '3:4'
+    }
+  };
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-goog-api-key': apiKey
+    },
+    body: JSON.stringify(payload)
+  });
+
+  if (!res.ok) {
+    const errText = await res.text().catch(() => '');
+    let errJson = null;
+    try {
+      errJson = JSON.parse(errText);
+    } catch (_) {}
+
+    const isQuotaOrBillingError =
+      res.status === 429 ||
+      errJson?.error?.code === 'too_many_requests' ||
+      errJson?.error?.code === 429 ||
+      errJson?.error?.status === 'RESOURCE_EXHAUSTED' ||
+      (typeof errJson?.error?.message === 'string' &&
+        (errJson.error.message.toLowerCase().includes('rate limit') ||
+         errJson.error.message.toLowerCase().includes('quota') ||
+         errJson.error.message.toLowerCase().includes('free tier') ||
+         errJson.error.message.toLowerCase().includes('resource_exhausted') ||
+         errJson.error.message.toLowerCase().includes('billing')));
+
+    if (isQuotaOrBillingError) {
+      const quotaErr = new Error(
+        'Gemini image generation requires an enabled billing/paid API project for this model. Please enable billing for the Gemini API project associated with GEMINI_API_KEY.'
+      );
+      quotaErr.statusCode = 429;
+      throw quotaErr;
+    }
+
+    const apiErr = new Error(
+      errJson?.error?.message ||
+      `Gemini image generation failed with HTTP ${res.status}: ${errText}`
+    );
+    apiErr.statusCode = res.status;
+    throw apiErr;
+  }
+
+  const data = await res.json();
+
+  let base64Data = null;
+  let mimeType = 'image/png';
+
+  // Extract generated image from steps
+  if (Array.isArray(data.steps)) {
+    for (const step of data.steps) {
+      if (step.type === 'model_output' && Array.isArray(step.content)) {
+        for (const item of step.content) {
+          if (item.type === 'image' && item.data) {
+            base64Data = item.data;
+            mimeType = item.mime_type || item.mimeType || 'image/png';
+            break;
+          }
+        }
+      }
+      if (base64Data) break;
+    }
+  }
+
+  // Fallback check on output_image convenience field
+  if (!base64Data && data.output_image?.data) {
+    base64Data = data.output_image.data;
+    mimeType = data.output_image.mime_type || data.output_image.mimeType || 'image/png';
+  }
+
+  if (!base64Data) {
+    throw new Error('Gemini API completed interaction, but no image data was returned in the response.');
+  }
+
+  return {
+    imageUrl: `data:${mimeType};base64,${base64Data}`,
+    modelUsed: 'gemini-3.1-flash-image'
+  };
 }
 
 /**
- * Generate a complete dress design concept with visual and technical fashion specs
+ * Generate a complete dress design concept with visual and technical fashion specs.
+ * Calls REAL Gemini image-generation models. Never uses mock, SVG, or fake fallbacks.
  */
 async function generateDressDesign(params) {
   const {
-    dressType = 'Lehenga',
+    dressType = 'Bridal Lehenga',
     occasion = 'Wedding Ceremony',
-    style = 'Royal Heritage',
     fabric = 'Banarasi Silk',
-    colors = 'Crimson Red & Antique Gold',
-    pattern = 'Intricate Zardozi Work',
-    additionalRequirements = '',
-    apiKey: clientApiKey
+    colors = 'Maroon + Antique Gold',
+    neckStyle,
+    sleeveStyle,
+    embellishment,
+    customRequirements,
+    neckline = 'Sweetheart Royal',
+    sleeve = 'Elbow Length',
+    pattern = 'Intricate Zardozi & Dabka Needlework',
+    additionalRequirements = 'Heavy traditional embroidery with a modern silhouette',
+    style = 'Haute Couture Bespoke',
+    prompt: clientPrompt
   } = params;
 
-  const activeApiKey = clientApiKey || process.env.GEMINI_API_KEY;
-  const prompt = buildDressPrompt(params);
+  const finalNeck = neckStyle || neckline;
+  const finalSleeves = sleeveStyle || sleeve;
+  const finalEmbellishment = embellishment || pattern;
+  const finalCustomReq = (
+    typeof customRequirements === 'string' && customRequirements.trim() !== ''
+      ? customRequirements.trim()
+      : (typeof additionalRequirements === 'string' && additionalRequirements.trim() !== ''
+          ? additionalRequirements.trim()
+          : '')
+  );
 
-  let imageUrl = null;
-  let isLiveGemini = false;
+  // Keep GEMINI_API_KEY server-side in backend/.env
+  const activeApiKey = (process.env.GEMINI_API_KEY || '').trim();
+
+  // If no Gemini API key is configured on the backend, stop immediately
+  if (!activeApiKey) {
+    const keyError = new Error(
+      'GEMINI_API_KEY is not configured in backend/.env. Please configure GEMINI_API_KEY with billing enabled for gemini-3.1-flash-image.'
+    );
+    keyError.statusCode = 500;
+    throw keyError;
+  }
+
+  const prompt = (clientPrompt && typeof clientPrompt === 'string' && clientPrompt.trim() !== '')
+    ? clientPrompt.trim()
+    : buildDressPrompt({
+        ...params,
+        neckStyle: finalNeck,
+        sleeveStyle: finalSleeves,
+        embellishment: finalEmbellishment,
+        customRequirements: finalCustomReq
+      });
+
+  console.log(`[Gemini Dress Designer] Initiating fresh generation request for: "${dressType}"...`);
+  console.log(`[Gemini Dress Designer] Prompt: ${prompt.substring(0, 120)}...`);
+
+  // Execute REAL Gemini native image generation using POST /v1beta/interactions with gemini-3.1-flash-image
+  const imageResult = await requestGeminiNativeImage({
+    prompt,
+    apiKey: activeApiKey
+  });
+
+  if (!imageResult?.imageUrl) {
+    throw new Error('Gemini native image-generation model failed to return an image.');
+  }
+
+  const imageUrl = imageResult.imageUrl;
+  const modelUsed = imageResult.modelUsed;
+  const isLiveGemini = true;
+
+  // Generate Couture Specification & Craftsmanship Notes using Gemini 3.7 Flash
   let aiSummary = null;
-  let errorNotice = null;
-
-  if (activeApiKey && activeApiKey.trim() !== '') {
-    try {
-      const ai = new GoogleGenAI({ apiKey: activeApiKey.trim() });
-
-      // Attempt 1: Try Imagen 3 image generation
-      try {
-        const imgResponse = await ai.models.generateImages({
-          model: 'imagen-3.0-generate-002',
-          prompt,
-          config: {
-            numberOfImages: 1,
-            aspectRatio: '3:4',
-            outputMimeType: 'image/jpeg'
-          }
-        });
-
-        if (imgResponse?.generatedImages?.[0]?.image?.imageBytes) {
-          imageUrl = `data:image/jpeg;base64,${imgResponse.generatedImages[0].image.imageBytes}`;
-          isLiveGemini = true;
-        }
-      } catch (imgErr) {
-        console.warn('Imagen-3 generation attempt failed, falling back to gemini-2.5-flash-image:', imgErr.message);
-
-        // Attempt 2: Try gemini-2.5-flash-image
-        try {
-          const flashImgResponse = await ai.models.generateContent({
-            model: 'gemini-2.5-flash-image',
-            contents: prompt
-          });
-
-          const candidates = flashImgResponse?.candidates || [];
-          for (const candidate of candidates) {
-            for (const part of candidate.content?.parts || []) {
-              if (part.inlineData) {
-                imageUrl = `data:${part.inlineData.mimeType || 'image/jpeg'};base64,${part.inlineData.data}`;
-                isLiveGemini = true;
-                break;
-              }
-            }
-          }
-        } catch (flashErr) {
-          console.warn('gemini-2.5-flash-image attempt failed:', flashErr.message);
-          errorNotice = imgErr.message || flashErr.message;
-        }
-      }
-
-      // Generate Couture Specification & Craftsmanship Notes using Gemini 2.5 Flash
-      try {
-        const textResponse = await ai.models.generateContent({
-          model: 'gemini-2.5-flash',
-          contents: `You are an elite master fashion consultant and artisan designer for AuraStitch AI.
+  try {
+    const ai = new GoogleGenAI({ apiKey: activeApiKey });
+    const textResponse = await ai.models.generateContent({
+      model: 'gemini-3.7-flash',
+      contents: `You are an elite master fashion consultant and artisan designer for AuraStitch AI.
 Analyze this custom dress order:
 - Dress Type: ${dressType}
 - Occasion: ${occasion}
-- Style: ${style}
-- Fabric: ${fabric}
-- Colors: ${colors}
-- Pattern: ${pattern}
-- Additional Requirements: ${additionalRequirements}
+- Fabric & Weave: ${fabric}
+- Colors & Dyes: ${colors}
+- Neck Style: ${finalNeck}
+- Sleeve Style: ${finalSleeves}
+- Artisan Embellishment: ${finalEmbellishment}
+- Custom Requirements: ${finalCustomReq}
 
 Provide a JSON object (no markdown backticks, raw JSON only) with these exact keys:
 {
@@ -182,48 +264,38 @@ Provide a JSON object (no markdown backticks, raw JSON only) with these exact ke
   "craftsmanshipNotes": "Detailed advice for weavers and master tailors on cut, border attachment, lining, and embroidery",
   "stylingTips": "Recommended jewelry, footwear, and hairstyle pairing",
   "estimatedArtisanHours": "e.g. 48-60 Artisan Hours",
-  "recommendedTrims": "Specific laces, latkans, or zari threads recommended"
+  "recommendedTrims": "Specific laces, latkans, or zari threads recommended",
+  "fabricMeterage": "e.g. 4.5m Silk + 2.5m Dupatta",
+  "tailorSpecialist": "e.g. Master Bridal Atelier"
 }`
-        });
+    });
 
-        const rawText = textResponse.text || '';
-        const cleaned = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
-        aiSummary = JSON.parse(cleaned);
-      } catch (textErr) {
-        console.warn('Gemini specs generation notice:', textErr.message);
-      }
-
-    } catch (apiErr) {
-      console.error('Gemini initialization error:', apiErr);
-      errorNotice = apiErr.message;
-    }
-  } else {
-    errorNotice = 'GEMINI_API_KEY is not configured in backend .env or request body. Provided high-definition curated couture concept.';
+    const rawText = textResponse.text || '';
+    const cleaned = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
+    aiSummary = JSON.parse(cleaned);
+  } catch (textErr) {
+    console.warn('Gemini specs generation notice:', textErr.message);
   }
 
-  // Fallback to curated studio concept if image generation did not yield a base64 image
-  if (!imageUrl) {
-    const fallback = getCuratedConcept(dressType, colors);
-    imageUrl = fallback.url;
-  }
-
-  // Fallback specs if text generation was skipped or offline
   if (!aiSummary) {
     aiSummary = {
       title: `${colors} ${fabric} ${dressType}`,
-      conceptSummary: `A bespoke ${style.toLowerCase()} concept designed for ${occasion.toLowerCase()}. Crafted in luxurious ${fabric} with rich ${colors} undertones and highlighted by intricate ${pattern.toLowerCase()}.`,
-      craftsmanshipNotes: `Double-needle seam reinforcements recommended along the princess seams. Use matching ${colors.split('&')[0].trim()} cotton-silk inner lining for breathable structure. Border zari should be hand-tacked with concealed stitching.`,
-      stylingTips: `Pair with antique temple gold jewelry or polki pearls. Minimalist footwear in metallic champagne gold complements the ${fabric} drape.`,
-      estimatedArtisanHours: '36–48 Handcraft Hours',
-      recommendedTrims: `${pattern} embroidered border lace, hand-tied silk dori tassels (latkans), and micro-beaded hems.`
+      conceptSummary: `A bespoke couture concept designed for ${occasion.toLowerCase()}. Crafted in luxurious ${fabric} with rich ${colors} tones, ${finalNeck} neckline, and highlighted by intricate ${finalEmbellishment.toLowerCase()}.`,
+      craftsmanshipNotes: `Double-needle seam reinforcements recommended along the ${finalNeck} neckline. Use matching cotton-silk inner lining for breathable structure. ${finalEmbellishment} should be hand-tacked with concealed stitching.`,
+      stylingTips: `Pair with traditional or contemporary matching jewelry and footwear conforming to ${colors}.`,
+      estimatedArtisanHours: '40–50 Artisan Hours',
+      recommendedTrims: `${finalEmbellishment} embroidered border lace, hand-tied tassels, and micro-beaded hems.`,
+      fabricMeterage: dressType.toLowerCase().includes('saree') ? '6.2m Pure Silk Saree + Blouse' : dressType.toLowerCase().includes('lehenga') ? '4.5m Silk + 2.5m Dupatta' : '3.8m Handloom Material',
+      tailorSpecialist: dressType.toLowerCase().includes('lehenga') ? 'Master Bridal Atelier' : 'Drape Specialist Atelier'
     };
   }
 
   return {
-    id: `concept-${Date.now()}`,
+    id: `concept-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
     imageUrl,
     isLiveGemini,
-    errorNotice,
+    geminiModelUsed: modelUsed,
+    errorNotice: null,
     prompt,
     specs: {
       dressType,
@@ -231,8 +303,14 @@ Provide a JSON object (no markdown backticks, raw JSON only) with these exact ke
       style,
       fabric,
       colors,
-      pattern,
-      additionalRequirements,
+      neckStyle: finalNeck,
+      sleeveStyle: finalSleeves,
+      embellishment: finalEmbellishment,
+      customRequirements: finalCustomReq,
+      neckline: finalNeck,
+      sleeve: finalSleeves,
+      pattern: finalEmbellishment,
+      additionalRequirements: finalCustomReq,
       ...aiSummary
     },
     createdAt: new Date().toISOString()
